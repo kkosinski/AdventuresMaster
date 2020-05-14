@@ -1,10 +1,12 @@
 package com.wintermute.adventuresmaster.view;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class ViewItem
 {
     private String label;

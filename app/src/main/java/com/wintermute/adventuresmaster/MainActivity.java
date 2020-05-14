@@ -1,29 +1,21 @@
 package com.wintermute.adventuresmaster;
 
-import android.view.ViewGroup;
+import android.content.Intent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import androidx.core.view.ViewCompat;
+import com.wintermute.adventuresmaster.helper.LayoutFactory;
 import com.wintermute.adventuresmaster.helper.SectionLoader;
+import com.wintermute.adventuresmaster.view.ListActivity;
 import com.wintermute.adventuresmaster.view.SectionData;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
 {
-    private SectionLoader sectionLoader;
-
-    private static final Map<String, String> ROUTE = new HashMap<String, String>()
-    {{
-        put("Host/Join game", "1");
-        put("Scene Manager", "2");
-        put("Settings", "3");
-    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,25 +28,35 @@ public class MainActivity extends AppCompatActivity
 
     private void init()
     {
-        sectionLoader = new SectionLoader();
-        LinearLayout layout = findViewById(R.id.main_menu_panel);
-        LinearLayout.LayoutParams layoutParams =
-            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        //TODO: eventually create Enum.
+        LayoutFactory layoutFactory = LayoutFactory.getInstance();
+        LinearLayout layout = layoutFactory.getDefaultLayout(getWindow().getDecorView());
+
+        SectionLoader sectionLoader = new SectionLoader();
         List<SectionData> root = sectionLoader.getSection("root");
         for (SectionData element : root)
         {
-            layout.addView(initMenuButton(element), layoutParams);
+            layoutFactory.addViewToDefaultLayout(layout, initMenuButton(element));
         }
     }
 
     private Button initMenuButton(SectionData data)
     {
-        Button result = new Button(getApplicationContext());
+        Button result = new Button(this);
         result.setText(data.getLabel());
-        result.setId(new Random().nextInt());
-        //TODO: differentiate between SectionData and new Activity
-        result.setOnClickListener((v) -> sectionLoader.getSection(data.getLabel()));
+        result.setId(ViewCompat.generateViewId());
+        result.setTag(data.getLabel());
+        result.setOnClickListener((v) ->
+        {
+            if (data.getContent() instanceof String)
+            {
+                System.out.println(data.getLabel());
+            } else if (data.getContent() instanceof Class)
+            {
+                //TODO: missing logic
+                startActivity(new Intent(MainActivity.this, ListActivity.class));
+                System.out.println("New activity should be started");
+            }
+        });
         return result;
     }
 }
