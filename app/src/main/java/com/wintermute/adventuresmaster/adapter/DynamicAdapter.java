@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.helper.LayoutFactory;
-import com.wintermute.adventuresmaster.view.ViewItem;
+import com.wintermute.adventuresmaster.model.ViewItem;
 
 import java.util.ArrayList;
 import java.util.List;

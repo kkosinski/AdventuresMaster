@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.adapter.DynamicAdapter;
+import com.wintermute.adventuresmaster.model.ViewItem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

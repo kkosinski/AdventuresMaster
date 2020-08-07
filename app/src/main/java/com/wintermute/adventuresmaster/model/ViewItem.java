@@ -1,4 +1,4 @@
-package com.wintermute.adventuresmaster.view;
+package com.wintermute.adventuresmaster.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
