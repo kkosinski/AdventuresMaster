@@ -34,4 +34,8 @@ public class MenuViewModel extends ViewModel
     public LiveData<List<MenuItem>> getItemParentContent(Context ctx, MenuItem target){
         return AppDatabase.getAppDatabase(ctx).menuItemDao().getMenuItems(target.getParentId());
     }
+
+    public LiveData<MenuItem> getItemParent(Context ctx, MenuItem child){
+        return AppDatabase.getAppDatabase(ctx).menuItemDao().getParent(child.getParentId());
+    }
 }

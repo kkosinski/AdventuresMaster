@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
     private LayoutFactory layoutFactory;
     private LinearLayout layout;
     private Observer<List<MenuItem>> menuItemsObserver = null;
+    private MenuItem currentItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,9 +38,8 @@ public class MainActivity extends AppCompatActivity
         layout = layoutFactory.getDefaultLayout(getWindow().getDecorView());
         model = new ViewModelProvider(this).get(MenuViewModel.class);
 
-        layout.removeAllViews();
-        menuItemsObserver =
-            currentItems -> currentItems.forEach(i -> layoutFactory.addViewToDefaultLayout(layout, initMenuItem(i)));
+        menuItemsObserver = displayedMenuItems -> displayedMenuItems.forEach(
+            i -> layoutFactory.addViewToDefaultLayout(layout, initMenuItem(i)));
 
         model.getTopLevelItems(this).observe(MainActivity.this, menuItemsObserver);
     }
@@ -52,12 +52,11 @@ public class MainActivity extends AppCompatActivity
         result.setTag(target.getTitle());
         result.setOnClickListener(v ->
         {
-            //TODO: update current item
             if (target.isActivity())
             {
-                onBackPressed();
             } else
             {
+                currentItem = target;
                 layout.removeAllViews();
                 model.getSelectedItemContent(this, target).observe(MainActivity.this, menuItemsObserver);
             }
@@ -65,9 +64,24 @@ public class MainActivity extends AppCompatActivity
         return result;
     }
 
+    private void updateCurrentAndParrentItem()
+    {
+        Observer<MenuItem> parentFetcher = p -> currentItem = p;
+        model.getItemParent(this, currentItem).observe(MainActivity.this, parentFetcher);
+    }
+
     @Override
     public void onBackPressed()
     {
-        //TODO: fix navigating back
+        System.out.println(currentItem.getId() + " " + currentItem.getParentId());
+        if (currentItem.getId() != -1L)
+        {
+            layout.removeAllViews();
+            model.getItemParentContent(this, currentItem).observe(this, menuItemsObserver);
+            if (currentItem.getParentId() != -1L)
+            {
+                updateCurrentAndParrentItem();
+            }
+        }
     }
 }

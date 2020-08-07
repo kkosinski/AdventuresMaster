@@ -14,9 +14,12 @@ import java.util.List;
 @Dao
 public interface MenuItemDao
 {
-    @Query("SELECT * FROM menu WHERE parentId = (:parentId)")
+    @Query("SELECT * FROM menu WHERE parentId = :parentId")
     LiveData<List<MenuItem>> getMenuItems(long parentId);
 
-    @Query("SELECT * FROM menu WHERE id = (:id)")
+    @Query("SELECT * FROM menu WHERE id = :id")
     LiveData<MenuItem> getSelectedItem(long id);
+
+    @Query("SELECT * FROM menu WHERE id = :parentId")
+    LiveData<MenuItem> getParent(long parentId);
 }
