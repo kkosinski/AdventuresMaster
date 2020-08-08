@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Represents activity description as object.
+ *
+ * @author wintermute
  */
 @Data
 @NoArgsConstructor

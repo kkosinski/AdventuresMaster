@@ -6,7 +6,9 @@ import androidx.room.Query;
 import com.wintermute.adventuresmaster.database.entity.ActivityDesc;
 
 /**
- * Represents the activity description as database access object.
+ * ActivityDesc as database access object.
+ *
+ * @author wintermute
  */
 @Dao
 public interface ActivityDescDao

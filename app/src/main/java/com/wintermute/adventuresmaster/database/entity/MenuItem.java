@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Represents menu item as database entity.
+ *
+ * @author wintermute
  */
 @Data
 @NoArgsConstructor

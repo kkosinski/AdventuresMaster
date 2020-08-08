@@ -17,6 +17,11 @@ import com.wintermute.adventuresmaster.viewmodel.MenuViewModel;
 
 import java.util.List;
 
+/**
+ * Main activity. Default entry point of this application.
+ *
+ * @author wintermute
+ */
 public class MainActivity extends AppCompatActivity
 {
 
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         return result;
     }
 
-    private void updateCurrentAndParrentItem()
+    private void updateCurrentAndParentItem()
     {
         final Observer<MenuItem> parentFetcher = p -> currentItem = p;
         model.getItemParent(this, currentItem).observe(MainActivity.this, parentFetcher);
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity
             model.getItemParentContent(this, currentItem).observe(this, menuItemsObserver);
             if (currentItem.getParentId() != -1L)
             {
-                updateCurrentAndParrentItem();
+                updateCurrentAndParentItem();
             }
         }
     }
