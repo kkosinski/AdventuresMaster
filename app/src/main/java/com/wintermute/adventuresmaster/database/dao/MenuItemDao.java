@@ -1,7 +1,6 @@
 package com.wintermute.adventuresmaster.database.dao;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 import com.wintermute.adventuresmaster.database.entity.MenuItem;
@@ -16,9 +15,6 @@ public interface MenuItemDao
 {
     @Query("SELECT * FROM menu WHERE parentId = :parentId")
     LiveData<List<MenuItem>> getMenuItems(long parentId);
-
-    @Query("SELECT * FROM menu WHERE id = :id")
-    LiveData<MenuItem> getSelectedItem(long id);
 
     @Query("SELECT * FROM menu WHERE id = :parentId")
     LiveData<MenuItem> getParent(long parentId);

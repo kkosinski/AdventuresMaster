@@ -27,4 +27,7 @@ public class MenuItem
 
     @ColumnInfo(name = "parentId")
     private long parentId;
+
+    @ColumnInfo
+    private String className;
 }

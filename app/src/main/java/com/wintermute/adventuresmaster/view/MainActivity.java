@@ -1,7 +1,9 @@
 package com.wintermute.adventuresmaster.view;
 
+import android.content.Intent;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -54,6 +56,16 @@ public class MainActivity extends AppCompatActivity
         {
             if (target.isActivity())
             {
+                try
+                {
+                    Class<?> c = Class.forName(this.getPackageName() + ".view." + target.getClassName());
+                    Intent intent= new Intent(this, c);
+                    startActivity(intent);
+                } catch (ClassNotFoundException e)
+                {
+                    Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
             } else
             {
                 currentItem = target;
@@ -66,14 +78,13 @@ public class MainActivity extends AppCompatActivity
 
     private void updateCurrentAndParrentItem()
     {
-        Observer<MenuItem> parentFetcher = p -> currentItem = p;
+        final Observer<MenuItem> parentFetcher = p -> currentItem = p;
         model.getItemParent(this, currentItem).observe(MainActivity.this, parentFetcher);
     }
 
     @Override
     public void onBackPressed()
     {
-        System.out.println(currentItem.getId() + " " + currentItem.getParentId());
         if (currentItem.getId() != -1L)
         {
             layout.removeAllViews();
