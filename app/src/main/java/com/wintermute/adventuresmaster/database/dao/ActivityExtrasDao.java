@@ -1,6 +1,11 @@
 package com.wintermute.adventuresmaster.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Query;
+import com.wintermute.adventuresmaster.database.entity.ActivityExtras;
+
+import java.util.List;
 
 /**
  * Represents the activity extras as database access object.
@@ -10,5 +15,6 @@ import androidx.room.Dao;
 @Dao
 public interface ActivityExtrasDao
 {
-    //TODO
+    @Query("SELECT * FROM activityExtras WHERE activityId = :activityId")
+    LiveData<List<ActivityExtras>> getExtrasForActivity(long activityId);
 }

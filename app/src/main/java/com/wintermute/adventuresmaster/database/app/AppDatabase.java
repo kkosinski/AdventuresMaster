@@ -5,6 +5,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.wintermute.adventuresmaster.database.dao.ActivityDescDao;
+import com.wintermute.adventuresmaster.database.dao.ActivityExtrasDao;
 import com.wintermute.adventuresmaster.database.dao.MenuItemDao;
 import com.wintermute.adventuresmaster.database.entity.ActivityDesc;
 import com.wintermute.adventuresmaster.database.entity.ActivityExtras;
@@ -22,6 +23,7 @@ public abstract class AppDatabase extends RoomDatabase
 
     public abstract MenuItemDao menuItemDao();
     public abstract ActivityDescDao activityDescDao();
+    public abstract ActivityExtrasDao activityExtrasDao();
 
     /**
      * Create an instance if not existent, return created if already existing.

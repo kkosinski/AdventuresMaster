@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.ActivityDesc;
+import com.wintermute.adventuresmaster.database.entity.ActivityExtras;
 import com.wintermute.adventuresmaster.database.entity.MenuItem;
 
 import java.util.List;
@@ -35,5 +36,9 @@ public class MenuViewModel extends ViewModel
 
     public LiveData<ActivityDesc> getActivity(Context ctx, MenuItem target) {
         return AppDatabase.getAppDatabase(ctx).activityDescDao().getActivityDesc(target.getId());
+    }
+
+    public LiveData<List<ActivityExtras>> getActivityExtras(Context ctx, ActivityDesc target){
+        return AppDatabase.getAppDatabase(ctx).activityExtrasDao().getExtrasForActivity(target.getActivityId());
     }
 }

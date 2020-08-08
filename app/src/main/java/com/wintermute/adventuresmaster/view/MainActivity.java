@@ -67,6 +67,13 @@ public class MainActivity extends AppCompatActivity
                     {
                         Class<?> c = Class.forName(this.getPackageName() + ".view." + activityDesc.getClassName());
                         Intent intent = new Intent(this, c);
+                        if (activityDesc.isHasExtras())
+                        {
+                            model
+                                .getActivityExtras(this, activityDesc)
+                                .observe(MainActivity.this,
+                                    activityExtras -> activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue())));
+                        }
                         startActivity(intent);
                     } catch (ClassNotFoundException e)
                     {
