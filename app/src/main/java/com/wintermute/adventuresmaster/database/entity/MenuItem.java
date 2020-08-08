@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@Entity(tableName = "menu")
+@Entity(tableName = "menuItem")
 public class MenuItem
 {
     @PrimaryKey(autoGenerate = true)
@@ -22,12 +22,9 @@ public class MenuItem
     @ColumnInfo(name = "title")
     private String title;
 
-    @ColumnInfo(name = "isActivity")
-    private boolean isActivity;
-
     @ColumnInfo(name = "parentId")
     private long parentId;
 
-    @ColumnInfo
-    private String className;
+    @ColumnInfo(name = "isActivity")
+    private boolean isActivity;
 }

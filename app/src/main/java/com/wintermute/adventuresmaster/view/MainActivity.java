@@ -56,16 +56,19 @@ public class MainActivity extends AppCompatActivity
         {
             if (target.isActivity())
             {
-                try
+                model.getActivity(this, target).observe(this, activityDesc ->
                 {
-                    Class<?> c = Class.forName(this.getPackageName() + ".view." + target.getClassName());
-                    Intent intent= new Intent(this, c);
-                    startActivity(intent);
-                } catch (ClassNotFoundException e)
-                {
-                    Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+                    try
+                    {
+                        Class<?> c = Class.forName(this.getPackageName() + ".view." + activityDesc.getClassName());
+                        Intent intent = new Intent(this, c);
+                        startActivity(intent);
+                    } catch (ClassNotFoundException e)
+                    {
+                        Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                });
             } else
             {
                 currentItem = target;
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        if (currentItem.getId() != -1L)
+        if (currentItem != null && currentItem.getId() != -1L)
         {
             layout.removeAllViews();
             model.getItemParentContent(this, currentItem).observe(this, menuItemsObserver);
