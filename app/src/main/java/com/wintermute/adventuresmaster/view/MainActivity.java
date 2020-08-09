@@ -72,12 +72,16 @@ public class MainActivity extends AppCompatActivity
                             model
                                 .getActivityExtras(this, activityDesc)
                                 .observe(MainActivity.this,
-                                    activityExtras -> activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue())));
+                                    activityExtras -> {
+                                        activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
+                                        startActivity(intent);
+                                    });
+                        } else {
+                            startActivity(intent);
                         }
-                        startActivity(intent);
                     } catch (ClassNotFoundException e)
                     {
-                        Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 });
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         return result;
     }
 
-    private void updateCurrentAndParentItem()
+    private void updateCurrentItem()
     {
         final Observer<MenuItem> parentFetcher = p -> currentItem = p;
         model.getItemParent(this, currentItem).observe(MainActivity.this, parentFetcher);
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity
             model.getItemParentContent(this, currentItem).observe(this, menuItemsObserver);
             if (currentItem.getParentId() != -1L)
             {
-                updateCurrentAndParentItem();
+                updateCurrentItem();
             }
         }
     }
