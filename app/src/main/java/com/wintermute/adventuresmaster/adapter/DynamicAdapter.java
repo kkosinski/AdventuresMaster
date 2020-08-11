@@ -10,65 +10,55 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.helper.LayoutFactory;
-import com.wintermute.adventuresmaster.model.ViewItem;
+import com.wintermute.adventuresmaster.model.DynamicListItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
- * This is an dynamic RecyclerViewAdapter. It decides how many views per item has to be rendered by the count of args
- * contained by each row.
+ * This is an dynamic RecyclerViewAdapter. An dynamic view is created depending on list item and how many text view
+ * (additional information) it should have. It may have fixed size.
  *
  * @author wintermute
  */
 public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHolder>
 {
-    private List<ViewItem> items;
-    private LayoutInflater mInflater;
+    private List<DynamicListItem> items;
     private ItemClickListener mClickListener;
     private Context ctx;
-    private int rowLength;
+    private int additionalInfoLength;
 
-    // data is passed into the constructor
-    public DynamicAdapter(Context context, List<ViewItem> data)
+    public DynamicAdapter(Context context, List<DynamicListItem> data)
     {
-        this.mInflater = LayoutInflater.from(context);
         this.items = data;
         this.ctx = context;
-        rowLength = getsublabelsLength();
-    }
-
-    private int getsublabelsLength()
-    {
-        int result = 0;
-        for (ViewItem item : items)
-        {
-            result = Math.max(result, item.getSubLabels().size());
-        }
-        return result;
+        additionalInfoLength =
+            data.stream().mapToInt(i -> i.getAdditionalInfo().size()).max().orElseThrow(NoSuchElementException::new);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int ViewType)
     {
-        View view = mInflater.inflate(R.layout.list_item_template, parent, false);
-        ViewItem viewItem = items.get(0);
-        generateRowLayout(view, viewItem);
-        return new ViewHolder(view, viewItem.getLabel(), rowLength);
+        LayoutInflater mInflater = LayoutInflater.from(ctx);
+        View view = mInflater.inflate(R.layout.dynamic_list_item_template, parent, false);
+        DynamicListItem viewItem = items.get(0);
+        generateSingleItemLayout(view, viewItem);
+        return new ViewHolder(view, viewItem.getTitle(), additionalInfoLength);
     }
 
-    private void generateRowLayout(View view, ViewItem viewItem)
+    private void generateSingleItemLayout(View view, DynamicListItem viewItem)
     {
         LayoutFactory factory = LayoutFactory.getInstance();
         LinearLayout container = factory.initLayoutWithParams(ctx);
-        container.addView(factory.createViewElement(ctx, viewItem.getLabel()));
 
-        for (int i = 0; i < rowLength; i++)
+        //define how the single item looks like
+        container.addView(factory.createViewElement(ctx, viewItem.getTitle()));
+        for (int i = 0; i < additionalInfoLength; i++)
         {
             container.addView(factory.createViewElement(ctx, i));
         }
-
         LinearLayout layout = view.findViewById(R.id.list_item_template_id);
         layout.addView(container);
     }
@@ -76,16 +66,16 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        ViewItem item = items.get(position);
-        holder.title.setText(item.getLabel());
+        DynamicListItem item = items.get(position);
+        holder.title.setText(item.getTitle());
 
-        if (item.getSubLabels() != null)
+        if (item.getAdditionalInfo() != null)
         {
-            for (int i = 0; i < holder.subViews.size(); i++)
+            for (int i = 0; i < holder.additionalInfo.size(); i++)
             {
-                if (i < item.getSubLabels().size())
+                if (i < item.getAdditionalInfo().size())
                 {
-                    holder.subViews.get(i).setText(item.getSubLabels().get(i));
+                    holder.additionalInfo.get(i).setText(item.getAdditionalInfo().get(i));
                 } else
                 {
                     holder.getView(i).setVisibility(View.GONE);
@@ -100,26 +90,29 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
         return items.size();
     }
 
+    /**
+     * Represents the displayed item in the list.
+     */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView title;
-        List<TextView> subViews;
-        View view;
+        List<TextView> additionalInfo;
+        View displayedItem;
 
         ViewHolder(View view, String title, int elementsCount)
         {
             super(view);
-            this.view = view;
+            this.displayedItem = view;
 
             this.title = view.findViewWithTag(title);
             view.setOnClickListener(this);
 
-            this.subViews = new ArrayList<>();
+            this.additionalInfo = new ArrayList<>();
             for (int i = 0; i < elementsCount; i++)
             {
                 TextView subViews = view.findViewWithTag(i);
                 subViews.setOnClickListener(this);
-                this.subViews.add(subViews);
+                this.additionalInfo.add(subViews);
             }
         }
 
@@ -132,7 +125,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
 
         View getView(int id)
         {
-            return view.findViewWithTag(id);
+            return displayedItem.findViewWithTag(id);
         }
     }
 
