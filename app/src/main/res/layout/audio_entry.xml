@@ -10,6 +10,7 @@
             android:id="@+id/audioTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/play"
             android:orientation="horizontal">
 
         <TextView
@@ -22,7 +23,7 @@
         <Button
                 android:id="@+id/selectAudioFile"
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
+                android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -30,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/audioTitle"
+            android:layout_toStartOf="@+id/play"
             android:orientation="horizontal">
 
         <TextView
@@ -51,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/playInLoop"
+            android:layout_toStartOf="@+id/play"
             android:orientation="horizontal">
 
         <TextView
@@ -69,8 +72,9 @@
 
     <Button
             android:id="@+id/play"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/volumePart"
+            android:layout_alignParentEnd="true"
             android:text="play" />
+
 </RelativeLayout>
