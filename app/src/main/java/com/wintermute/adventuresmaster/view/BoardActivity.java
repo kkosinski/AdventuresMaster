@@ -1,20 +1,28 @@
 package com.wintermute.adventuresmaster.view;
 
-import android.widget.Toast;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.wintermute.adventuresmaster.R;
+import com.wintermute.adventuresmaster.adapter.DynamicAdapter;
 
-public class BoardActivity extends AppCompatActivity
+public class BoardActivity extends AppCompatActivity implements DynamicAdapter.ItemClickListener
 {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_board);
+        setContentView(R.layout.board_activity);
 
-        System.out.println();
-        Toast.makeText(this, getIntent().getStringExtra("type"), Toast.LENGTH_SHORT).show();
+        //TODO: add logic
+    }
+
+
+
+    @Override
+    public void onItemClick(View view, int position)
+    {
+
     }
 }

@@ -1,4 +1,4 @@
-package com.wintermute.adventuresmaster.database.entity;
+package com.wintermute.adventuresmaster.database.entity.menu;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
 import com.wintermute.adventuresmaster.helper.LayoutFactory;
-import com.wintermute.adventuresmaster.view.tools.gm.SceneActivity;
 import com.wintermute.adventuresmaster.viewmodel.MenuViewModel;
 
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
  *
  * @author wintermute
  */
-public class MainActivity extends AppCompatActivity
+public class AdventuresMaster extends AppCompatActivity
 {
 
     private MenuViewModel model;
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         init();
     }
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         menuItemsObserver = displayedMenuItems -> displayedMenuItems.forEach(
             i -> layoutFactory.addViewToDefaultLayout(layout, initMenuItem(i)));
 
-        model.getTopLevelItems(this).observe(MainActivity.this, menuItemsObserver);
+        model.getTopLevelItems(this).observe(AdventuresMaster.this, menuItemsObserver);
     }
 
     private Button initMenuItem(MenuItem target)
@@ -62,36 +61,35 @@ public class MainActivity extends AppCompatActivity
         {
             if (target.isActivity())
             {
-                startActivity(new Intent(this, SceneActivity.class));
-//                model.getActivity(this, target).observe(this, activityDesc ->
-//                {
-//                    try
-//                    {
-//                        Class<?> c = Class.forName(this.getPackageName() + ".view." + activityDesc.getClassName());
-//                        Intent intent = new Intent(this, c);
-//                        if (activityDesc.isHasExtras())
-//                        {
-//                            model
-//                                .getActivityExtras(this, activityDesc)
-//                                .observe(MainActivity.this,
-//                                    activityExtras -> {
-//                                        activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
-//                                        startActivity(intent);
-//                                    });
-//                        } else {
-//                            startActivity(intent);
-//                        }
-//                    } catch (ClassNotFoundException e)
-//                    {
-//                        Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_SHORT).show();
-//                        e.printStackTrace();
-//                    }
-//                });
+                model.getActivity(this, target).observe(this, activityDesc ->
+                {
+                    try
+                    {
+                        Class<?> c = Class.forName(this.getPackageName() + ".view." + activityDesc.getClassName());
+                        Intent intent = new Intent(this, c);
+                        if (activityDesc.isHasExtras())
+                        {
+                            model
+                                .getActivityExtras(this, activityDesc)
+                                .observe(AdventuresMaster.this,
+                                    activityExtras -> {
+                                        activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
+                                        startActivity(intent);
+                                    });
+                        } else {
+                            startActivity(intent);
+                        }
+                    } catch (ClassNotFoundException e)
+                    {
+                        Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                });
             } else
             {
                 currentItem = target;
                 layout.removeAllViews();
-                model.getSelectedItemContent(this, target).observe(MainActivity.this, menuItemsObserver);
+                model.getSelectedItemContent(this, target).observe(AdventuresMaster.this, menuItemsObserver);
             }
         });
         return result;
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity
     private void updateCurrentItem()
     {
         final Observer<MenuItem> parentFetcher = p -> currentItem = p;
-        model.getItemParent(this, currentItem).observe(MainActivity.this, parentFetcher);
+        model.getItemParent(this, currentItem).observe(AdventuresMaster.this, parentFetcher);
     }
 
     @Override

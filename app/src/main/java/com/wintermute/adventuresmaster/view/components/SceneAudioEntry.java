@@ -99,7 +99,7 @@ public class SceneAudioEntry extends LinearLayout
     /**
      * Assigns the click listener interface.
      *
-     * @param onSelectAudioClick
+     * @param onSelectAudioClick interface to bind.
      */
     public void setOnSelectAudioClick(OnSelectAudioClick onSelectAudioClick)
     {
@@ -109,7 +109,7 @@ public class SceneAudioEntry extends LinearLayout
     /**
      * Assigns the click listener interface.
      *
-     * @param onPlayAudioClick
+     * @param onPlayAudioClick interface to bind.
      */
     public void setOnPlayAudioClick(OnPlayAudioClick onPlayAudioClick)
     {

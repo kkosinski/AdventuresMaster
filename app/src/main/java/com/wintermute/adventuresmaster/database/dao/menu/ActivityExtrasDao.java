@@ -1,9 +1,9 @@
-package com.wintermute.adventuresmaster.database.dao;
+package com.wintermute.adventuresmaster.database.dao.menu;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
-import com.wintermute.adventuresmaster.database.entity.ActivityExtras;
+import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
 
 import java.util.List;
 

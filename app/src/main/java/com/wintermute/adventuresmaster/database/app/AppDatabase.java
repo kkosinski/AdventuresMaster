@@ -4,12 +4,12 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.wintermute.adventuresmaster.database.dao.ActivityDescDao;
-import com.wintermute.adventuresmaster.database.dao.ActivityExtrasDao;
-import com.wintermute.adventuresmaster.database.dao.MenuItemDao;
-import com.wintermute.adventuresmaster.database.entity.ActivityDesc;
-import com.wintermute.adventuresmaster.database.entity.ActivityExtras;
-import com.wintermute.adventuresmaster.database.entity.MenuItem;
+import com.wintermute.adventuresmaster.database.dao.menu.ActivityDescDao;
+import com.wintermute.adventuresmaster.database.dao.menu.ActivityExtrasDao;
+import com.wintermute.adventuresmaster.database.dao.menu.MenuItemDao;
+import com.wintermute.adventuresmaster.database.entity.menu.ActivityDesc;
+import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
+import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
 
 /**
  * Abstract class containing all information to create database. Singleton.
@@ -42,7 +42,6 @@ public abstract class AppDatabase extends RoomDatabase
         }
         return INSTANCE;
     }
-
 
     /**
      * Destroy instance of this class.
