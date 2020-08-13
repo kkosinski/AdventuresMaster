@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AdventuresMaster</string>
+
+    // Custom component
+    <string name="audio_entry_title">audio title: </string>
+    <string name="audio_entry_volume">volume: </string>
+    <string name="audio_entry_loop">loop: </string>
 </resources>

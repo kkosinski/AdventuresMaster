@@ -11,8 +11,9 @@ import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
-import com.wintermute.adventuresmaster.database.entity.MenuItem;
+import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
 import com.wintermute.adventuresmaster.helper.LayoutFactory;
+import com.wintermute.adventuresmaster.view.tools.gm.SceneActivity;
 import com.wintermute.adventuresmaster.viewmodel.MenuViewModel;
 
 import java.util.List;
@@ -61,30 +62,31 @@ public class MainActivity extends AppCompatActivity
         {
             if (target.isActivity())
             {
-                model.getActivity(this, target).observe(this, activityDesc ->
-                {
-                    try
-                    {
-                        Class<?> c = Class.forName(this.getPackageName() + ".view." + activityDesc.getClassName());
-                        Intent intent = new Intent(this, c);
-                        if (activityDesc.isHasExtras())
-                        {
-                            model
-                                .getActivityExtras(this, activityDesc)
-                                .observe(MainActivity.this,
-                                    activityExtras -> {
-                                        activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
-                                        startActivity(intent);
-                                    });
-                        } else {
-                            startActivity(intent);
-                        }
-                    } catch (ClassNotFoundException e)
-                    {
-                        Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                });
+                startActivity(new Intent(this, SceneActivity.class));
+//                model.getActivity(this, target).observe(this, activityDesc ->
+//                {
+//                    try
+//                    {
+//                        Class<?> c = Class.forName(this.getPackageName() + ".view." + activityDesc.getClassName());
+//                        Intent intent = new Intent(this, c);
+//                        if (activityDesc.isHasExtras())
+//                        {
+//                            model
+//                                .getActivityExtras(this, activityDesc)
+//                                .observe(MainActivity.this,
+//                                    activityExtras -> {
+//                                        activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
+//                                        startActivity(intent);
+//                                    });
+//                        } else {
+//                            startActivity(intent);
+//                        }
+//                    } catch (ClassNotFoundException e)
+//                    {
+//                        Toast.makeText(this, "This function is not implemented yet", Toast.LENGTH_SHORT).show();
+//                        e.printStackTrace();
+//                    }
+//                });
             } else
             {
                 currentItem = target;

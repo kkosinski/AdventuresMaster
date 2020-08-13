@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+    <LinearLayout
+            android:id="@+id/audioTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/audioTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/audio_entry_title"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+        <Button
+                android:id="@+id/selectAudioFile"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/playInLoop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/audioTitle"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/playInLoopTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/audio_entry_loop"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+        <CheckBox
+                android:id="@+id/loopAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="loop" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/volumePart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/playInLoop"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/volumeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/audio_entry_volume"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+        <SeekBar
+                android:id="@+id/volumebar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="10" />
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/play"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/volumePart"
+            android:text="play" />
+</RelativeLayout>
