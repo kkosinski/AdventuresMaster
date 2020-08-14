@@ -30,8 +30,8 @@ INSERT INTO activityExtras (activityId, key, value)	VALUES
 
 CREATE TABLE scene (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, lightId INTEGER, effect INTEGER, music INTEGER, ambience INTEGER, FOREIGN KEY (effect) REFERENCES audioWithOpts (audiFileId), FOREIGN KEY (music) REFERENCES audioWithOpts (audiFileId),	FOREIGN KEY (ambience) REFERENCES audioWithOpts (audiFileId));
 
-CREATE TABLE audioWithOpts (audioFileId INTEGER, optsId INTEGER, FOREIGN KEY (audioFileId) REFERENCES audioFile (id), FOREIGN KEY (optsId) REFERENCES opts (id) ON DELETE CASCADE);
+CREATE TABLE audioWithOpts (audioFileId INTEGER, optsId INTEGER, FOREIGN KEY (audioFileId) REFERENCES audioFile (id), FOREIGN KEY (optsId) REFERENCES audioOpts(id) ON DELETE CASCADE);
 
 CREATE TABLE audioFile (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, path TEXT UNIQUE);
 
-CREATE TABLE opts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, volume INTEGER, repeat INTEGER, playAfterEffect INTEGER);
+CREATE TABLE audioOpts(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, volume INTEGER, repeat INTEGER, playAfterEffect INTEGER);

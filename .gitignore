@@ -15,4 +15,3 @@
 .externalNativeBuild
 .cxx
 /app/schemas
-/app/src/test/sqlinit.sql
