@@ -3,12 +3,12 @@ package com.wintermute.adventuresmaster.view.components;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import com.wintermute.adventuresmaster.R;
-import lombok.Getter;
 
 /**
  * Custom component representing entry of audio file within a scene.
@@ -17,14 +17,31 @@ import lombok.Getter;
  */
 public class SceneAudioEntry extends LinearLayout
 {
-    @Getter
+    /**
+     * Handles clicks on select audio buttons.
+     */
+    public interface OnSelectAudioClick
+    {
+        void onSelectAudioClickListener(View v);
+    }
+
+    /**
+     * Handles clicks on play audio buttons.
+     */
+    public interface OnPlayAudioClick
+    {
+        void onPlayClickListener(View v);
+    }
+
+    private OnSelectAudioClick onSelectAudioClick;
+    private OnPlayAudioClick onPlayAudioClick;
+
     private Button selectAudio;
-    @Getter
-    private Button playAudio;
-    private boolean playInLoop;
-    private String sceneAudioFileTitle;
     private CheckBox loopBox;
+    private String sceneAudioFileTitle;
+
     private SeekBar volumeBar;
+    private boolean playInLoop;
     private int volume;
 
     /**
@@ -59,9 +76,45 @@ public class SceneAudioEntry extends LinearLayout
     private void initComponents()
     {
         selectAudio = findViewById(R.id.selectAudioFile);
-        playAudio = findViewById(R.id.play);
+        selectAudio.setOnClickListener(v ->
+        {
+            if (onSelectAudioClick != null)
+            {
+                onSelectAudioClick.onSelectAudioClickListener(v);
+            }
+        });
+
+        Button playAudio = findViewById(R.id.play);
+        playAudio.setOnClickListener(v ->
+        {
+            if (onPlayAudioClick != null)
+            {
+                onPlayAudioClick.onPlayClickListener(v);
+            }
+        });
+
         volumeBar = findViewById(R.id.volumebar);
         loopBox = findViewById(R.id.loopAudio);
+    }
+
+    /**
+     * Assigns the click listener interface.
+     *
+     * @param onSelectAudioClick interface to bind.
+     */
+    public void setOnSelectAudioClick(OnSelectAudioClick onSelectAudioClick)
+    {
+        this.onSelectAudioClick = onSelectAudioClick;
+    }
+
+    /**
+     * Assigns the click listener interface.
+     *
+     * @param onPlayAudioClick interface to bind.
+     */
+    public void setOnPlayAudioClick(OnPlayAudioClick onPlayAudioClick)
+    {
+        this.onPlayAudioClick = onPlayAudioClick;
     }
 
     /**
