@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 public class SceneViewModel extends ViewModel
 {
 
-    public void setSceneAudio(Context ctx, HashMap<SceneAudioEntry, String> audioWithPath, String sceneName)
+    public void createSceneWithAllDependingOperations(Context ctx, HashMap<SceneAudioEntry, String> audioWithPath, String sceneName)
     {
         HashMap<String, Long> audioFileTypeAndId = new HashMap<>();
         for (Map.Entry<SceneAudioEntry, String> audioEntry : audioWithPath.entrySet())
@@ -61,7 +61,6 @@ public class SceneViewModel extends ViewModel
         {
             result.setAmbience(sceneAudioWithOpts.get("ambience"));
         }
-
         return result;
     }
 

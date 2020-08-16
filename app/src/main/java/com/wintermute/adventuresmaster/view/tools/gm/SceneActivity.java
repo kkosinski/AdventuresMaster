@@ -124,7 +124,7 @@ public class SceneActivity extends AppCompatActivity
         }
 
         SceneViewModel model = new ViewModelProvider(this).get(SceneViewModel.class);
-        model.setSceneAudio(this, audioWithPath, sceneName);
+        model.createSceneWithAllDependingOperations(this, audioWithPath, sceneName);
     }
 
     private String sanitizeFileName(String path)
