@@ -5,6 +5,9 @@
     <string name="scene_activity_scene_name">Scene name</string>
     <string name="scene_activity_scene_save">save</string>
 
+    //BoardDialog
+    <string name="board_dialog_confirm">Confirm</string>
+    <string name="board_dialog_cancel">Cancel</string>
 
     // Custom component
     <string name="audio_entry_title">audio title: </string>
@@ -12,4 +15,7 @@
     <string name="audio_entry_loop">loop: </string>
     <string name="audio_entry_play_after_effect">start when effect is done</string>
     <string name="audio_entry_loop_audio">repeat track</string>
+    <string name="board_activity_emptyBoardHint">Tap to add board</string>
+    <string name="board_dialog_board_name">Board name</string>
+    <string name="board_activity_add_board_content">Add</string>
 </resources>

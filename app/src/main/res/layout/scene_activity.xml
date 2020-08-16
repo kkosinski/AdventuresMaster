@@ -8,7 +8,7 @@
         tools:context=".view.tools.gm.SceneActivity">
 
     <EditText
-            android:id="@+id/scene_name"
+            android:id="@+id/scene_activity_scene_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
@@ -18,10 +18,10 @@
             android:inputType="text" />
 
     <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
-            android:id="@+id/effect"
+            android:id="@+id/scene_activity_effect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/scene_name"
+            android:layout_below="@+id/scene_activity_scene_name"
             android:tag="effect"
             android:visibility="visible"
             custom:styleable_scene_after_effect="false"
@@ -30,10 +30,10 @@
 
 
     <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
-            android:id="@+id/music"
+            android:id="@+id/scene_activity_music"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/effect"
+            android:layout_below="@id/scene_activity_effect"
             android:tag="music"
             android:visibility="visible"
             custom:styleable_scene_after_effect="true"
@@ -41,10 +41,10 @@
             custom:styleable_scene_title="set music" />
 
     <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
-            android:id="@+id/ambience"
+            android:id="@+id/scene_activity_ambience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/music"
+            android:layout_below="@+id/scene_activity_music"
             android:tag="ambience"
             android:visibility="visible"
             custom:styleable_scene_after_effect="true"
@@ -52,7 +52,7 @@
             custom:styleable_scene_title="set ambience" />
 
     <Button
-            android:id="@+id/save_scene"
+            android:id="@+id/scene_activity_save_scene"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

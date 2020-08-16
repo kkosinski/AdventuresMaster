@@ -77,7 +77,7 @@ public class SceneAudioEntry extends LinearLayout
 
     private void initComponents()
     {
-        selectAudio = findViewById(R.id.selectAudioFile);
+        selectAudio = findViewById(R.id.audio_entry_select_audio_file);
         selectAudio.setOnClickListener(v ->
         {
             if (onSelectAudioClick != null)
@@ -86,7 +86,7 @@ public class SceneAudioEntry extends LinearLayout
             }
         });
 
-        Button playAudio = findViewById(R.id.play);
+        Button playAudio = findViewById(R.id.audio_entry_play);
         playAudio.setOnClickListener(v ->
         {
             if (onPlayAudioClick != null)
@@ -95,7 +95,7 @@ public class SceneAudioEntry extends LinearLayout
             }
         });
 
-        volumeBar = findViewById(R.id.volumebar);
+        volumeBar = findViewById(R.id.audio_entry_volumebar);
         volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
@@ -117,10 +117,10 @@ public class SceneAudioEntry extends LinearLayout
             }
         });
 
-        loopBox = findViewById(R.id.repeatTrack);
+        loopBox = findViewById(R.id.audio_entry_repeat_track);
         loopBox.setOnCheckedChangeListener((buttonView, isChecked) -> setRepeatTrack(isChecked));
 
-        playAfterEffectBox = findViewById(R.id.playAfterEffect);
+        playAfterEffectBox = findViewById(R.id.audio_entry_play_after_effect);
         playAfterEffectBox.setOnCheckedChangeListener((buttonView, isChecked) -> setPlayAfterEffect(isChecked));
     }
 

@@ -27,7 +27,8 @@ public class BoardViewModel extends ViewModel
         return AppDatabase.getAppDatabase(ctx).boardDao().getBoardsByParentId(id, type);
     }
 
-    public LiveData<Board> getBoardById(Context ctx, long id){
+    public LiveData<Board> getBoardById(Context ctx, long id)
+    {
         return AppDatabase.getAppDatabase(ctx).boardDao().getById(id);
     }
 

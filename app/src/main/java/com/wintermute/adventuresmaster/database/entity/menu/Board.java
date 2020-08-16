@@ -34,7 +34,8 @@ public class Board
     @ColumnInfo(name = "parentId")
     private long parentId;
 
-    public Board(@NonNull String name, @NonNull String type, long parentId) {
+    public Board(@NonNull String name, @NonNull String type, long parentId)
+    {
         this.name = name;
         this.type = type;
         this.hasNestedBoards = false;

@@ -25,7 +25,8 @@ public class DynamicListItem
      * @param title of target element
      * @param id equals to the id from the database of target item
      */
-    public DynamicListItem(String title, long id) {
+    public DynamicListItem(String title, long id)
+    {
         this.title = title;
         this.additionalInfo = new ArrayList<>();
         this.id = id;

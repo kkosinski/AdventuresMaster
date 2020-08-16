@@ -20,6 +20,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * In this activity a scene is composed and the responsible view model ({@link SceneViewModel}) is notified to persist
+ * these changes once the user want to save it.
+ *
+ * @author wintermute
+ */
 public class SceneActivity extends AppCompatActivity
     implements SceneAudioEntry.OnSelectAudioClick, SceneAudioEntry.OnPlayAudioClick
 {
@@ -38,10 +44,10 @@ public class SceneActivity extends AppCompatActivity
 
     private void initComponents()
     {
-        Button save = findViewById(R.id.save_scene);
+        Button save = findViewById(R.id.scene_activity_save_scene);
         save.setOnClickListener(v ->
         {
-            TextView sceneNameView = findViewById(R.id.scene_name);
+            TextView sceneNameView = findViewById(R.id.scene_activity_scene_name);
             String sceneName = sceneNameView.getText().toString();
             if ("".equals(sceneName))
             {
@@ -52,10 +58,10 @@ public class SceneActivity extends AppCompatActivity
             storeScene(sceneName);
         });
 
-        effect = findViewById(R.id.effect);
+        effect = findViewById(R.id.scene_activity_effect);
         effect.disablePlayAfterEffectOption();
-        music = findViewById(R.id.music);
-        ambience = findViewById(R.id.ambience);
+        music = findViewById(R.id.scene_activity_music);
+        ambience = findViewById(R.id.scene_activity_ambience);
         SceneAudioEntry[] audioEntries = new SceneAudioEntry[] {effect, music, ambience};
 
         Arrays.stream(audioEntries).forEach(a ->

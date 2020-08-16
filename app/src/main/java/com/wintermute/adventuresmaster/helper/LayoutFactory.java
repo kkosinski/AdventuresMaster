@@ -36,7 +36,7 @@ public class LayoutFactory
      */
     public LinearLayout getDefaultLayout(View view)
     {
-        return view.findViewById(R.id.default_layout);
+        return view.findViewById(R.id.adventures_master_default_layout);
     }
 
     /**

@@ -59,7 +59,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
         {
             container.addView(factory.createViewElement(ctx, i));
         }
-        LinearLayout layout = view.findViewById(R.id.list_item_template_id);
+        LinearLayout layout = view.findViewById(R.id.dynamic_list_item_template_id);
         layout.addView(container);
     }
 
@@ -68,6 +68,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
     {
         DynamicListItem item = items.get(position);
         holder.title.setText(item.getTitle());
+        holder.itemId = item.getId();
 
         if (item.getAdditionalInfo() != null)
         {
@@ -98,6 +99,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
         TextView title;
         List<TextView> additionalInfo;
         View displayedItem;
+        long itemId;
 
         ViewHolder(View view, String title, int elementsCount)
         {
@@ -120,7 +122,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
         public void onClick(View view)
         {
             if (mClickListener != null)
-            { mClickListener.onItemClick(view, getAdapterPosition()); }
+            { mClickListener.onItemClick(view, getAdapterPosition(), itemId); }
         }
 
         View getView(int id)
@@ -136,6 +138,6 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
 
     public interface ItemClickListener
     {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position, long itemId);
     }
 }

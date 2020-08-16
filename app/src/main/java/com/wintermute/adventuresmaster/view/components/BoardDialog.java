@@ -61,15 +61,18 @@ public class BoardDialog extends DialogFragment
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-
         if (createBoardOnly)
         {
-            builder.setView(view).setTitle("Create board: ").setPositiveButton(R.string.board_dialog_confirm, (dialog, which) ->
-            {
-                EditText insertBoardName = view.findViewById(R.id.board_dialog_board_name);
-                setOnCreateBoardConfirm((OnCreateBoardConfirm) context);
-                onCreateBoardConfirm.createBoard(insertBoardName.getText().toString());
-            }).setNegativeButton(R.string.board_dialog_cancel, ((dialog, which) -> dialog.dismiss()));
+            builder
+                .setView(view)
+                .setTitle("Create board: ")
+                .setPositiveButton(R.string.board_dialog_confirm, (dialog, which) ->
+                {
+                    EditText insertBoardName = view.findViewById(R.id.board_dialog_board_name);
+                    setOnCreateBoardConfirm((OnCreateBoardConfirm) context);
+                    onCreateBoardConfirm.createBoard(insertBoardName.getText().toString());
+                })
+                .setNegativeButton(R.string.board_dialog_cancel, ((dialog, which) -> dialog.dismiss()));
         } else
         {
             builder.setTitle("Create: ").setItems(R.array.boardArray, (dialog, which) ->

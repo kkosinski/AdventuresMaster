@@ -6,64 +6,62 @@
         android:orientation="horizontal">
 
     <LinearLayout
-            android:id="@+id/audioTitle"
+            android:id="@+id/audio_entry_audio_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/play"
+            android:layout_toStartOf="@+id/audio_entry_play"
             android:orientation="horizontal">
 
         <TextView
-                android:id="@+id/audioTitleTextView"
+                android:id="@+id/audio_entry_audio_title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/audio_entry_title"
                 android:textAppearance="?android:textAppearanceLarge" />
 
         <Button
-                android:id="@+id/selectAudioFile"
+                android:id="@+id/audio_entry_select_audio_file"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
     </LinearLayout>
 
     <TextView
-            android:id="@+id/volumeTextView"
+            android:id="@+id/audio_entry_volume_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/audio_entry_volume"
-            android:layout_below="@id/audioTitle"
+            android:layout_below="@id/audio_entry_audio_title"
             android:textAppearance="?android:textAppearanceLarge" />
 
     <SeekBar
-            android:id="@+id/volumebar"
+            android:id="@+id/audio_entry_volumebar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/audioTitle"
-            android:layout_toEndOf="@+id/volumeTextView"
+            android:layout_below="@id/audio_entry_audio_title"
+            android:layout_toEndOf="@+id/audio_entry_volume_text_view"
             android:progress="5"
             android:max="10" />
 
     <Button
-            android:id="@+id/play"
+            android:id="@+id/audio_entry_play"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="play" />
 
     <CheckBox
-            android:id="@+id/repeatTrack"
+            android:id="@+id/audio_entry_repeat_track"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/volumeTextView"
+            android:layout_below="@+id/audio_entry_volume_text_view"
             android:checked="false"
             android:text="@string/audio_entry_loop_audio" />
 
     <CheckBox
-            android:id="@+id/playAfterEffect"
+            android:id="@+id/audio_entry_play_after_effect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/repeatTrack"
+            android:layout_below="@+id/audio_entry_repeat_track"
             android:checked="false"
             android:text="@string/audio_entry_play_after_effect" />
-
-
 </RelativeLayout>

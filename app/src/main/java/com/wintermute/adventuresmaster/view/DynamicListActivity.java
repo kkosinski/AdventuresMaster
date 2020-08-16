@@ -46,7 +46,7 @@ public class DynamicListActivity extends AppCompatActivity implements DynamicAda
 
     private RecyclerView initRecyclerView()
     {
-        RecyclerView result = findViewById(R.id.list);
+        RecyclerView result = findViewById(R.id.dynamic_list_list);
         LinearLayoutManager layout = new LinearLayoutManager(this);
         result.setLayoutManager(layout);
         DividerItemDecoration divider = new DividerItemDecoration(result.getContext(), layout.getOrientation());
@@ -62,7 +62,7 @@ public class DynamicListActivity extends AppCompatActivity implements DynamicAda
     }
 
     @Override
-    public void onItemClick(View view, int position)
+    public void onItemClick(View view, int position, long itemId)
     {
         System.out.println("clicked " + position);
     }
