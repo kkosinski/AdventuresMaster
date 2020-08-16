@@ -1,6 +1,9 @@
 package com.wintermute.adventuresmaster.database.dao.tools.gm;
 
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
 
 /**
  * SceneDao as database access object.
@@ -10,5 +13,7 @@ import androidx.room.Dao;
 @Dao
 public interface SceneDao
 {
-    //TODO
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insert(Scene scene);
+
 }
