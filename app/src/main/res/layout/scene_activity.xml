@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".view.tools.gm.SceneActivity">
+
+    <EditText
+            android:id="@+id/scene_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:hint="@string/scene_activity_scene_name"
+            android:importantForAutofill="no"
+            android:inputType="text" />
+
+    <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
+            android:id="@+id/effect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scene_name"
+            android:tag="effect"
+            android:visibility="visible"
+            custom:styleable_scene_after_effect="false"
+            custom:styleable_scene_loop="false"
+            custom:styleable_scene_title="set effect" />
+
+
+    <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
+            android:id="@+id/music"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/effect"
+            android:tag="music"
+            android:visibility="visible"
+            custom:styleable_scene_after_effect="true"
+            custom:styleable_scene_loop="true"
+            custom:styleable_scene_title="set music" />
+
+    <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
+            android:id="@+id/ambience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/music"
+            android:tag="ambience"
+            android:visibility="visible"
+            custom:styleable_scene_after_effect="true"
+            custom:styleable_scene_loop="true"
+            custom:styleable_scene_title="set ambience" />
+
+    <Button
+            android:id="@+id/save_scene"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="@string/scene_activity_scene_save" />
+</RelativeLayout>

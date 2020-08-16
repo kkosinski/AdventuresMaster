@@ -3,6 +3,7 @@
     <declare-styleable name="SceneAudioEntry">
         <attr name="styleable_scene_title" format="string" />
         <attr name="styleable_scene_loop" format="boolean" />
+        <attr name="styleable_scene_after_effect" format="boolean" />
         <attr name="styleable_scene_volume" format="integer" />
     </declare-styleable>
 </resources>

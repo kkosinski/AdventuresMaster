@@ -37,11 +37,11 @@ public class SceneAudioEntry extends LinearLayout
     private OnPlayAudioClick onPlayAudioClick;
 
     private Button selectAudio;
-    private CheckBox loopBox;
+    private CheckBox loopBox, playAfterEffectBox;
     private String sceneAudioFileTitle;
 
     private SeekBar volumeBar;
-    private boolean playInLoop;
+    private boolean repeatTrack, playAfterEffect;
     private int volume;
 
     /**
@@ -59,7 +59,8 @@ public class SceneAudioEntry extends LinearLayout
         try
         {
             sceneAudioFileTitle = resources.getString(R.styleable.SceneAudioEntry_styleable_scene_title);
-            playInLoop = resources.getBoolean(R.styleable.SceneAudioEntry_styleable_scene_loop, false);
+            repeatTrack = resources.getBoolean(R.styleable.SceneAudioEntry_styleable_scene_loop, false);
+            playAfterEffect = resources.getBoolean(R.styleable.SceneAudioEntry_styleable_scene_after_effect, false);
             volume = resources.getInt(R.styleable.SceneAudioEntry_styleable_scene_volume, 5);
         } finally
         {
@@ -69,7 +70,8 @@ public class SceneAudioEntry extends LinearLayout
         initComponents();
 
         setSceneAudioFileTitle(sceneAudioFileTitle);
-        setPlayInLoop(playInLoop);
+        setRepeatTrack(repeatTrack);
+        setPlayAfterEffect(playAfterEffect);
         setVolume(volume);
     }
 
@@ -94,7 +96,31 @@ public class SceneAudioEntry extends LinearLayout
         });
 
         volumeBar = findViewById(R.id.volumebar);
-        loopBox = findViewById(R.id.loopAudio);
+        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                setVolume(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+        });
+
+        loopBox = findViewById(R.id.repeatTrack);
+        loopBox.setOnCheckedChangeListener((buttonView, isChecked) -> setRepeatTrack(isChecked));
+
+        playAfterEffectBox = findViewById(R.id.playAfterEffect);
+        playAfterEffectBox.setOnCheckedChangeListener((buttonView, isChecked) -> setPlayAfterEffect(isChecked));
     }
 
     /**
@@ -118,14 +144,6 @@ public class SceneAudioEntry extends LinearLayout
     }
 
     /**
-     * @return scene audio title file in this component.
-     */
-    public String getSceneAudioFileTitle()
-    {
-        return sceneAudioFileTitle;
-    }
-
-    /**
      * @param sceneAudioFileTitle audio file title.
      */
     public void setSceneAudioFileTitle(String sceneAudioFileTitle)
@@ -139,18 +157,18 @@ public class SceneAudioEntry extends LinearLayout
     /**
      * @return if selected audio file in this scene should be played in loop.
      */
-    public boolean isPlayInLoop()
+    public boolean isRepeatTrack()
     {
-        return playInLoop;
+        return repeatTrack;
     }
 
     /**
-     * @param playInLoop state.
+     * @param repeatTrack describes if track should be played in loop or not.
      */
-    public void setPlayInLoop(boolean playInLoop)
+    public void setRepeatTrack(boolean repeatTrack)
     {
-        this.playInLoop = playInLoop;
-        loopBox.setChecked(playInLoop);
+        this.repeatTrack = repeatTrack;
+        loopBox.setChecked(repeatTrack);
         invalidate();
         requestLayout();
     }
@@ -172,5 +190,29 @@ public class SceneAudioEntry extends LinearLayout
         volumeBar.setProgress(volume);
         invalidate();
         requestLayout();
+    }
+
+    /**
+     * @return the flag if the audio entry should play once the effect audio is done or not.
+     */
+    public boolean isPlayAfterEffect(){
+        return playAfterEffect;
+    }
+
+    /**
+     * @param playAfterEffect to determine if audio entry should be started in player once the effect audio is done.
+     */
+    public void setPlayAfterEffect(boolean playAfterEffect){
+        this.playAfterEffect = playAfterEffect;
+        playAfterEffectBox.setChecked(playAfterEffect);
+        invalidate();
+        requestLayout();
+    }
+
+    /**
+     * Hides the checkbox for playing after effect option. This is needed for the effect audio itself.
+     */
+    public void disablePlayAfterEffectOption(){
+        playAfterEffectBox.setVisibility(GONE);
     }
 }

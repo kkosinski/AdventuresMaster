@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">AdventuresMaster</string>
 
+    //SceneActivity
+    <string name="scene_activity_scene_name">Scene name</string>
+    <string name="scene_activity_scene_save">save</string>
+
+
     // Custom component
     <string name="audio_entry_title">audio title: </string>
     <string name="audio_entry_volume">volume: </string>
     <string name="audio_entry_loop">loop: </string>
+    <string name="audio_entry_play_after_effect">start when effect is done</string>
+    <string name="audio_entry_loop_audio">repeat track</string>
 </resources>

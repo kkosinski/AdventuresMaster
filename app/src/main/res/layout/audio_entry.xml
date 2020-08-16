@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="15dp"
         android:orientation="horizontal">
 
     <LinearLayout
@@ -26,49 +25,22 @@
                 android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <LinearLayout
-            android:id="@+id/playInLoop"
+    <TextView
+            android:id="@+id/volumeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/audio_entry_volume"
+            android:layout_below="@id/audioTitle"
+            android:textAppearance="?android:textAppearanceLarge" />
+
+    <SeekBar
+            android:id="@+id/volumebar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/audioTitle"
-            android:layout_toStartOf="@+id/play"
-            android:orientation="horizontal">
-
-        <TextView
-                android:id="@+id/playInLoopTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/audio_entry_loop"
-                android:textAppearance="?android:textAppearanceLarge" />
-
-        <CheckBox
-                android:id="@+id/loopAudio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="loop" />
-    </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/volumePart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/playInLoop"
-            android:layout_toStartOf="@+id/play"
-            android:orientation="horizontal">
-
-        <TextView
-                android:id="@+id/volumeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/audio_entry_volume"
-                android:textAppearance="?android:textAppearanceLarge" />
-
-        <SeekBar
-                android:id="@+id/volumebar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="10" />
-    </LinearLayout>
+            android:layout_toEndOf="@+id/volumeTextView"
+            android:progress="5"
+            android:max="10" />
 
     <Button
             android:id="@+id/play"
@@ -76,5 +48,22 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="play" />
+
+    <CheckBox
+            android:id="@+id/repeatTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/volumeTextView"
+            android:checked="false"
+            android:text="@string/audio_entry_loop_audio" />
+
+    <CheckBox
+            android:id="@+id/playAfterEffect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/repeatTrack"
+            android:checked="false"
+            android:text="@string/audio_entry_play_after_effect" />
+
 
 </RelativeLayout>
