@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity(indices = {@Index(value = "effect"), @Index(value = "music"), @Index(value = "ambience")},
-    foreignKeys = {@ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "effect"),
-                   @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "music"),
-                   @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "ambience")})
+        foreignKeys = {@ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "effect"),
+                       @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "music"),
+                       @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "ambience")})
 public class Scene
 {
     @PrimaryKey(autoGenerate = true)
@@ -40,6 +40,4 @@ public class Scene
 
     @ColumnInfo(name = "ambience")
     private Long ambience;
-
-
 }

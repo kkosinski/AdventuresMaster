@@ -23,7 +23,8 @@ public class AudioFile
     @ColumnInfo(name = "path")
     private String path;
 
-    public AudioFile(@NonNull String path){
+    public AudioFile(@NonNull String path)
+    {
         this.path = path;
     }
 }

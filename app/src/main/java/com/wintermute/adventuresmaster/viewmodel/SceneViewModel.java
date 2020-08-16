@@ -29,7 +29,8 @@ public class SceneViewModel extends ViewModel
      * @param audioWithPath audio entry with all information and path to the audio file.
      * @param sceneName title of scene to display in list after its created and once it will be listed.
      */
-    public void createSceneWithAllDependingOperations(Context ctx, HashMap<SceneAudioEntry, String> audioWithPath, String sceneName)
+    public void createSceneWithAllDependingOperations(Context ctx, HashMap<SceneAudioEntry, String> audioWithPath,
+                                                      String sceneName)
     {
         HashMap<String, Long> audioFileTypeAndId = new HashMap<>();
         for (Map.Entry<SceneAudioEntry, String> audioEntry : audioWithPath.entrySet())
@@ -40,7 +41,8 @@ public class SceneViewModel extends ViewModel
                 Long audioFileId = new DatabaseOperationTask(ctx).execute(new AudioFile(audioEntry.getValue())).get();
 
                 Long audioWithOptsId = new DatabaseOperationTask(ctx)
-                    .execute(new AudioWithOpts(audioFileId, audioDesc.getVolume(), audioDesc.isRepeatTrack(), audioEntry.getKey().isPlayAfterEffect()))
+                    .execute(new AudioWithOpts(audioFileId, audioDesc.getVolume(), audioDesc.isRepeatTrack(),
+                        audioEntry.getKey().isPlayAfterEffect()))
                     .get();
 
                 audioFileTypeAndId.put(audioEntry.getKey().getTag().toString(), audioWithOptsId);

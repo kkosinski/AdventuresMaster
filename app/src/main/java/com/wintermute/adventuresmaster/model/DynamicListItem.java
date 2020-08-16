@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.util.List;
 
-
 /**
  * Acts as information holder for items to display in dynamic list.
  *

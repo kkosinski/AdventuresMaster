@@ -1,12 +1,11 @@
 package com.wintermute.adventuresmaster.view;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -69,14 +68,13 @@ public class AdventuresMaster extends AppCompatActivity
                         Intent intent = new Intent(this, c);
                         if (activityDesc.isHasExtras())
                         {
-                            model
-                                .getActivityExtras(this, activityDesc)
-                                .observe(AdventuresMaster.this,
-                                    activityExtras -> {
-                                        activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
-                                        startActivity(intent);
-                                    });
-                        } else {
+                            model.getActivityExtras(this, activityDesc).observe(AdventuresMaster.this, activityExtras ->
+                            {
+                                activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
+                                startActivity(intent);
+                            });
+                        } else
+                        {
                             startActivity(intent);
                         }
                     } catch (ClassNotFoundException e)

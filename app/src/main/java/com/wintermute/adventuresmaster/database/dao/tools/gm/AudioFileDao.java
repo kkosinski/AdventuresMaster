@@ -6,8 +6,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 
-import java.util.List;
-
 /**
  * Access audio files in database.
  *
@@ -24,5 +22,4 @@ public interface AudioFileDao
 
     @Query("SELECT id FROM audioFile WHERE path = :path")
     long getIdByPath(String path);
-
 }

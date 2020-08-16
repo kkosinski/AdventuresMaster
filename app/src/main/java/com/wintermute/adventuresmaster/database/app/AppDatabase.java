@@ -29,10 +29,15 @@ public abstract class AppDatabase extends RoomDatabase
     public static AppDatabase INSTANCE;
 
     public abstract MenuItemDao menuItemDao();
+
     public abstract ActivityDescDao activityDescDao();
+
     public abstract ActivityExtrasDao activityExtrasDao();
+
     public abstract AudioFileDao audioFileDao();
+
     public abstract AudioWithOptsDao audioWithOptsDao();
+
     public abstract SceneDao sceneDao();
 
     /**

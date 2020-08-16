@@ -21,7 +21,8 @@ public class MenuViewModel extends ViewModel
      * @param ctx of calling activity.
      * @return top level items in main menu.
      */
-    public LiveData<List<MenuItem>> getTopLevelItems(Context ctx){
+    public LiveData<List<MenuItem>> getTopLevelItems(Context ctx)
+    {
         return AppDatabase.getAppDatabase(ctx).menuItemDao().getItemsByParentId(-1L);
     }
 
@@ -40,7 +41,8 @@ public class MenuViewModel extends ViewModel
      * @param target menu item that has been selected.
      * @return its children menu item elements.
      */
-    public LiveData<List<MenuItem>> getItemParentContent(Context ctx, MenuItem target){
+    public LiveData<List<MenuItem>> getItemParentContent(Context ctx, MenuItem target)
+    {
         return AppDatabase.getAppDatabase(ctx).menuItemDao().getItemsByParentId(target.getParentId());
     }
 
@@ -49,7 +51,8 @@ public class MenuViewModel extends ViewModel
      * @param target menu item that has been selected.
      * @return its parent menu item element.
      */
-    public LiveData<MenuItem> getItemParent(Context ctx, MenuItem target){
+    public LiveData<MenuItem> getItemParent(Context ctx, MenuItem target)
+    {
         return AppDatabase.getAppDatabase(ctx).menuItemDao().getParent(target.getParentId());
     }
 
@@ -58,7 +61,8 @@ public class MenuViewModel extends ViewModel
      * @param target menu item that has been selected.
      * @return activity description of selected menu item.
      */
-    public LiveData<ActivityDesc> getActivity(Context ctx, MenuItem target) {
+    public LiveData<ActivityDesc> getActivity(Context ctx, MenuItem target)
+    {
         return AppDatabase.getAppDatabase(ctx).activityDescDao().getActivityDesc(target.getId());
     }
 
@@ -67,7 +71,8 @@ public class MenuViewModel extends ViewModel
      * @param target activity description of menu item that has been selected.
      * @return activity extras of selected activity.
      */
-    public LiveData<List<ActivityExtras>> getActivityExtras(Context ctx, ActivityDesc target){
+    public LiveData<List<ActivityExtras>> getActivityExtras(Context ctx, ActivityDesc target)
+    {
         return AppDatabase.getAppDatabase(ctx).activityExtrasDao().getExtrasForActivity(target.getActivityId());
     }
 }

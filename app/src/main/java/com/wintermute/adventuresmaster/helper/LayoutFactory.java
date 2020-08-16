@@ -13,23 +13,24 @@ import com.wintermute.adventuresmaster.R;
 public class LayoutFactory
 {
 
-    private LayoutFactory(){};
+    private LayoutFactory() {}
 
-
-    private static class InstanceCreator {
+    private static class InstanceCreator
+    {
         private static final LayoutFactory LAYOUT_FACTORY = new LayoutFactory();
     }
 
     /**
      * @return instance LayoutFactory instance.
      */
-    public static LayoutFactory getInstance() {
+    public static LayoutFactory getInstance()
+    {
         return InstanceCreator.LAYOUT_FACTORY;
     }
 
-
     /**
      * Init default linear layout.
+     *
      * @param view of current activity.
      * @return default layout
      */
@@ -40,6 +41,7 @@ public class LayoutFactory
 
     /**
      * Adds children to default layout.
+     *
      * @param layout target.
      * @param child element to add.
      */
@@ -54,7 +56,8 @@ public class LayoutFactory
      * @param ctx of activity containing this layout.
      * @return parameterized linear layout.
      */
-    public LinearLayout initLayoutWithParams(Context ctx){
+    public LinearLayout initLayoutWithParams(Context ctx)
+    {
         LinearLayout container = new LinearLayout(ctx);
         container.setLayoutParams(getDefaultLayoutParams());
         container.setOrientation(LinearLayout.VERTICAL);
@@ -64,7 +67,7 @@ public class LayoutFactory
     /**
      * Creates view view for container within layout.
      *
-     *  @param ctx of activity containing this view.
+     * @param ctx of activity containing this view.
      * @param id to set the tag on created view.
      * @return created, tagged view.
      */
@@ -81,5 +84,4 @@ public class LayoutFactory
         return new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT);
     }
-
 }

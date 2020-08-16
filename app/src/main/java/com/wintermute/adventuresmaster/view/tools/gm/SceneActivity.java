@@ -3,13 +3,13 @@ package com.wintermute.adventuresmaster.view.tools.gm;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.view.components.SceneAudioEntry;
@@ -39,10 +39,12 @@ public class SceneActivity extends AppCompatActivity
     private void initComponents()
     {
         Button save = findViewById(R.id.save_scene);
-        save.setOnClickListener(v -> {
+        save.setOnClickListener(v ->
+        {
             TextView sceneNameView = findViewById(R.id.scene_name);
             String sceneName = sceneNameView.getText().toString();
-            if ("".equals(sceneName)){
+            if ("".equals(sceneName))
+            {
                 Toast.makeText(this, "Name must not be empty", Toast.LENGTH_SHORT).show();
                 sceneNameView.setHintTextColor(Color.RED);
                 return;

@@ -96,7 +96,8 @@ public class SceneAudioEntry extends LinearLayout
         });
 
         volumeBar = findViewById(R.id.volumebar);
-        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
@@ -195,14 +196,17 @@ public class SceneAudioEntry extends LinearLayout
     /**
      * @return the flag if the audio entry should play once the effect audio is done or not.
      */
-    public boolean isPlayAfterEffect(){
+    public boolean isPlayAfterEffect()
+    {
         return playAfterEffect;
     }
 
     /**
-     * @param playAfterEffect to determine if audio entry should be started in player once the effect audio is done.
+     * @param playAfterEffect to determine if audio entry should be started in player once the effect audio is
+     *     done.
      */
-    public void setPlayAfterEffect(boolean playAfterEffect){
+    public void setPlayAfterEffect(boolean playAfterEffect)
+    {
         this.playAfterEffect = playAfterEffect;
         playAfterEffectBox.setChecked(playAfterEffect);
         invalidate();
@@ -212,7 +216,8 @@ public class SceneAudioEntry extends LinearLayout
     /**
      * Hides the checkbox for playing after effect option. This is needed for the effect audio itself.
      */
-    public void disablePlayAfterEffectOption(){
+    public void disablePlayAfterEffectOption()
+    {
         playAfterEffectBox.setVisibility(GONE);
     }
 }

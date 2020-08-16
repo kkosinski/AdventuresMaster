@@ -33,7 +33,8 @@ public class AudioWithOpts
     @ColumnInfo(name = "playAfterEffect")
     private boolean playAfterEffect;
 
-    public AudioWithOpts(long audioFileId, int volume, boolean repeat, boolean playAfterEffect){
+    public AudioWithOpts(long audioFileId, int volume, boolean repeat, boolean playAfterEffect)
+    {
         this.audioFileId = audioFileId;
         this.volume = volume;
         this.repeat = repeat;

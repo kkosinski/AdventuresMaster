@@ -1,8 +1,8 @@
 package com.wintermute.adventuresmaster.view;
 
+import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,13 +16,13 @@ import java.util.List;
 
 /**
  * Example for implementic the dynamic list in activity.
- * @deprecated (this class will be removed in near future.)
  *
  * @author wintermute
- *
+ * @deprecated (this class will be removed in near future.)
  */
 //TODO: Remove this class as soon as possible. For this time it is only usage example.
-public class DynamicListActivity extends AppCompatActivity implements DynamicAdapter.ItemClickListener {
+public class DynamicListActivity extends AppCompatActivity implements DynamicAdapter.ItemClickListener
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,7 +44,8 @@ public class DynamicListActivity extends AppCompatActivity implements DynamicAda
         recyclerView.setAdapter(dynamicAdapter);
     }
 
-    private RecyclerView initRecyclerView(){
+    private RecyclerView initRecyclerView()
+    {
         RecyclerView result = findViewById(R.id.list);
         LinearLayoutManager layout = new LinearLayoutManager(this);
         result.setLayoutManager(layout);
@@ -53,7 +54,8 @@ public class DynamicListActivity extends AppCompatActivity implements DynamicAda
         return result;
     }
 
-    private DynamicAdapter initAdapter(List<DynamicListItem> items){
+    private DynamicAdapter initAdapter(List<DynamicListItem> items)
+    {
         DynamicAdapter adapter = new DynamicAdapter(this, items);
         adapter.setClickListener(this);
         return adapter;
