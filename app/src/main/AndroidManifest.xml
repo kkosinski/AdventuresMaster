@@ -9,7 +9,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".view.tools.gm.SceneActivity"></activity>
+        <activity android:name=".view.tools.gm.SceneActivity"/>
         <activity android:name=".view.BoardActivity" />
         <activity android:name=".view.DynamicListActivity" />
         <activity android:name=".view.AdventuresMaster">

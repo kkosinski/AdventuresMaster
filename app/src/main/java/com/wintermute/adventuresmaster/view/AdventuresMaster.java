@@ -28,7 +28,7 @@ public class AdventuresMaster extends AppCompatActivity
     private MenuViewModel model;
     private LayoutFactory layoutFactory;
     private LinearLayout layout;
-    private Observer<List<MenuItem>> menuItemsObserver = null;
+    private Observer<List<MenuItem>> menuItemsObserver;
     private MenuItem currentItem;
 
     @Override
