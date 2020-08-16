@@ -15,5 +15,4 @@ public interface SceneDao
 {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(Scene scene);
-
 }
