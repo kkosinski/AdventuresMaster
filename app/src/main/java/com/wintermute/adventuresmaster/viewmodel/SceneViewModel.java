@@ -22,6 +22,13 @@ import java.util.concurrent.ExecutionException;
 public class SceneViewModel extends ViewModel
 {
 
+    /**
+     * Creates audio files if these don´t already exists, adds opts to it and stores it together with scene.
+     *
+     * @param ctx activity context.
+     * @param audioWithPath audio entry with all information and path to the audio file.
+     * @param sceneName title of scene to display in list after its created and once it will be listed.
+     */
     public void createSceneWithAllDependingOperations(Context ctx, HashMap<SceneAudioEntry, String> audioWithPath, String sceneName)
     {
         HashMap<String, Long> audioFileTypeAndId = new HashMap<>();
