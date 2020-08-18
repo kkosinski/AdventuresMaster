@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@Entity
+@Entity(tableName = "board")
 public class Board
 {
     @PrimaryKey(autoGenerate = true)
@@ -28,17 +28,17 @@ public class Board
     @ColumnInfo(name = "type")
     private String type;
 
-    @ColumnInfo(name = "hasNestedBoards")
-    private boolean hasNestedBoards;
+    @ColumnInfo(name = "isContentTable")
+    private boolean isContentTable;
 
     @ColumnInfo(name = "parentId")
     private long parentId;
 
-    public Board(@NonNull String name, @NonNull String type, long parentId)
+    public Board(@NonNull String name, @NonNull String type, boolean isContentTable, long parentId)
     {
         this.name = name;
         this.type = type;
-        this.hasNestedBoards = false;
+        this.isContentTable = isContentTable;
         this.parentId = parentId;
     }
 }

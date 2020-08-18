@@ -21,17 +21,17 @@ INSERT INTO activityDesc (activityId, className, hasExtras) VALUES
 	(5, 'JoinGameActivity', 0),
 	(7, 'CreateNewGameActivity', 0),
 	(8, 'ExistingGamesActivity', 0),
-	(9, 'BoardActivity', 1),
-	(10, 'BoardActivity', 1);
+	(9, 'BoardPanel', 1),
+	(10, 'BoardPanel', 1);
 
 INSERT INTO activityExtras (activityId, key, value)	VALUES 
 	(9, 'type', 'scenes'),
 	(10, 'type', 'effects');
 
-CREATE TABLE scene (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT NOT NULL, lightId INTEGER NOT NULL, effect INTEGER, music INTEGER, ambience INTEGER, FOREIGN KEY (effect) REFERENCES audioWithOpts (id), FOREIGN KEY (music) REFERENCES audioWithOpts (id),	FOREIGN KEY (ambience) REFERENCES audioWithOpts (id));
+CREATE TABLE scene (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, inBoard INTEGER NOT NULL, title TEXT NOT NULL, lightId INTEGER NOT NULL, effect INTEGER, music INTEGER, ambience INTEGER, FOREIGN KEY (inBoard) REFERENCES board (id), FOREIGN KEY (effect) REFERENCES audioWithOpts (id), FOREIGN KEY (music) REFERENCES audioWithOpts (id),	FOREIGN KEY (ambience) REFERENCES audioWithOpts (id));
 
 CREATE TABLE audioWithOpts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, audioFileId INTEGER NOT NULL, volume INTEGER NOT NULL, repeat INTEGER NOT NULL, playAfterEffect INTEGER NOT NULL, FOREIGN KEY (audioFileId) REFERENCES audioFile (id) ON DELETE CASCADE);
 
 CREATE TABLE audioFile (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, path TEXT UNIQUE NOT NULL);
 
-CREATE TABLE board (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, type TEXT NOT NULL, hasNestedBoards INTEGER NOT NULL, parentId INTEGER NOT NULL);
+CREATE TABLE board (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, type TEXT NOT NULL, isContentTable INTEGER NOT NULL, parentId INTEGER NOT NULL);

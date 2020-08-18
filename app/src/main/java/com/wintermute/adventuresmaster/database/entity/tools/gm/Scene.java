@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,14 +17,18 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@Entity(indices = {@Index(value = "effect"), @Index(value = "music"), @Index(value = "ambience")},
-        foreignKeys = {@ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "effect"),
+@Entity(indices = {@Index(value = "inBoard"), @Index(value = "effect"), @Index(value = "music"), @Index(value = "ambience")},
+        foreignKeys = {@ForeignKey(entity = Board.class, parentColumns = "id", childColumns = "inBoard"),
+                       @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "effect"),
                        @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "music"),
                        @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "ambience")})
 public class Scene
 {
     @PrimaryKey(autoGenerate = true)
     private long id;
+
+    @ColumnInfo(name = "inBoard")
+    private long inBoard;
 
     @NonNull
     @ColumnInfo(name = "title")

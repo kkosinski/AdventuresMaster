@@ -23,9 +23,6 @@ public interface BoardDao
     @Query("SELECT * FROM board WHERE parentId = :parentId AND type = :type")
     LiveData<List<Board>> getBoardsByParentId(long parentId, String type);
 
-    @Query("UPDATE board SET hasNestedBoards = 1 WHERE id = :id")
-    void makeBoardToParent(long id);
-
     @Query("SELECT * FROM board WHERE id = :id")
     LiveData<Board> getById(long id);
 

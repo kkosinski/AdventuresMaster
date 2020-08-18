@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.tools.gm.SceneActivity">
+        tools:context=".view.tools.gm.SceneCreator">
 
     <EditText
             android:id="@+id/scene_activity_scene_name"
@@ -17,7 +17,7 @@
             android:importantForAutofill="no"
             android:inputType="text" />
 
-    <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
+    <com.wintermute.adventuresmaster.view.custom.SceneAudioEntry
             android:id="@+id/scene_activity_effect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             custom:styleable_scene_title="set effect" />
 
 
-    <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
+    <com.wintermute.adventuresmaster.view.custom.SceneAudioEntry
             android:id="@+id/scene_activity_music"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             custom:styleable_scene_loop="true"
             custom:styleable_scene_title="set music" />
 
-    <com.wintermute.adventuresmaster.view.components.SceneAudioEntry
+    <com.wintermute.adventuresmaster.view.custom.SceneAudioEntry
             android:id="@+id/scene_activity_ambience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

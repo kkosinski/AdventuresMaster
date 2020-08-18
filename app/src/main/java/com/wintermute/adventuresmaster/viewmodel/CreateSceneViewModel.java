@@ -8,18 +8,19 @@ import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
-import com.wintermute.adventuresmaster.view.components.SceneAudioEntry;
+import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
+import com.wintermute.adventuresmaster.view.tools.gm.SceneCreator;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Handles logic and notifies the {@link com.wintermute.adventuresmaster.view.tools.gm.SceneActivity} about changes.
+ * Handles logic and notifies the {@link SceneCreator} about changes.
  *
  * @author wintermute
  */
-public class SceneViewModel extends ViewModel
+public class CreateSceneViewModel extends ViewModel
 {
 
     /**
@@ -29,8 +30,8 @@ public class SceneViewModel extends ViewModel
      * @param audioWithPath audio entry with all information and path to the audio file.
      * @param sceneName title of scene to display in list after its created and once it will be listed.
      */
-    public void createSceneWithAllDependingOperations(Context ctx, HashMap<SceneAudioEntry, String> audioWithPath,
-                                                      String sceneName)
+    public void createSceneWithAllDependingOperations(Context ctx, String sceneName, long inBoard,
+                                                      HashMap<SceneAudioEntry, String> audioWithPath)
     {
         HashMap<String, Long> audioFileTypeAndId = new HashMap<>();
         for (Map.Entry<SceneAudioEntry, String> audioEntry : audioWithPath.entrySet())
@@ -51,13 +52,14 @@ public class SceneViewModel extends ViewModel
                 e.printStackTrace();
             }
         }
-        new DatabaseOperationTask(ctx).execute(compose(sceneName, audioFileTypeAndId));
+        new DatabaseOperationTask(ctx).execute(compose(sceneName, inBoard, audioFileTypeAndId));
     }
 
-    private Scene compose(String sceneName, HashMap<String, Long> sceneAudioWithOpts)
+    private Scene compose(String sceneName, long inBoard, HashMap<String, Long> sceneAudioWithOpts)
     {
         Scene result = new Scene();
         result.setTitle(sceneName);
+        result.setInBoard(inBoard);
         if (sceneAudioWithOpts.containsKey("effect"))
         {
             result.setEffect(sceneAudioWithOpts.get("effect"));
@@ -74,7 +76,7 @@ public class SceneViewModel extends ViewModel
     }
 
     /**
-     * Async task to operate on databases for {@link com.wintermute.adventuresmaster.view.tools.gm.SceneActivity}.
+     * Async task to operate on databases for {@link SceneCreator}.
      * Performs mostly operation insert operation. Except in case when row exists yet and should not be created twice,
      * in this case this task performs select operation.
      */
