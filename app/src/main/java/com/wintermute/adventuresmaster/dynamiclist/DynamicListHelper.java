@@ -4,10 +4,7 @@ import android.content.Context;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.wintermute.adventuresmaster.database.entity.menu.Board;
-import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,8 +16,6 @@ public class DynamicListHelper
 {
 
     public static DynamicListHelper INSTANCE;
-    private DynamicAdapter adapter;
-    private List<DynamicListItem> dynamicItems;
 
     private DynamicListHelper() {}
 
@@ -38,35 +33,32 @@ public class DynamicListHelper
         return INSTANCE;
     }
 
-    public RecyclerView initRecyclerView(Context ctx, RecyclerView recyclerView,
-                                         DynamicAdapter.ItemClickListener listItemClickListener)
+    /**
+     * @param ctx of calling activity.
+     * @param recyclerView inside the calling activity.
+     * @return a preconfigured recycler view with adapter set.
+     */
+    public RecyclerView initRecyclerView(Context ctx, RecyclerView recyclerView)
     {
         LinearLayoutManager layout = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layout);
         DividerItemDecoration divider = new DividerItemDecoration(recyclerView.getContext(), layout.getOrientation());
         recyclerView.addItemDecoration(divider);
-        recyclerView.setAdapter(initAdapter(ctx, listItemClickListener));
         return recyclerView;
     }
 
-    private DynamicAdapter initAdapter(Context ctx, DynamicAdapter.ItemClickListener listItemClickListener)
+    /**
+     * @param ctx of calling activity.
+     * @param items to put into adapter.
+     * @param listItemClickListener to attach to adapter.
+     *
+     * @return preconfigured dynamic adapter for the {@link DynamicAdapter}.
+     */
+    public DynamicAdapter initAdapter(Context ctx, List<DynamicListItem> items,
+                                      DynamicAdapter.ItemClickListener listItemClickListener)
     {
-        dynamicItems = new ArrayList<>();
-        adapter = new DynamicAdapter(ctx, dynamicItems);
+        DynamicAdapter adapter = new DynamicAdapter(ctx, items);
         adapter.setClickListener(listItemClickListener);
         return adapter;
-    }
-
-    public void updateBoards(List<Board> items)
-    {
-        dynamicItems.clear();
-        items.forEach(i -> dynamicItems.add(new DynamicListItem(i.getName(), i.getId())));
-        adapter.notifyDataSetChanged();
-    }
-
-    public void updateScenes(List<Scene> items) {
-        dynamicItems.clear();
-        items.forEach(i -> dynamicItems.add(new DynamicListItem(i.getTitle(), i.getId())));
-        adapter.notifyDataSetChanged();
     }
 }

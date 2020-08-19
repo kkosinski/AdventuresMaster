@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="boardArray">
-        <item>board</item>
-        <item>content</item>
+        <item>Folder</item>
+        <item>Content table</item>
     </array>
 </resources>

@@ -20,6 +20,6 @@ public interface SceneDao
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(Scene scene);
 
-    @Query("SELECT * FROM scene WHERE id = :boardId")
+    @Query("SELECT * FROM scene WHERE inBoard = :boardId")
     LiveData<List<Scene>> getOrderedByBoard(long boardId);
 }
