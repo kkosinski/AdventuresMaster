@@ -12,12 +12,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.viewmodel.CreateSceneViewModel;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,7 +33,7 @@ public class SceneCreator extends AppCompatActivity
 {
     private String audioEntryType;
     private SceneAudioEntry effect, music, ambience;
-    private String effectPath, musicPath, ambiencePath;
+    private Map<String, String> audioFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,13 +65,46 @@ public class SceneCreator extends AppCompatActivity
         effect.disablePlayAfterEffectOption();
         music = findViewById(R.id.scene_activity_music);
         ambience = findViewById(R.id.scene_activity_ambience);
-        SceneAudioEntry[] audioEntries = new SceneAudioEntry[] {effect, music, ambience};
 
-        Arrays.stream(audioEntries).forEach(a ->
+        Arrays.stream(new SceneAudioEntry[] {effect, music, ambience}).forEach(a ->
         {
             a.setOnSelectAudioClick(this);
             a.setOnPlayAudioClick(this);
         });
+    }
+
+    private void storeScene(String sceneName)
+    {
+        Map<String, SceneAudioEntry> sceneInAudioWithPath = new HashMap<String, SceneAudioEntry>()
+        {{
+            put("effect", effect);
+            put("music", music);
+            put("ambience", ambience);
+        }};
+
+        HashMap<AudioInScene, String> audioWithOptsAndPath = new HashMap<>();
+        sceneInAudioWithPath
+            .entrySet()
+            .forEach(e -> composeAudioInSceneAndFilePath(audioWithOptsAndPath, e.getKey(), e.getValue()));
+
+        CreateSceneViewModel model = new ViewModelProvider(this).get(CreateSceneViewModel.class);
+        model.createSceneWithAllDependingOperations(this, sceneName, getIntent().getLongExtra("inBoard", 0L),
+            audioWithOptsAndPath);
+    }
+
+    private void composeAudioInSceneAndFilePath(HashMap<AudioInScene, String> result, String key, SceneAudioEntry type)
+    {
+        if (audioFilePath.containsKey(key))
+        {
+            result.put(new AudioInScene(type.getVolume(), type.isRepeatTrack(), type.isPlayAfterEffect(), key),
+                audioFilePath.get(key));
+        }
+    }
+
+    private String sanitizeFileName(String path)
+    {
+        String result = new File(path).getName();
+        return result.length() < 30 ? result : result.substring(0, 27) + "...";
     }
 
     @Override
@@ -96,50 +131,26 @@ public class SceneCreator extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == Activity.RESULT_OK)
         {
+            if (audioFilePath == null)
+            {
+                audioFilePath = new HashMap<>();
+            }
+
             String selectedFilePath = Objects.requireNonNull(data.getData()).getPath();
             if ("effect".equals(audioEntryType))
             {
-                effectPath = selectedFilePath;
+                audioFilePath.put("effect", selectedFilePath);
                 effect.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
             } else if ("music".equals(audioEntryType))
             {
-                musicPath = selectedFilePath;
+                audioFilePath.put("music", selectedFilePath);
                 music.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
             }
             if ("ambience".equals(audioEntryType))
             {
-                ambiencePath = selectedFilePath;
+                audioFilePath.put("ambience", selectedFilePath);
                 ambience.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
             }
         }
-    }
-
-    private void storeScene(String sceneName)
-    {
-        HashMap<SceneAudioEntry, String> audioWithPath = new HashMap<>();
-        if (effectPath != null)
-        {
-            audioWithPath.put(effect, effectPath);
-        }
-
-        if (musicPath != null)
-        {
-            audioWithPath.put(music, musicPath);
-        }
-
-        if (ambiencePath != null)
-        {
-            audioWithPath.put(ambience, ambiencePath);
-        }
-
-        CreateSceneViewModel model = new ViewModelProvider(this).get(CreateSceneViewModel.class);
-        model.createSceneWithAllDependingOperations(this, sceneName, getIntent().getLongExtra("inBoard", 0L),
-            audioWithPath);
-    }
-
-    private String sanitizeFileName(String path)
-    {
-        String result = new File(path).getName();
-        return result.length() < 30 ? result : result.substring(0, 27) + "...";
     }
 }

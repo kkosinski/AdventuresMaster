@@ -1,5 +1,7 @@
 package com.wintermute.adventuresmaster.database.entity.tools.gm;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -17,11 +19,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@Entity(indices = {@Index(value = "inBoard"), @Index(value = "effect"), @Index(value = "music"), @Index(value = "ambience")},
-        foreignKeys = {@ForeignKey(entity = Board.class, parentColumns = "id", childColumns = "inBoard"),
-                       @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "effect"),
-                       @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "music"),
-                       @ForeignKey(entity = AudioWithOpts.class, parentColumns = "id", childColumns = "ambience")})
+@Entity(indices = {@Index(value = "inBoard")},
+        foreignKeys = @ForeignKey(entity = Board.class, parentColumns = "id", childColumns = "inBoard",
+                                  onDelete = CASCADE))
 public class Scene
 {
     @PrimaryKey(autoGenerate = true)
@@ -34,8 +34,8 @@ public class Scene
     @ColumnInfo(name = "title")
     private String title;
 
-    @ColumnInfo(name = "lightId")
-    private long light;
+    @ColumnInfo(name = "light")
+    private Long light;
 
     @ColumnInfo(name = "effect")
     private Long effect;
@@ -45,4 +45,10 @@ public class Scene
 
     @ColumnInfo(name = "ambience")
     private Long ambience;
+
+    public Scene(@NonNull String title, long inBoard)
+    {
+        this.title = title;
+        this.inBoard = inBoard;
+    }
 }

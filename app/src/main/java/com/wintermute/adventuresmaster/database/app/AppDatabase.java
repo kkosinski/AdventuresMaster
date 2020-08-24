@@ -9,14 +9,14 @@ import com.wintermute.adventuresmaster.database.dao.menu.ActivityExtrasDao;
 import com.wintermute.adventuresmaster.database.dao.menu.BoardDao;
 import com.wintermute.adventuresmaster.database.dao.menu.MenuItemDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.AudioFileDao;
-import com.wintermute.adventuresmaster.database.dao.tools.gm.AudioWithOptsDao;
+import com.wintermute.adventuresmaster.database.dao.tools.gm.AudioInSceneDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.SceneDao;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityDesc;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
 import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
-import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioWithOpts;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
 
 /**
@@ -24,8 +24,9 @@ import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
  *
  * @author wintermute
  */
-@Database(entities = {MenuItem.class, ActivityDesc.class, ActivityExtras.class, AudioFile.class, AudioWithOpts.class,
-                      Scene.class, Board.class}, version = 1)
+@Database(
+    entities = {MenuItem.class, ActivityDesc.class, ActivityExtras.class, AudioFile.class, Scene.class, Board.class,
+                AudioInScene.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase
 {
     public static AppDatabase INSTANCE;
@@ -38,7 +39,7 @@ public abstract class AppDatabase extends RoomDatabase
 
     public abstract AudioFileDao audioFileDao();
 
-    public abstract AudioWithOptsDao audioWithOptsDao();
+    public abstract AudioInSceneDao audioInSceneDao();
 
     public abstract SceneDao sceneDao();
 
