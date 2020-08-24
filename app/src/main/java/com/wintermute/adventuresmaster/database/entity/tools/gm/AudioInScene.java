@@ -5,13 +5,12 @@ import static androidx.room.ForeignKey.CASCADE;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@Entity(tableName = "audioInBoard", foreignKeys = {
+@Entity(tableName = "audioInBoard", indices = {@Index("audioFile"), @Index("inScene")}, foreignKeys = {
     @ForeignKey(entity = Scene.class, parentColumns = "id", childColumns = "inScene", onDelete = CASCADE),
     @ForeignKey(entity = AudioFile.class, parentColumns = "id", childColumns = "audioFile", onDelete = CASCADE)})
 public class AudioInScene

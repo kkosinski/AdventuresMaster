@@ -10,7 +10,6 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Represents a scene contained withing GM tools including information about configured light and audio background.
@@ -18,7 +17,6 @@ import lombok.NoArgsConstructor;
  * @author wintermute
  */
 @Data
-@NoArgsConstructor
 @Entity(indices = {@Index(value = "inBoard")},
         foreignKeys = @ForeignKey(entity = Board.class, parentColumns = "id", childColumns = "inBoard",
                                   onDelete = CASCADE))

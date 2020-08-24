@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Represents a board containing scenes, boards or nested boards of one of these types.
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
  * @author wintermute
  */
 @Data
-@NoArgsConstructor
 @Entity(tableName = "board")
 public class Board
 {
