@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.menu.Board;
-import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneWithAudio;
 import com.wintermute.adventuresmaster.view.BoardPanel;
 
 import java.util.List;
@@ -55,7 +55,8 @@ public class BoardViewModel extends ViewModel
      * @param name of board to create.
      * @param type of this board (scene or soundboard).
      * @param isContentTable defines if it has nested boards (false) or content of given type (true).
-     * @param parentId defines in which board this board should be created. If the board is toplevel, parentId is -1L.
+     * @param parentId defines in which board this board should be created. If the board is toplevel, parentId is
+     *     -1L.
      */
     public void createNewBoard(Context ctx, String name, String type, boolean isContentTable, long parentId)
     {
@@ -68,9 +69,9 @@ public class BoardViewModel extends ViewModel
      * @param boardId to which the scenes belong.
      * @return list of scenes to show in @{@link com.wintermute.adventuresmaster.view.tools.gm.BoardContentTable}
      */
-    public LiveData<List<Scene>> getScenesForBoard(Context ctx, long boardId)
+    public LiveData<List<SceneWithAudio>> getScenesForBoard(Context ctx, long boardId)
     {
-        return AppDatabase.getAppDatabase(ctx).sceneDao().getOrderedByBoard(boardId);
+        return AppDatabase.getAppDatabase(ctx).sceneDao().getScenesInBoard(boardId);
     }
 
     private static class InsertTask extends AsyncTask<Board, Void, Long>

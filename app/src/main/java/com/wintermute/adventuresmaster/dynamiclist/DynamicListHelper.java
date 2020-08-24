@@ -51,7 +51,6 @@ public class DynamicListHelper
      * @param ctx of calling activity.
      * @param items to put into adapter.
      * @param listItemClickListener to attach to adapter.
-     *
      * @return preconfigured dynamic adapter for the {@link DynamicAdapter}.
      */
     public DynamicAdapter initAdapter(Context ctx, List<DynamicListItem> items,

@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * In this activity a scene is composed and the responsible view model ({@link CreateSceneViewModel}) is notified to persist
- * these changes once the user want to save it.
+ * In this activity a scene is composed and the responsible view model ({@link CreateSceneViewModel}) is notified to
+ * persist these changes once the user want to save it.
  *
  * @author wintermute
  */
@@ -56,7 +56,7 @@ public class SceneCreator extends AppCompatActivity
                 return;
             }
             storeScene(sceneName);
-            finishAndOpenSceneTable();
+            finish();
         });
 
         effect = findViewById(R.id.scene_activity_effect);
@@ -133,17 +133,13 @@ public class SceneCreator extends AppCompatActivity
         }
 
         CreateSceneViewModel model = new ViewModelProvider(this).get(CreateSceneViewModel.class);
-        model.createSceneWithAllDependingOperations(this, sceneName, getIntent().getLongExtra("inBoard", 0L), audioWithPath);
+        model.createSceneWithAllDependingOperations(this, sceneName, getIntent().getLongExtra("inBoard", 0L),
+            audioWithPath);
     }
 
     private String sanitizeFileName(String path)
     {
         String result = new File(path).getName();
         return result.length() < 30 ? result : result.substring(0, 27) + "...";
-    }
-
-    private void finishAndOpenSceneTable(){
-        startActivity(new Intent(this, BoardContentTable.class));
-        finish();
     }
 }

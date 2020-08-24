@@ -20,11 +20,16 @@ public class AudioFile
     private long id;
 
     @NonNull
+    @ColumnInfo(name = "title")
+    private String title;
+
+    @NonNull
     @ColumnInfo(name = "path")
     private String path;
 
     public AudioFile(@NonNull String path)
     {
         this.path = path;
+        this.title = path.substring(path.lastIndexOf("/") + 1);
     }
 }

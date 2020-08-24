@@ -114,16 +114,18 @@ public class BoardPanel extends AppCompatActivity
 
     private void retrieveBoardAndPerformAction(long itemId)
     {
-            Observer<Board> itemObserver = board ->
+        Observer<Board> itemObserver = board ->
+        {
+            currentBoard = board;
+            try
             {
-                currentBoard = board;
-                try {
-                    handleBoardClicked(itemId);
-                } catch (NullPointerException e) {
-                    model.getTopLevelBoards(this, boardType).observe(this, this::updateViewContent);
-                }
-            };
-            model.getBoardById(this, itemId).observe(this, itemObserver);
+                handleBoardClicked(itemId);
+            } catch (NullPointerException e)
+            {
+                model.getTopLevelBoards(this, boardType).observe(this, this::updateViewContent);
+            }
+        };
+        model.getBoardById(this, itemId).observe(this, itemObserver);
     }
 
     @Override
@@ -158,9 +160,11 @@ public class BoardPanel extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        try {
+        try
+        {
             retrieveBoardAndPerformAction(currentBoard.getParentId());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e)
+        {
             finish();
         }
     }

@@ -31,8 +31,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
     {
         this.items = data;
         this.ctx = context;
-        additionalInfoLength =
-            data.stream().mapToInt(i -> i.getAdditionalInfo().size()).max().orElse(0);
+        additionalInfoLength = data.stream().mapToInt(i -> i.getAdditionalInfo().size()).max().orElse(0);
     }
 
     @NonNull
