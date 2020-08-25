@@ -22,7 +22,7 @@ public class SceneAudioEntry extends LinearLayout
      */
     public interface OnSelectAudioClick
     {
-        void onSelectAudioClickListener(View v);
+        void onSelectAudioClickListener(String tag);
     }
 
     /**
@@ -30,11 +30,17 @@ public class SceneAudioEntry extends LinearLayout
      */
     public interface OnPlayAudioClick
     {
-        void onPlayClickListener(View v);
+        void onPlayClickListener(String tag);
+    }
+
+    public interface OnChangedVolume
+    {
+        void onChangedVolume(int progress, String tag);
     }
 
     private OnSelectAudioClick onSelectAudioClick;
     private OnPlayAudioClick onPlayAudioClick;
+    private OnChangedVolume onChangedVolume;
 
     private Button selectAudio;
     private CheckBox loopBox, playAfterEffectBox;
@@ -82,7 +88,8 @@ public class SceneAudioEntry extends LinearLayout
         {
             if (onSelectAudioClick != null)
             {
-                onSelectAudioClick.onSelectAudioClickListener(v);
+                onSelectAudioClick.onSelectAudioClickListener(
+                    ((View) v.getParent().getParent().getParent()).getTag().toString());
             }
         });
 
@@ -91,7 +98,7 @@ public class SceneAudioEntry extends LinearLayout
         {
             if (onPlayAudioClick != null)
             {
-                onPlayAudioClick.onPlayClickListener(v);
+                onPlayAudioClick.onPlayClickListener(((View) v.getParent().getParent()).getTag().toString());
             }
         });
 
@@ -102,6 +109,11 @@ public class SceneAudioEntry extends LinearLayout
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 setVolume(progress);
+                if (onChangedVolume != null)
+                {
+                    onChangedVolume.onChangedVolume(progress,
+                        ((View) seekBar.getParent().getParent()).getTag().toString());
+                }
             }
 
             @Override
@@ -142,6 +154,11 @@ public class SceneAudioEntry extends LinearLayout
     public void setOnPlayAudioClick(OnPlayAudioClick onPlayAudioClick)
     {
         this.onPlayAudioClick = onPlayAudioClick;
+    }
+
+    public void setOnChangedVolume(OnChangedVolume onChangedVolume)
+    {
+        this.onChangedVolume = onChangedVolume;
     }
 
     /**

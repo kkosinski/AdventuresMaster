@@ -107,9 +107,8 @@ public class BoardPanel extends AppCompatActivity
 
     private Dialog getCreateBoardDialog(boolean createContentTable)
     {
-        Dialog dialog = new BoardDialog(this, true, createContentTable,
+        return new BoardDialog(this, true, createContentTable,
             getLayoutInflater().inflate(R.layout.board_dialog_create_board, null)).onCreateDialog(null);
-        return dialog;
     }
 
     private void retrieveBoardAndPerformAction(long itemId)

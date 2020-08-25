@@ -1,11 +1,15 @@
 package com.wintermute.adventuresmaster.database.entity.tools.gm;
 
+import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
+
+import java.io.File;
+import java.util.Objects;
 
 /**
  * Represents path to audio file stored on device.
@@ -25,11 +29,16 @@ public class AudioFile
 
     @NonNull
     @ColumnInfo(name = "path")
-    private String path;
+    private String uri;
 
-    public AudioFile(@NonNull String path)
+    /**
+     * Describes what is needed to create file.
+     *
+     * @param uri of file to store in database.
+     */
+    public AudioFile(@NonNull String uri)
     {
-        this.path = path;
-        this.title = path.substring(path.lastIndexOf("/") + 1);
+        this.uri = uri;
+        this.title = new File(Objects.requireNonNull(Uri.parse(uri).getPath())).getName();
     }
 }
