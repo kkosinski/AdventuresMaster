@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,11 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
+import com.wintermute.adventuresmaster.services.player.AudioTypePlayer;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.viewmodel.CreateSceneViewModel;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,11 +27,13 @@ import java.util.Objects;
  * @author wintermute
  */
 public class SceneCreator extends AppCompatActivity
-    implements SceneAudioEntry.OnSelectAudioClick, SceneAudioEntry.OnPlayAudioClick
+    implements SceneAudioEntry.OnSelectAudioClick, SceneAudioEntry.OnPlayAudioClick, SceneAudioEntry.OnChangedVolume
 {
     private String audioEntryType;
     private SceneAudioEntry effect, music, ambience;
+    private Map<String, SceneAudioEntry> sceneAudioEntries;
     private Map<String, String> audioFilePath;
+    private AudioTypePlayer audioTypePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,6 +46,8 @@ public class SceneCreator extends AppCompatActivity
 
     private void initComponents()
     {
+        audioTypePlayer = AudioTypePlayer.getInstance();
+
         Button save = findViewById(R.id.scene_activity_save_scene);
         save.setOnClickListener(v ->
         {
@@ -66,15 +68,23 @@ public class SceneCreator extends AppCompatActivity
         music = findViewById(R.id.scene_activity_music);
         ambience = findViewById(R.id.scene_activity_ambience);
 
-        Arrays.stream(new SceneAudioEntry[] {effect, music, ambience}).forEach(a ->
+        sceneAudioEntries = new HashMap<>();
+        sceneAudioEntries.put("effect", effect);
+        sceneAudioEntries.put("music", music);
+        sceneAudioEntries.put("ambience", ambience);
+
+        sceneAudioEntries.values().forEach(a ->
         {
             a.setOnSelectAudioClick(this);
             a.setOnPlayAudioClick(this);
+            a.setOnChangedVolume(this);
         });
     }
 
     private void storeScene(String sceneName)
     {
+        audioTypePlayer.stopAll();
+
         Map<String, SceneAudioEntry> sceneInAudioWithPath = new HashMap<String, SceneAudioEntry>()
         {{
             put("effect", effect);
@@ -94,10 +104,12 @@ public class SceneCreator extends AppCompatActivity
 
     private void composeAudioInSceneAndFilePath(HashMap<AudioInScene, String> result, String key, SceneAudioEntry type)
     {
-        if (audioFilePath.containsKey(key))
-        {
-            result.put(new AudioInScene(type.getVolume(), type.isRepeatTrack(), type.isPlayAfterEffect(), key),
-                audioFilePath.get(key));
+        if (audioFilePath != null) {
+            if (audioFilePath.containsKey(key))
+            {
+                result.put(new AudioInScene(type.getVolume(), type.isRepeatTrack(), type.isPlayAfterEffect(), key),
+                    audioFilePath.get(key));
+            }
         }
     }
 
@@ -108,21 +120,20 @@ public class SceneCreator extends AppCompatActivity
     }
 
     @Override
-    public void onSelectAudioClickListener(View v)
+    public void onSelectAudioClickListener(String tag)
     {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.setType("*/*");
-        startActivityForResult(intent, 1);
+        audioEntryType = tag;
 
-        ViewParent rootElement = v.getParent().getParent().getParent();
-        audioEntryType = (String) ((View) rootElement).getTag();
+        startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("audio/*"), 1);
     }
 
     @Override
-    public void onPlayClickListener(View v)
+    public void onPlayClickListener(String tag)
     {
-        ViewParent rootElement = v.getParent().getParent();
-        audioEntryType = (String) ((View) rootElement).getTag();
+        audioEntryType = tag;
+
+        String fileUri = audioFilePath.containsKey(audioEntryType) ? audioFilePath.get(audioEntryType) : null;
+        audioTypePlayer.startOrStopPlaying(this, fileUri, sceneAudioEntries.get(tag));
     }
 
     @Override
@@ -139,18 +150,24 @@ public class SceneCreator extends AppCompatActivity
             String selectedFilePath = Objects.requireNonNull(data.getData()).getPath();
             if ("effect".equals(audioEntryType))
             {
-                audioFilePath.put("effect", selectedFilePath);
+                audioFilePath.put("effect", data.getDataString());
                 effect.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
             } else if ("music".equals(audioEntryType))
             {
-                audioFilePath.put("music", selectedFilePath);
+                audioFilePath.put("music", data.getDataString());
                 music.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
             }
             if ("ambience".equals(audioEntryType))
             {
-                audioFilePath.put("ambience", selectedFilePath);
+                audioFilePath.put("ambience", data.getDataString());
                 ambience.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
             }
         }
+    }
+
+    @Override
+    public void onChangedVolume(int progress, String tag)
+    {
+        audioTypePlayer.adjustVolume(tag, progress);
     }
 }
