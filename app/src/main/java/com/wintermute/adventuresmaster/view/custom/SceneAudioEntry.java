@@ -33,17 +33,38 @@ public class SceneAudioEntry extends LinearLayout
         void onPlayClickListener(String tag);
     }
 
+    /**
+     * Handles changing progress on volume seek bar.
+     */
     public interface OnChangedVolume
     {
         void onChangedVolume(int progress, String tag);
     }
 
+    /**
+     * Recognizes changing status of checkbox.
+     */
+    public interface OnChangeLoopingStatus
+    {
+        void onChangeLoopingStatus(boolean loop, String tag);
+    }
+
+    /**
+     * Recognizes changing status of checkbox.
+     */
+    public interface OnChangeSchedulerStatus
+    {
+        void OnChangeSchedulerStatus(boolean playAfterEffect, String tag);
+    }
+
     private OnSelectAudioClick onSelectAudioClick;
     private OnPlayAudioClick onPlayAudioClick;
     private OnChangedVolume onChangedVolume;
+    private OnChangeLoopingStatus onChangeLoopingStatus;
+    private OnChangeSchedulerStatus onChangeSchedulerStatus;
 
     private Button selectAudio;
-    private CheckBox loopBox, playAfterEffectBox;
+    private CheckBox loopingStatus, playScheduleStatus;
     private String sceneAudioFileTitle;
 
     private SeekBar volumeBar;
@@ -129,17 +150,33 @@ public class SceneAudioEntry extends LinearLayout
             }
         });
 
-        loopBox = findViewById(R.id.audio_entry_repeat_track);
-        loopBox.setOnCheckedChangeListener((buttonView, isChecked) -> setRepeatTrack(isChecked));
+        loopingStatus = findViewById(R.id.audio_entry_repeat_track);
+        loopingStatus.setOnClickListener(v ->
+        {
+            if (onChangeLoopingStatus != null)
+            {
+                onChangeLoopingStatus.onChangeLoopingStatus(repeatTrack,
+                    ((View) v.getParent().getParent()).getTag().toString());
+            }
+        });
+        loopingStatus.setOnCheckedChangeListener((buttonView, isChecked) -> setRepeatTrack(isChecked));
 
-        playAfterEffectBox = findViewById(R.id.audio_entry_play_after_effect);
-        playAfterEffectBox.setOnCheckedChangeListener((buttonView, isChecked) -> setPlayAfterEffect(isChecked));
+        playScheduleStatus = findViewById(R.id.audio_entry_play_after_effect);
+        playScheduleStatus.setOnClickListener(v ->
+        {
+            if (onChangeSchedulerStatus != null)
+            {
+                onChangeSchedulerStatus.OnChangeSchedulerStatus(playAfterEffect,
+                    ((View) v.getParent().getParent()).getTag().toString());
+            }
+        });
+        playScheduleStatus.setOnCheckedChangeListener((buttonView, isChecked) -> setPlayAfterEffect(isChecked));
     }
 
     /**
      * Assigns the click listener interface.
      *
-     * @param onSelectAudioClick interface to bind.
+     * @param onSelectAudioClick interface recognizing select audio button click.
      */
     public void setOnSelectAudioClick(OnSelectAudioClick onSelectAudioClick)
     {
@@ -149,16 +186,39 @@ public class SceneAudioEntry extends LinearLayout
     /**
      * Assigns the click listener interface.
      *
-     * @param onPlayAudioClick interface to bind.
+     * @param onPlayAudioClick interface recognizing play button click.
      */
     public void setOnPlayAudioClick(OnPlayAudioClick onPlayAudioClick)
     {
         this.onPlayAudioClick = onPlayAudioClick;
     }
 
+    /**
+     * Assigns changing volume listener.
+     *
+     * @param onChangedVolume interface listening on volume bar progress change.
+     */
     public void setOnChangedVolume(OnChangedVolume onChangedVolume)
     {
         this.onChangedVolume = onChangedVolume;
+    }
+
+    /**
+     * Assigns changins looping status listener.
+     *
+     * @param onChangeLoopingStatus interface listening on changing status of looping state.
+     */
+    public void setOnChangedLoopingStatus(OnChangeLoopingStatus onChangeLoopingStatus)
+    {
+        this.onChangeLoopingStatus = onChangeLoopingStatus;
+    }
+
+    /**
+     * @param onChangeSchedulerStatus interface listening on changing status of scheduling the player after intro.
+     */
+    public void setOnChangeSchedulerStatus(OnChangeSchedulerStatus onChangeSchedulerStatus)
+    {
+        this.onChangeSchedulerStatus = onChangeSchedulerStatus;
     }
 
     /**
@@ -186,7 +246,7 @@ public class SceneAudioEntry extends LinearLayout
     public void setRepeatTrack(boolean repeatTrack)
     {
         this.repeatTrack = repeatTrack;
-        loopBox.setChecked(repeatTrack);
+        loopingStatus.setChecked(repeatTrack);
         invalidate();
         requestLayout();
     }
@@ -225,7 +285,7 @@ public class SceneAudioEntry extends LinearLayout
     public void setPlayAfterEffect(boolean playAfterEffect)
     {
         this.playAfterEffect = playAfterEffect;
-        playAfterEffectBox.setChecked(playAfterEffect);
+        playScheduleStatus.setChecked(playAfterEffect);
         invalidate();
         requestLayout();
     }
@@ -235,6 +295,6 @@ public class SceneAudioEntry extends LinearLayout
      */
     public void disablePlayAfterEffectOption()
     {
-        playAfterEffectBox.setVisibility(GONE);
+        playScheduleStatus.setVisibility(GONE);
     }
 }

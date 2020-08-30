@@ -13,7 +13,7 @@ import java.util.List;
  * @author wintermute
  */
 @Data
-public class AudioWithOptsAndFile
+public class AudioFileWithOpts
 {
     @Embedded
     AudioInScene audioInScene;

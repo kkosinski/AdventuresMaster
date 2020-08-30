@@ -6,10 +6,14 @@ import android.os.AsyncTask;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
+import com.wintermute.adventuresmaster.services.player.GameAudioPlayer;
+import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.view.tools.gm.SceneCreator;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -22,46 +26,111 @@ import java.util.concurrent.ExecutionException;
 public class CreateSceneViewModel extends ViewModel
 {
 
+    private Map<String, AudioFileWithOpts> preparedAudio = new HashMap<>();
+    private GameAudioPlayer gameAudioPlayer = GameAudioPlayer.getInstance();
+
     /**
-     * Creates audio files if these don´t already exists, adds opts to it and stores it together with scene.
+     * Creates audio files if these don´t already exists, creates opts and scene.
      *
-     * @param ctx activity context.
-     * @param audioWithPath audio entry with all information and path to the audio file.
-     * @param sceneName title of scene to display in list after its created and once it will be listed.
+     * @param context of calling activity.
+     * @param inBoard is the boardId to attach the scene to it.
      */
-    public void createSceneWithAllDependingOperations(Context ctx, String sceneName, long inBoard,
-                                                      HashMap<AudioInScene, String> audioWithPath)
+    public void storeSceneAndAudio(Context context, String sceneName, long inBoard)
     {
-        Scene target = new Scene(sceneName, inBoard);
+        AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
+
+        Scene scene = new Scene(sceneName, inBoard);
         try
         {
-            AppDatabase appDatabase = AppDatabase.getAppDatabase(ctx);
-            long sceneId = new InsertTask(appDatabase).execute(target).get();
-            target.setId(sceneId);
-            for (Map.Entry<AudioInScene, String> audioEntry : audioWithPath.entrySet())
+            Long sceneId = new InsertTask(appDatabase).execute(scene).get();
+            for (AudioFileWithOpts target : preparedAudio.values())
             {
-
-                AudioInScene audioInScene = audioEntry.getKey();
+                Long audioFileId = new InsertTask(appDatabase).execute(target.getAudioFiles().get(0)).get();
+                AudioInScene audioInScene = target.getAudioInScene();
+                audioInScene.setAudioFile(audioFileId);
                 audioInScene.setInScene(sceneId);
-                audioInScene.setAudioFile(
-                    new InsertTask(appDatabase).execute(new AudioFile(audioEntry.getValue())).get());
 
-                long sceneInAudioId = new InsertTask(appDatabase).execute(audioInScene).get();
-                if ("effect".equals(audioInScene.getTag()))
-                {
-                    target.setEffect(sceneInAudioId);
-                } else if ("music".equals(audioInScene.getTag()))
-                {
-                    target.setMusic(sceneInAudioId);
-                } else if ("ambience".equals(audioInScene.getTag()))
-                {
-                    target.setAmbience(sceneInAudioId);
-                }
+                new InsertTask(appDatabase).execute(audioInScene);
             }
-            new UpdateTask(AppDatabase.getAppDatabase(ctx)).execute(target);
         } catch (ExecutionException | InterruptedException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Terminate all existing players.
+     */
+    public void stopGameAudioPlayer()
+    {
+        gameAudioPlayer.stopAll();
+    }
+
+    public void updateTrackVolume(String tag, int progress)
+    {
+        gameAudioPlayer.adjustVolume(tag, progress);
+        if (preparedAudio.containsKey(tag))
+        {
+            AudioFileWithOpts updatedTarget = preparedAudio.get(tag);
+            updatedTarget.getAudioInScene().setVolume(progress);
+            preparedAudio.put(tag, updatedTarget);
+        }
+    }
+
+    /**
+     * Update loop option for prepared track.
+     *
+     * @param loop status.
+     * @param tag of audio type.
+     */
+    public void updateLoopingStatus(boolean loop, String tag)
+    {
+        if (preparedAudio.containsKey(tag))
+        {
+            gameAudioPlayer.setLoopForPlayer(loop, tag);
+            AudioFileWithOpts updatedTarget = preparedAudio.get(tag);
+            updatedTarget.getAudioInScene().setRepeat(loop);
+            preparedAudio.put(tag, updatedTarget);
+        }
+    }
+
+    /**
+     * Update loop option for prepared track.
+     *
+     * @param playAfterIntro scheduling status.
+     * @param tag of audio type.
+     */
+    public void updateTrackScheduling(boolean playAfterIntro, String tag)
+    {
+        if (preparedAudio.containsKey(tag))
+        {
+            AudioFileWithOpts updatedTarget = preparedAudio.get(tag);
+            updatedTarget.getAudioInScene().setPlayAfterEffect(playAfterIntro);
+            preparedAudio.put(tag, updatedTarget);
+        }
+    }
+
+    /**
+     * Prepares audio file with configuration to persist in database.
+     *
+     * @param audio object containing opts.
+     * @param uri of audio file on device.
+     */
+    public void prepareAudioFileWithOpts(SceneAudioEntry audio, String uri)
+    {
+        AudioFileWithOpts result = new AudioFileWithOpts();
+        result.setAudioFiles(Collections.singletonList(new AudioFile(uri)));
+        result.setAudioInScene(new AudioInScene(audio.getVolume(), audio.isRepeatTrack(), audio.isPlayAfterEffect(),
+            audio.getTag().toString()));
+        preparedAudio.put(audio.getTag().toString(), result);
+    }
+
+    public void playTrack(Context ctx, String tag)
+    {
+        if (preparedAudio.containsKey(tag))
+        {
+            AudioFileWithOpts target = preparedAudio.get(tag);
+            gameAudioPlayer.preparePlayer(ctx, target);
         }
     }
 
@@ -103,32 +172,6 @@ public class CreateSceneViewModel extends ViewModel
             {
                 return appDatabase.sceneDao().insert((Scene) objects[0]);
             }
-            return null;
-        }
-    }
-
-    /**
-     * Async task to operate on databases for {@link SceneCreator}. Performs update operation on {@link Scene} table.
-     */
-    private static class UpdateTask extends AsyncTask<Scene, Void, Void>
-    {
-
-        private AppDatabase appDatabase;
-
-        /**
-         * Creates an instance of async task.
-         *
-         * @param appDatabase instance of database to access..
-         */
-        UpdateTask(AppDatabase appDatabase)
-        {
-            this.appDatabase = appDatabase;
-        }
-
-        @Override
-        protected Void doInBackground(Scene... scenes)
-        {
-            appDatabase.sceneDao().update(scenes[0]);
             return null;
         }
     }

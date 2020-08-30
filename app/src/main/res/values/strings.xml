@@ -18,4 +18,5 @@
     <string name="board_activity_emptyBoardHint">Tap to add board</string>
     <string name="board_dialog_board_name">Board name</string>
     <string name="board_activity_add_board_content">Add</string>
+    <string name="scene_activity_scene_preview">scene preview</string>
 </resources>
