@@ -66,6 +66,12 @@ public class CreateSceneViewModel extends ViewModel
         gameAudioPlayer.stopAll();
     }
 
+    /**
+     * Updates volume for prepared audio.
+     *
+     * @param tag of audio type.
+     * @param progress new volume value.
+     */
     public void updateTrackVolume(String tag, int progress)
     {
         gameAudioPlayer.adjustVolume(tag, progress);

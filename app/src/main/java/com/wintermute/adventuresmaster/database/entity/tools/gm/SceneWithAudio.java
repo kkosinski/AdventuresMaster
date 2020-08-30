@@ -7,8 +7,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Builds relation between {@link Scene} and {@link AudioWithOptsAndFile} to empower returning Scene, its AudioInScene
- * and AudioFile title and path.
+ * Builds relation between {@link Scene} and {@link AudioFileWithOpts} to empower returning Scene, its AudioInScene and
+ * AudioFile title and path.
  *
  * @author wintermute
  */
@@ -19,5 +19,5 @@ public class SceneWithAudio
     Scene scene;
 
     @Relation(parentColumn = "id", entityColumn = "inScene", entity = AudioInScene.class)
-    List<AudioWithOptsAndFile> audioInScene;
+    List<AudioFileWithOpts> audioInScene;
 }
