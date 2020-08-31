@@ -17,7 +17,7 @@ import java.util.Objects;
  * @author wintermute
  */
 @Data
-@Entity(tableName = "audioFile", indices = @Index(value = "path", unique = true))
+@Entity(tableName = "audioFile", indices = @Index(value = "uri", unique = true))
 public class AudioFile
 {
     @PrimaryKey(autoGenerate = true)
@@ -28,7 +28,7 @@ public class AudioFile
     private String title;
 
     @NonNull
-    @ColumnInfo(name = "path")
+    @ColumnInfo(name = "uri")
     private String uri;
 
     /**

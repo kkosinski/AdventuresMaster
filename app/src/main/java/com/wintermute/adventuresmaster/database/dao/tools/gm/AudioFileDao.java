@@ -17,6 +17,6 @@ public interface AudioFileDao
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(AudioFile audioFile);
 
-    @Query("SELECT id FROM audioFile WHERE path = :path")
-    long getIdByPath(String path);
+    @Query("SELECT id FROM audioFile WHERE uri = :uri")
+    long getIdByPath(String uri);
 }

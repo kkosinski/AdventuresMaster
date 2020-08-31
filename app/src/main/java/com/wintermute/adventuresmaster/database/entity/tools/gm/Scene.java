@@ -35,15 +35,6 @@ public class Scene
     @ColumnInfo(name = "light")
     private Long light;
 
-    @ColumnInfo(name = "effect")
-    private Long effect;
-
-    @ColumnInfo(name = "music")
-    private Long music;
-
-    @ColumnInfo(name = "ambience")
-    private Long ambience;
-
     public Scene(@NonNull String title, long inBoard)
     {
         this.title = title;
