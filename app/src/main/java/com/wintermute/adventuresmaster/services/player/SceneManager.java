@@ -1,6 +1,8 @@
 package com.wintermute.adventuresmaster.services.player;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -19,6 +21,7 @@ public class SceneManager extends Service
     @Override
     public void onCreate()
     {
+        createNotificationChannel();
         Notification notification = createNotification();
         startForeground(1, notification);
         player = GameAudioPlayer.getInstance();
@@ -51,6 +54,17 @@ public class SceneManager extends Service
 
         return notificationBuilder.build();
     }
+
+    private void createNotificationChannel()
+        {
+            CharSequence name = "channelName";
+            String description = "description";
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("scene", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
 
     @Override
     public void onDestroy()
