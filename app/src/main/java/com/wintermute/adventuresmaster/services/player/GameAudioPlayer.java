@@ -7,7 +7,6 @@ import android.net.Uri;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
-import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import java.util.Objects;
  *
  * @author wintermute
  */
-@Data
 public class GameAudioPlayer
 {
     private static GameAudioPlayer INSTANCE;

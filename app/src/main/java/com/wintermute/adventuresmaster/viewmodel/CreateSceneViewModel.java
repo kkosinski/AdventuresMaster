@@ -2,7 +2,9 @@ package com.wintermute.adventuresmaster.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.ArrayMap;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
@@ -10,6 +12,7 @@ import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpt
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
 import com.wintermute.adventuresmaster.services.player.GameAudioPlayer;
+import com.wintermute.adventuresmaster.services.player.SceneManager;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.view.tools.gm.SceneCreator;
 
@@ -143,8 +146,9 @@ public class CreateSceneViewModel extends ViewModel
 
     public void playSceneForPreview(Context context)
     {
-        gameAudioPlayer.stopAll();
-        gameAudioPlayer.playScene(context, new ArrayList<>(preparedAudio.values()));
+        Intent scenePreview = new Intent(context, SceneManager.class);
+        scenePreview.putParcelableArrayListExtra("audioList", new ArrayList<>(preparedAudio.values()));
+        context.startForegroundService(scenePreview);
     }
 
     /**

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.menu.Board;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneWithAudio;
 import com.wintermute.adventuresmaster.view.BoardPanel;
 
@@ -72,6 +73,15 @@ public class BoardViewModel extends ViewModel
     public LiveData<List<SceneWithAudio>> getScenesForBoard(Context ctx, long boardId)
     {
         return AppDatabase.getAppDatabase(ctx).sceneDao().getScenesInBoard(boardId);
+    }
+
+    /**
+     * @param ctx of calling activity
+     * @param sceneId of scene containing target audio
+     * @return list with audio tracks contained in scene.
+     */
+    public LiveData<List<AudioFileWithOpts>> getAudioInScene(Context ctx, long sceneId){
+        return AppDatabase.getAppDatabase(ctx).audioInSceneDao().getAudioForScenes(sceneId);
     }
 
     private static class InsertTask extends AsyncTask<Board, Void, Long>

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.wintermute.adventuresmaster">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -9,17 +10,18 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".view.tools.gm.BoardContentTable"></activity>
+        <service android:name=".services.player.SceneManager" android:exported="false" />
+        <activity android:name=".view.tools.gm.BoardContentTable" />
         <activity android:name=".view.tools.gm.SceneCreator" />
         <activity android:name=".view.BoardPanel" />
         <activity android:name=".dynamiclist.DynamicListActivity" />
         <activity android:name=".view.AdventuresMaster">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".services.receiver.SceneReceiver"/>
     </application>
 
 </manifest>

@@ -11,6 +11,8 @@ import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicAdapter;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListHelper;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListItem;
+import com.wintermute.adventuresmaster.services.player.GameAudioPlayer;
+import com.wintermute.adventuresmaster.services.player.SceneManager;
 import com.wintermute.adventuresmaster.viewmodel.BoardViewModel;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.List;
  */
 public class BoardContentTable extends AppCompatActivity implements DynamicAdapter.ItemClickListener
 {
+    private BoardViewModel model;
+    private long sceneId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,17 +37,17 @@ public class BoardContentTable extends AppCompatActivity implements DynamicAdapt
 
     private void init()
     {
-        long currentBoardId = getIntent().getLongExtra("inBoard", 0L);
-        BoardViewModel model = new ViewModelProvider(this).get(BoardViewModel.class);
+        sceneId = getIntent().getLongExtra("inBoard", 0L);
+        model = new ViewModelProvider(this).get(BoardViewModel.class);
 
         Button addEntry = findViewById(R.id.board_content_table_add_entry);
         addEntry.setOnClickListener(
-            v -> startActivity(new Intent(this, SceneCreator.class).putExtra("inBoard", currentBoardId)));
+            v -> startActivity(new Intent(this, SceneCreator.class).putExtra("inBoard", sceneId)));
 
         RecyclerView recyclerView =
             DynamicListHelper.getInstance().initRecyclerView(this, findViewById(R.id.board_content_table_content_list));
 
-        model.getScenesForBoard(this, currentBoardId).observe(this, scenes ->
+        model.getScenesForBoard(this, sceneId).observe(this, scenes ->
         {
             List<DynamicListItem> listContent = new ArrayList<>();
             scenes.forEach(s ->
@@ -52,7 +56,7 @@ public class BoardContentTable extends AppCompatActivity implements DynamicAdapt
                 s
                     .getAudioInScene()
                     .forEach(a -> additionalInfo.add(
-                        a.getAudioInScene().getTag() + ": " + a.getAudioFiles().get(0).getTitle()));
+                        a.getAudioInScene().getTag().toUpperCase() + ": " + a.getAudioFiles().get(0).getTitle()));
                 listContent.add(new DynamicListItem(s.getScene().getTitle(), additionalInfo, s.getScene().getId()));
             });
 
@@ -65,6 +69,14 @@ public class BoardContentTable extends AppCompatActivity implements DynamicAdapt
     @Override
     public void onDynamicListItemClick(View view, int position, long itemId)
     {
-        //TODO: dependes which object is called
+        GameAudioPlayer gameAudioPlayer = GameAudioPlayer.getInstance();
+        gameAudioPlayer.stopAll();
+        Intent intent = new Intent(this, SceneManager.class);
+        model
+            .getAudioInScene(this, itemId)
+            .observe(this, audioFileWithOpts -> {
+                intent.putParcelableArrayListExtra("audioList", new ArrayList<>(audioFileWithOpts));
+                startForegroundService(intent);
+            });
     }
 }
