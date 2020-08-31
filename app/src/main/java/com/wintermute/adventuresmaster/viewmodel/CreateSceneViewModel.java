@@ -13,6 +13,7 @@ import com.wintermute.adventuresmaster.services.player.GameAudioPlayer;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.view.tools.gm.SceneCreator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class CreateSceneViewModel extends ViewModel
     {
         if (preparedAudio.containsKey(tag))
         {
-            gameAudioPlayer.setLoopForPlayer(loop, tag);
+            gameAudioPlayer.setLoopForPlayer(tag, loop);
             AudioFileWithOpts updatedTarget = preparedAudio.get(tag);
             updatedTarget.getAudioInScene().setRepeat(loop);
             preparedAudio.put(tag, updatedTarget);
@@ -136,8 +137,14 @@ public class CreateSceneViewModel extends ViewModel
         if (preparedAudio.containsKey(tag))
         {
             AudioFileWithOpts target = preparedAudio.get(tag);
-            gameAudioPlayer.preparePlayer(ctx, target);
+            gameAudioPlayer.playAudioType(ctx, target);
         }
+    }
+
+    public void playSceneForPreview(Context context)
+    {
+        gameAudioPlayer.stopAll();
+        gameAudioPlayer.playScene(context, new ArrayList<>(preparedAudio.values()));
     }
 
     /**

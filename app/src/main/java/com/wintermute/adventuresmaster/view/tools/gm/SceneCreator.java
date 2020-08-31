@@ -80,7 +80,7 @@ public class SceneCreator extends AppCompatActivity
 
     private void scenePreview()
     {
-        //TODO: handle scene playing
+        model.playSceneForPreview(this);
     }
 
     private void storeScene(String sceneName)
@@ -91,7 +91,7 @@ public class SceneCreator extends AppCompatActivity
     private String sanitizeFileName(String path)
     {
         String result = new File(path).getName();
-        return result.length() < 30 ? result : result.substring(0, 27) + "...";
+        return result.length() < 27 ? result : result.substring(0, 25) + "...";
     }
 
     @Override
@@ -123,6 +123,13 @@ public class SceneCreator extends AppCompatActivity
     public void OnChangeSchedulerStatus(boolean playAfterIntro, String tag)
     {
         model.updateTrackScheduling(playAfterIntro, tag);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        model.stopGameAudioPlayer();
     }
 
     @Override
