@@ -14,16 +14,23 @@ import com.wintermute.adventuresmaster.services.receiver.SceneReceiver;
 
 import java.util.ArrayList;
 
+/**
+ * Service responsible for starting the {@link GameAudioPlayer} and sending notification to user.
+ *
+ * @author wintermute
+ */
 public class SceneManager extends Service
 {
-    GameAudioPlayer player;
+    public static final int NOTIFICATION_CHANNEL_ID = 1;
+    public static final int NOTIFICATION_REQUEST_ID = 2;
+    private GameAudioPlayer player;
 
     @Override
     public void onCreate()
     {
         createNotificationChannel();
         Notification notification = createNotification();
-        startForeground(1, notification);
+        startForeground(NOTIFICATION_CHANNEL_ID, notification);
         player = GameAudioPlayer.getInstance();
         super.onCreate();
     }
@@ -43,7 +50,7 @@ public class SceneManager extends Service
     {
         Intent broadcastIntent = new Intent(this, SceneReceiver.class);
         PendingIntent actionIntent =
-            PendingIntent.getBroadcast(this, 1, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent.getBroadcast(this, NOTIFICATION_REQUEST_ID, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "scene")
             .setContentTitle("playing scene")
