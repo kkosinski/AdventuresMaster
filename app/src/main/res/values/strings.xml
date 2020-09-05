@@ -19,4 +19,8 @@
     <string name="board_dialog_board_name">Board name</string>
     <string name="board_activity_add_board_content">Add</string>
     <string name="scene_activity_scene_preview">scene preview</string>
+    <string name="scene_activity_set_light">set light</string>
+    <string name="light_settings_save">save</string>
+    <string name="light_settings_show_changes_off">show changes: off</string>
+    <string name="light_settings_show_changes_on">show changes: on</string>
 </resources>

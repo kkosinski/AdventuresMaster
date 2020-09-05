@@ -10,6 +10,7 @@ import com.wintermute.adventuresmaster.database.dao.menu.BoardDao;
 import com.wintermute.adventuresmaster.database.dao.menu.MenuItemDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.AudioFileDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.AudioInSceneDao;
+import com.wintermute.adventuresmaster.database.dao.tools.gm.LightDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.SceneDao;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityDesc;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
@@ -17,6 +18,7 @@ import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
 
 /**
@@ -26,7 +28,7 @@ import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
  */
 @Database(
     entities = {MenuItem.class, ActivityDesc.class, ActivityExtras.class, AudioFile.class, Scene.class, Board.class,
-                AudioInScene.class}, version = 1)
+                AudioInScene.class, Light.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase
 {
     public static AppDatabase INSTANCE;
@@ -40,6 +42,8 @@ public abstract class AppDatabase extends RoomDatabase
     public abstract AudioFileDao audioFileDao();
 
     public abstract AudioInSceneDao audioInSceneDao();
+
+    public abstract LightDao lightDao();
 
     public abstract SceneDao sceneDao();
 

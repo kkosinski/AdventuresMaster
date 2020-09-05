@@ -52,13 +52,19 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
     testImplementation 'androidx.room:room-testing:2.2.5'
 
+    //Color picker
+    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
+
+    // Volley
+    implementation 'com.android.volley:volley:1.1.1'
+
     androidTestAnnotationProcessor 'androidx.room:room-compiler:2.2.5'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
     // JUnit
     testImplementation 'junit:junit:4.13'
@@ -66,6 +72,6 @@ dependencies {
     // Mockito
     testImplementation 'org.mockito:mockito-core:3.4.6'
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

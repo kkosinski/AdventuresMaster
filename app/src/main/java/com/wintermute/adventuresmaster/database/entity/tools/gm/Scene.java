@@ -17,7 +17,7 @@ import lombok.Data;
  * @author wintermute
  */
 @Data
-@Entity(indices = {@Index(value = "inBoard")},
+@Entity(tableName = "scene", indices = {@Index(value = "inBoard")},
         foreignKeys = @ForeignKey(entity = Board.class, parentColumns = "id", childColumns = "inBoard",
                                   onDelete = CASCADE))
 public class Scene
@@ -31,9 +31,6 @@ public class Scene
     @NonNull
     @ColumnInfo(name = "title")
     private String title;
-
-    @ColumnInfo(name = "light")
-    private Long light;
 
     public Scene(@NonNull String title, long inBoard)
     {

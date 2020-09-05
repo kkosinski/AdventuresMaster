@@ -1,6 +1,5 @@
 package com.wintermute.adventuresmaster.view.tools.gm;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,6 +26,8 @@ public class SceneCreator extends AppCompatActivity
     implements SceneAudioEntry.OnSelectAudioClick, SceneAudioEntry.OnPlayAudioClick, SceneAudioEntry.OnChangedVolume,
     SceneAudioEntry.OnChangeLoopingStatus, SceneAudioEntry.OnChangeSchedulerStatus
 {
+    public static final int LIGHT_PICKER_REQUEST_CODE = 2;
+    public static final int AUDIO_ENTRY_REQUEST_CODE = 1;
     private String audioEntryType;
     private SceneAudioEntry effect, music, ambience;
     private CreateSceneViewModel model;
@@ -63,6 +64,10 @@ public class SceneCreator extends AppCompatActivity
             finish();
         });
 
+        Button setLight = findViewById(R.id.scene_activity_set_light);
+        setLight.setOnClickListener(
+            v -> startActivityForResult(new Intent(this, LightSettings.class), LIGHT_PICKER_REQUEST_CODE));
+
         effect = findViewById(R.id.scene_activity_effect);
         effect.disablePlayAfterEffectOption();
         music = findViewById(R.id.scene_activity_music);
@@ -85,7 +90,7 @@ public class SceneCreator extends AppCompatActivity
 
     private void storeScene(String sceneName)
     {
-        model.storeSceneAndAudio(this, sceneName, getIntent().getLongExtra("inBoard", 0L));
+        model.storeScene(this, sceneName, getIntent().getLongExtra("inBoard", 0L));
     }
 
     private String sanitizeFileName(String path)
@@ -98,7 +103,7 @@ public class SceneCreator extends AppCompatActivity
     public void onSelectAudioClickListener(String tag)
     {
         audioEntryType = tag;
-        startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("audio/*"), 1);
+        startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("audio/*"), AUDIO_ENTRY_REQUEST_CODE);
     }
 
     @Override
@@ -136,22 +141,28 @@ public class SceneCreator extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK)
+        if (resultCode == RESULT_OK)
         {
-            String selectedFilePath = Objects.requireNonNull(data.getData()).getPath();
-            if ("effect".equals(audioEntryType))
+            if (requestCode == AUDIO_ENTRY_REQUEST_CODE)
             {
-                model.prepareAudioFileWithOpts(effect, data.getDataString());
-                effect.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
-            } else if ("music".equals(audioEntryType))
+                String selectedFilePath = Objects.requireNonNull(data.getData()).getPath();
+                if ("effect".equals(audioEntryType))
+                {
+                    model.prepareAudioFileWithOpts(effect, data.getDataString());
+                    effect.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
+                } else if ("music".equals(audioEntryType))
+                {
+                    model.prepareAudioFileWithOpts(music, data.getDataString());
+                    music.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
+                }
+                if ("ambience".equals(audioEntryType))
+                {
+                    model.prepareAudioFileWithOpts(ambience, data.getDataString());
+                    ambience.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
+                }
+            } else if (requestCode == LIGHT_PICKER_REQUEST_CODE)
             {
-                model.prepareAudioFileWithOpts(music, data.getDataString());
-                music.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
-            }
-            if ("ambience".equals(audioEntryType))
-            {
-                model.prepareAudioFileWithOpts(ambience, data.getDataString());
-                ambience.setSceneAudioFileTitle(sanitizeFileName(selectedFilePath));
+                model.setLight(data.getParcelableExtra("preparedLight"));
             }
         }
     }

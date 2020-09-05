@@ -10,11 +10,13 @@ import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
 import com.wintermute.adventuresmaster.services.player.GameAudioPlayer;
 import com.wintermute.adventuresmaster.services.player.SceneManager;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.view.tools.gm.SceneCreator;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,30 +33,36 @@ public class CreateSceneViewModel extends ViewModel
 {
 
     private Map<String, AudioFileWithOpts> preparedAudio = new HashMap<>();
+    @Setter
+    private Light light;
     private GameAudioPlayer gameAudioPlayer = GameAudioPlayer.getInstance();
 
     /**
-     * Creates audio files if these don´t already exists, creates opts and scene.
+     * Creates audio files if these don´t already exists, stores audio settings, scene and light settings.
      *
      * @param context of calling activity.
      * @param inBoard is the boardId to attach the scene to it.
      */
-    public void storeSceneAndAudio(Context context, String sceneName, long inBoard)
+    public void storeScene(Context context, String sceneName, long inBoard)
     {
         AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
 
         Scene scene = new Scene(sceneName, inBoard);
         try
         {
-            Long sceneId = new InsertTask(appDatabase).execute(scene).get();
+            scene.setId(new InsertTask(appDatabase).execute(scene).get());
             for (AudioFileWithOpts target : preparedAudio.values())
             {
                 Long audioFileId = new InsertTask(appDatabase).execute(target.getAudioFiles().get(0)).get();
                 AudioInScene audioInScene = target.getAudioInScene();
                 audioInScene.setAudioFile(audioFileId);
-                audioInScene.setInScene(sceneId);
+                audioInScene.setInScene(scene.getId());
 
                 new InsertTask(appDatabase).execute(audioInScene);
+            }
+            if (light != null) {
+                light.setInScene(scene.getId());
+                new InsertTask(appDatabase).execute(light);
             }
         } catch (ExecutionException | InterruptedException e)
         {
@@ -135,6 +143,12 @@ public class CreateSceneViewModel extends ViewModel
         preparedAudio.put(audio.getTag().toString(), result);
     }
 
+    /**
+     * Plays single track
+     *
+     * @param ctx of calling activity
+     * @param tag of selected player.
+     */
     public void playTrack(Context ctx, String tag)
     {
         if (preparedAudio.containsKey(tag))
@@ -144,6 +158,11 @@ public class CreateSceneViewModel extends ViewModel
         }
     }
 
+    /**
+     * Plays all tracks with all settings configured for created scene.
+     *
+     * @param context of calling activity.
+     */
     public void playSceneForPreview(Context context)
     {
         Intent scenePreview = new Intent(context, SceneManager.class);
@@ -188,6 +207,8 @@ public class CreateSceneViewModel extends ViewModel
             } else if (objects[0] instanceof Scene)
             {
                 return appDatabase.sceneDao().insert((Scene) objects[0]);
+            } else if (objects[0] instanceof Light) {
+                return appDatabase.lightDao().insert((Light) objects[0]);
             }
             return null;
         }

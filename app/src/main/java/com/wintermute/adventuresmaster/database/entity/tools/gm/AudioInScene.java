@@ -11,6 +11,11 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
 
+/**
+ * Represents audio ordered to scene with user settings.
+ *
+ * @author wintermute
+ */
 @Data
 @Entity(tableName = "audioInBoard", indices = {@Index("audioFile"), @Index("inScene")}, foreignKeys = {
     @ForeignKey(entity = Scene.class, parentColumns = "id", childColumns = "inScene", onDelete = CASCADE),

@@ -52,6 +52,14 @@
             custom:styleable_scene_title="set ambience" />
 
     <Button
+            android:id="@+id/scene_activity_set_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/scene_activity_ambience"
+            android:text="@string/scene_activity_set_light" />
+
+    <Button
             android:id="@+id/scene_activity_save_scene"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
