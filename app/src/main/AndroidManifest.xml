@@ -7,12 +7,14 @@
 
     <application
             android:allowBackup="false"
+            android:usesCleartextTraffic="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".view.tools.gm.LightSettings"></activity>
+        <activity android:name=".view.settings.PhilipsHueConfig"></activity>
+        <activity android:name=".view.tools.gm.LightSettings" />
 
         <service
                 android:name=".services.player.SceneManager"

@@ -15,12 +15,22 @@
     <string name="audio_entry_loop">loop: </string>
     <string name="audio_entry_play_after_effect">start when effect is done</string>
     <string name="audio_entry_loop_audio">repeat track</string>
+
     <string name="board_activity_emptyBoardHint">Tap to add board</string>
     <string name="board_dialog_board_name">Board name</string>
     <string name="board_activity_add_board_content">Add</string>
+
     <string name="scene_activity_scene_preview">scene preview</string>
     <string name="scene_activity_set_light">set light</string>
+
     <string name="light_settings_save">save</string>
     <string name="light_settings_show_changes_off">show changes: off</string>
     <string name="light_settings_show_changes_on">show changes: on</string>
+
+    <string name="philips_hue_config_discover">discover philips hue bridge</string>
+
+    <string name="hue_discover_dialog_successful">Connect</string>
+    <string name="hue_discover_dialog_successful_message">Bridge found. Please press pairing button and connect your device.</string>
+    <string name="hue_discover_dialog_failed">Close</string>
+    <string name="hue_discover_dialog_failed_message">No bridges found. Please make sure that your device and the bridge are in the same network</string>
 </resources>

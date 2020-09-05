@@ -8,6 +8,7 @@ import com.wintermute.adventuresmaster.database.dao.menu.ActivityDescDao;
 import com.wintermute.adventuresmaster.database.dao.menu.ActivityExtrasDao;
 import com.wintermute.adventuresmaster.database.dao.menu.BoardDao;
 import com.wintermute.adventuresmaster.database.dao.menu.MenuItemDao;
+import com.wintermute.adventuresmaster.database.dao.settings.HueBridgeDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.AudioFileDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.AudioInSceneDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.LightDao;
@@ -16,6 +17,7 @@ import com.wintermute.adventuresmaster.database.entity.menu.ActivityDesc;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
 import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
+import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
@@ -28,7 +30,7 @@ import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
  */
 @Database(
     entities = {MenuItem.class, ActivityDesc.class, ActivityExtras.class, AudioFile.class, Scene.class, Board.class,
-                AudioInScene.class, Light.class}, version = 1)
+                AudioInScene.class, Light.class, HueBridge.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase
 {
     public static AppDatabase INSTANCE;
@@ -48,6 +50,8 @@ public abstract class AppDatabase extends RoomDatabase
     public abstract SceneDao sceneDao();
 
     public abstract BoardDao boardDao();
+
+    public abstract HueBridgeDao hueBridgeDao();
 
     /**
      * Create an instance if not existent, return created if already existing.
