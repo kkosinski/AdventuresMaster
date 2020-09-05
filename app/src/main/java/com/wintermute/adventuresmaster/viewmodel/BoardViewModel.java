@@ -9,7 +9,7 @@ import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneWithAudio;
-import com.wintermute.adventuresmaster.view.BoardPanel;
+import com.wintermute.adventuresmaster.view.tools.gm.BoardPanel;
 
 import java.util.List;
 

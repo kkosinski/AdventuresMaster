@@ -9,7 +9,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.wintermute.adventuresmaster.R;
-import com.wintermute.adventuresmaster.view.BoardPanel;
+import com.wintermute.adventuresmaster.view.tools.gm.BoardPanel;
 
 /**
  * Custom alert dialog to create folders and {@link com.wintermute.adventuresmaster.view.tools.gm.BoardContentTable} in

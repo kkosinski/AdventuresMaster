@@ -1,4 +1,4 @@
-package com.wintermute.adventuresmaster.view;
+package com.wintermute.adventuresmaster.view.tools.gm;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import com.wintermute.adventuresmaster.dynamiclist.DynamicAdapter;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListHelper;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListItem;
 import com.wintermute.adventuresmaster.view.custom.BoardDialog;
-import com.wintermute.adventuresmaster.view.tools.gm.BoardContentTable;
 import com.wintermute.adventuresmaster.viewmodel.BoardViewModel;
 
 import java.util.ArrayList;

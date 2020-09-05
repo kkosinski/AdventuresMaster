@@ -20,7 +20,7 @@
 
         <activity android:name=".view.tools.gm.BoardContentTable" />
         <activity android:name=".view.tools.gm.SceneCreator" />
-        <activity android:name=".view.BoardPanel" />
+        <activity android:name=".view.tools.gm.BoardPanel" />
         <activity android:name=".dynamiclist.DynamicListActivity" />
         <activity android:name=".view.AdventuresMaster">
             <intent-filter>

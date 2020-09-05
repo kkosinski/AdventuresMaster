@@ -64,7 +64,10 @@ public class AdventuresMaster extends AppCompatActivity
                 {
                     try
                     {
-                        Class<?> c = Class.forName(this.getPackageName() + ".view." + activityDesc.getClassName());
+                        String packageInfo =
+                            activityDesc.getPackageInfo() == null ? "" : activityDesc.getPackageInfo() + ".";
+                        Class<?> c =
+                            Class.forName(this.getPackageName() + ".view." + packageInfo + activityDesc.getClassName());
                         Intent intent = new Intent(this, c);
                         if (activityDesc.isHasExtras())
                         {

@@ -30,6 +30,9 @@ public class ActivityDesc
     @ColumnInfo(name = "className")
     private String className;
 
+    @ColumnInfo(name = "packageInfo")
+    private String packageInfo;
+
     @ColumnInfo(name = "hasExtras")
     private boolean hasExtras;
 }
