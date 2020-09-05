@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.ArrayMap;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
@@ -60,7 +59,8 @@ public class CreateSceneViewModel extends ViewModel
 
                 new InsertTask(appDatabase).execute(audioInScene);
             }
-            if (light != null) {
+            if (light != null)
+            {
                 light.setInScene(scene.getId());
                 new InsertTask(appDatabase).execute(light);
             }
@@ -207,7 +207,8 @@ public class CreateSceneViewModel extends ViewModel
             } else if (objects[0] instanceof Scene)
             {
                 return appDatabase.sceneDao().insert((Scene) objects[0]);
-            } else if (objects[0] instanceof Light) {
+            } else if (objects[0] instanceof Light)
+            {
                 return appDatabase.lightDao().insert((Light) objects[0]);
             }
             return null;
