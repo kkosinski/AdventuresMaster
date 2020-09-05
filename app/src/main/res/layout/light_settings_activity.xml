@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".view.tools.gm.LightSettings">
+
+    <Button
+            android:id="@+id/light_settings_show_changes"
+            android:layout_above="@+id/light_settings_color_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/light_settings_show_changes_off"
+            />
+
+    <com.flask.colorpicker.ColorPickerView
+            android:id="@+id/light_settings_color_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:wheelType="CIRCLE"/>
+
+    <SeekBar
+            android:id="@+id/light_settings_brightness_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:min="0"
+            android:max="254"
+            android:progress="127"
+            android:layout_below="@id/light_settings_color_picker"/>
+
+    <Button
+        android:id="@+id/light_settings_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="@string/light_settings_save"/>
+
+</RelativeLayout>
