@@ -1,4 +1,4 @@
-package com.wintermute.adventuresmaster.view.settings;
+package com.wintermute.adventuresmaster.view.custom.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,12 +13,12 @@ import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 
 import java.util.List;
 
-public class BridgeViewAdapter extends ArrayAdapter<HueBridge>
+public class HueBridgeViewAdapter extends ArrayAdapter<HueBridge>
 {
     private final Context context;
     private List<HueBridge> data;
 
-    public BridgeViewAdapter(Context context, List<HueBridge> data)
+    public HueBridgeViewAdapter(Context context, List<HueBridge> data)
     {
         super(context, 0, data);
         this.data = data;

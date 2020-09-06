@@ -62,6 +62,11 @@ public class RestGun
         sendRequest(Request.Method.PUT, url, getChangeBrightnessReqBody(brightness));
     }
 
+    public void requestBulbs(String url)
+    {
+        sendRequest(Request.Method.GET, url, null);
+    }
+
     /**
      * @param url of target device.
      */

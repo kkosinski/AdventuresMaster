@@ -7,22 +7,33 @@
 
     <Button
             android:id="@+id/philips_hue_config_discover"
-            android:text="@string/philips_hue_config_discover"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/philips_hue_config_discover" />
 
-    <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/philips_hue_config_bridge_spinner"
+    <LinearLayout
+            android:id="@+id/philips_hue_available_devices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/philips_hue_config_discover"/>
+            android:layout_below="@+id/philips_hue_config_discover">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/philips_hue_config_bridge_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        <Button
+                android:id="@+id/philips_hue_config_set_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/philips_hue_config_set_default" />
+    </LinearLayout>
 
     <Button
-            android:id="@+id/philips_hue_config_set_default"
+            android:id="@+id/philips_hue_config_connect_bulbs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/philips_hue_config_discover"
-            android:layout_toEndOf="@id/philips_hue_config_bridge_spinner"
-            android:text="@string/philips_hue_config_set_default"/>
+            android:layout_below="@+id/philips_hue_available_devices"
+            android:text="@string/philips_hue_config_connect_bulbs" />
 
 </RelativeLayout>

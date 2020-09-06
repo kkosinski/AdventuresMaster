@@ -1,5 +1,6 @@
 package com.wintermute.adventuresmaster.view.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,7 +13,8 @@ import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import com.wintermute.adventuresmaster.services.light.RestGun;
 import com.wintermute.adventuresmaster.view.custom.ConnectHueBridgeDialog;
-import com.wintermute.adventuresmaster.viewmodel.PhilipsHueConfigViewModel;
+import com.wintermute.adventuresmaster.view.custom.adapter.HueBridgeViewAdapter;
+import com.wintermute.adventuresmaster.viewmodel.HueBridgeViewModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,10 +29,10 @@ import java.util.List;
 public class PhilipsHueConfig extends AppCompatActivity
     implements ConnectHueBridgeDialog.OnConnectClickedListener, RestGun.OnSuccess, AdapterView.OnItemSelectedListener
 {
-    private PhilipsHueConfigViewModel model;
+    private HueBridgeViewModel model;
     private List<HueBridge> bridges;
-    private BridgeViewAdapter adapter;
-    private Button setAsDefaultDevice;
+    private HueBridgeViewAdapter adapter;
+    private Button setAsDefaultDevice, connectBulbs;
     private Spinner registeredDevicesView;
 
     @Override
@@ -44,23 +46,28 @@ public class PhilipsHueConfig extends AppCompatActivity
 
     private void init()
     {
-        model = new ViewModelProvider(this).get(PhilipsHueConfigViewModel.class);
+        model = new ViewModelProvider(this).get(HueBridgeViewModel.class);
 
         Button discoverBridge = findViewById(R.id.philips_hue_config_discover);
         discoverBridge.setOnClickListener(v -> showResult(model.discoverBridge()));
+
+        setAsDefaultDevice = findViewById(R.id.philips_hue_config_set_default);
+        setAsDefaultDevice.setOnClickListener(
+            v -> model.changeDefaultDevice(this, (HueBridge) registeredDevicesView.getSelectedItem()));
+
+        connectBulbs = findViewById(R.id.philips_hue_config_connect_bulbs);
+        connectBulbs.setOnClickListener(v -> startActivity(
+            new Intent(this, PhilipsHueBulbsSettings.class).putExtra("bridge",
+                ((HueBridge) registeredDevicesView.getSelectedItem()))));
 
         registeredDevicesView = findViewById(R.id.philips_hue_config_bridge_spinner);
         registeredDevicesView.setOnItemSelectedListener(this);
 
         bridges = new ArrayList<>();
 
-        adapter = new BridgeViewAdapter(this, bridges);
+        adapter = new HueBridgeViewAdapter(this, bridges);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         registeredDevicesView.setAdapter(adapter);
-
-        setAsDefaultDevice = findViewById(R.id.philips_hue_config_set_default);
-        setAsDefaultDevice.setOnClickListener(
-            v -> model.changeDefaultDevice(this, (HueBridge) registeredDevicesView.getSelectedItem()));
 
         showBridges();
     }
@@ -73,6 +80,7 @@ public class PhilipsHueConfig extends AppCompatActivity
             {
                 registeredDevicesView.setVisibility(View.GONE);
                 setAsDefaultDevice.setVisibility(View.GONE);
+                connectBulbs.setVisibility(View.GONE);
             } else
             {
                 bridges.clear();
@@ -89,6 +97,7 @@ public class PhilipsHueConfig extends AppCompatActivity
         if (!bridges.isEmpty())
         {
             findViewById(R.id.philips_hue_config_bridge_spinner).setVisibility(View.VISIBLE);
+            connectBulbs.setVisibility(View.VISIBLE);
         }
     }
 

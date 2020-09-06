@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SceneAudioEntry">
+    <declare-styleable name="scene_audio_entry">
         <attr name="styleable_scene_title" format="string" />
         <attr name="styleable_scene_loop" format="boolean" />
         <attr name="styleable_scene_after_effect" format="boolean" />

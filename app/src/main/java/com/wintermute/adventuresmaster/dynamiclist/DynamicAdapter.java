@@ -90,10 +90,10 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicAdapter.ViewHold
      */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-        TextView title;
-        List<TextView> additionalInfo;
-        View displayedItem;
-        long itemId;
+        private TextView title;
+        private List<TextView> additionalInfo;
+        private View displayedItem;
+        private long itemId;
 
         ViewHolder(View view, String title, int elementsCount)
         {

@@ -82,13 +82,13 @@ public class SceneAudioEntry extends LinearLayout
         super(context, attrs);
         inflate(context, R.layout.audio_entry, this);
 
-        TypedArray resources = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SceneAudioEntry, 0, 0);
+        TypedArray resources = context.getTheme().obtainStyledAttributes(attrs, R.styleable.scene_audio_entry, 0, 0);
         try
         {
-            sceneAudioFileTitle = resources.getString(R.styleable.SceneAudioEntry_styleable_scene_title);
-            repeatTrack = resources.getBoolean(R.styleable.SceneAudioEntry_styleable_scene_loop, false);
-            playAfterEffect = resources.getBoolean(R.styleable.SceneAudioEntry_styleable_scene_after_effect, false);
-            volume = resources.getInt(R.styleable.SceneAudioEntry_styleable_scene_volume, 5);
+            sceneAudioFileTitle = resources.getString(R.styleable.scene_audio_entry_styleable_scene_title);
+            repeatTrack = resources.getBoolean(R.styleable.scene_audio_entry_styleable_scene_loop, false);
+            playAfterEffect = resources.getBoolean(R.styleable.scene_audio_entry_styleable_scene_after_effect, false);
+            volume = resources.getInt(R.styleable.scene_audio_entry_styleable_scene_volume, 5);
         } finally
         {
             resources.recycle();

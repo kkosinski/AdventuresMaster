@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
  *
  * @author wintermute
  */
-public class PhilipsHueConfigViewModel extends ViewModel
+public class HueBridgeViewModel extends ViewModel
 {
 
     private String discoverResponse;
