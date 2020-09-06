@@ -49,8 +49,8 @@ public class SceneManager extends Service
     private Notification createNotification()
     {
         Intent broadcastIntent = new Intent(this, SceneReceiver.class);
-        PendingIntent actionIntent =
-            PendingIntent.getBroadcast(this, NOTIFICATION_REQUEST_ID, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent actionIntent = PendingIntent.getBroadcast(this, NOTIFICATION_REQUEST_ID, broadcastIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "scene")
             .setContentTitle("playing scene")
@@ -63,15 +63,15 @@ public class SceneManager extends Service
     }
 
     private void createNotificationChannel()
-        {
-            CharSequence name = "channelName";
-            String description = "description";
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel channel = new NotificationChannel("scene", name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+    {
+        CharSequence name = "channelName";
+        String description = "description";
+        int importance = NotificationManager.IMPORTANCE_LOW;
+        NotificationChannel channel = new NotificationChannel("scene", name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
 
     @Override
     public void onDestroy()

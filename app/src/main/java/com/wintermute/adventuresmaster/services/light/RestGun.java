@@ -63,6 +63,14 @@ public class RestGun
     }
 
     /**
+     * @param url of target device.
+     */
+    public void getHueBridgeName(String url)
+    {
+        sendRequest(Request.Method.GET, url + "/config", null);
+    }
+
+    /**
      * Register device by hue bridge.
      *
      * @param url of hue bridge.

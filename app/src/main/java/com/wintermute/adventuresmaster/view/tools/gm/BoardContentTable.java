@@ -72,11 +72,10 @@ public class BoardContentTable extends AppCompatActivity implements DynamicAdapt
         GameAudioPlayer gameAudioPlayer = GameAudioPlayer.getInstance();
         gameAudioPlayer.stopAll();
         Intent intent = new Intent(this, SceneManager.class);
-        model
-            .getAudioInScene(this, itemId)
-            .observe(this, audioFileWithOpts -> {
-                intent.putParcelableArrayListExtra("audioList", new ArrayList<>(audioFileWithOpts));
-                startForegroundService(intent);
-            });
+        model.getAudioInScene(this, itemId).observe(this, audioFileWithOpts ->
+        {
+            intent.putParcelableArrayListExtra("audioList", new ArrayList<>(audioFileWithOpts));
+            startForegroundService(intent);
+        });
     }
 }

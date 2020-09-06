@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -68,7 +67,8 @@ public class ConnectHueBridgeDialog extends DialogFragment
             builder.setPositiveButton(R.string.hue_discover_dialog_successful, (dialog, which) ->
             {
                 setOnConnectListener((OnConnectClickedListener) context);
-                if (onConnectClickedListener != null) {
+                if (onConnectClickedListener != null)
+                {
                     onConnectClickedListener.onConnectClicked();
                 }
             });
@@ -80,7 +80,8 @@ public class ConnectHueBridgeDialog extends DialogFragment
         return builder.create();
     }
 
-    private void setOnConnectListener(OnConnectClickedListener onConnectClickedListener) {
+    private void setOnConnectListener(OnConnectClickedListener onConnectClickedListener)
+    {
         this.onConnectClickedListener = onConnectClickedListener;
     }
 }

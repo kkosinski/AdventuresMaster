@@ -24,12 +24,19 @@ public class HueBridge
     @ColumnInfo(name = "url")
     private String url;
 
+    @ColumnInfo(name = "defaultDevice")
+    private boolean defaultDevice;
+
+    @ColumnInfo(name = "deviceName")
+    private String deviceName;
+
     /**
      * Creates instance with url.
      *
      * @param url to api of bridge.
      */
-    public HueBridge(String url){
+    public HueBridge(String url)
+    {
         this.url = url;
     }
 }

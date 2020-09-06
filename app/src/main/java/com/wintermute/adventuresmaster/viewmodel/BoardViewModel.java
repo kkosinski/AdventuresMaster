@@ -80,7 +80,8 @@ public class BoardViewModel extends ViewModel
      * @param sceneId of scene containing target audio
      * @return list with audio tracks contained in scene.
      */
-    public LiveData<List<AudioFileWithOpts>> getAudioInScene(Context ctx, long sceneId){
+    public LiveData<List<AudioFileWithOpts>> getAudioInScene(Context ctx, long sceneId)
+    {
         return AppDatabase.getAppDatabase(ctx).audioInSceneDao().getAudioForScenes(sceneId);
     }
 

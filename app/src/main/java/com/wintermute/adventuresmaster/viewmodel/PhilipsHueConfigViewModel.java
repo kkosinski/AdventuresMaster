@@ -3,6 +3,7 @@ package com.wintermute.adventuresmaster.viewmodel;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
@@ -17,6 +18,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -31,7 +33,28 @@ public class PhilipsHueConfigViewModel extends ViewModel
     private HueBridge hueBridge;
 
     /**
-     * Starts discovering hue bridge.
+     * @param context of calling activity.
+     * @return list of registered hue bridges, stored in database.
+     */
+    public LiveData<List<HueBridge>> getRegisteredDevices(Context context)
+    {
+        return AppDatabase.getAppDatabase(context).hueBridgeDao().getAll();
+    }
+
+    /**
+     * Sends request for getting the hue bridge device name.
+     *
+     * @param context of calling activity.
+     * @param url of device to request its information.
+     */
+    public void getHueBridgeDeviceName(Context context, String url)
+    {
+        RestGun restGun = new RestGun(context);
+        restGun.getHueBridgeName(url);
+    }
+
+    /**
+     * Starts discovering hue bridge over network.
      *
      * @return response if any received otherwise null.
      */
@@ -52,7 +75,7 @@ public class PhilipsHueConfigViewModel extends ViewModel
      * Stores the hue bridge in database and connects the client.
      *
      * @param context of calling activity.
-     * @return true if hue bridge is registered, false this device is already registered.
+     * @return true if new registration is successful, false this device is already registered.
      */
     public boolean registerHueBridge(Context context)
     {
@@ -61,7 +84,7 @@ public class PhilipsHueConfigViewModel extends ViewModel
             RestGun restGun = new RestGun(context);
             String hueUrl = parseHttpBroadcastResponse(discoverResponse).getString("LOCATION").split("/")[2];
             hueUrl = "http://" + hueUrl.split(":80")[0] + "/api";
-            hueBridge = new CheckIfAlreadyRegistered(AppDatabase.getAppDatabase(context), restGun).execute(hueUrl).get();
+            hueBridge = new RegisterIfNonExisting(AppDatabase.getAppDatabase(context), restGun).execute(hueUrl).get();
             return hueBridge != null;
         } catch (JSONException | NullPointerException | InterruptedException | ExecutionException e)
         {
@@ -71,27 +94,65 @@ public class PhilipsHueConfigViewModel extends ViewModel
     }
 
     /**
-     * Checks whether the request was successful or not.
+     * Checks whether the register request was successful or not.
      *
-     * @param response sent by the client.
+     * @param response on registration request.
      * @return true if success, false if registration failed.
      */
-    public boolean checkResult(JSONArray response, Context context)
+    public boolean registerDevice(JSONArray response, Context context)
     {
         try
         {
-            String username = response.getJSONObject(0).getJSONObject("success").getString("username");
-            hueBridge.setUser(username);
-            hueBridge.setId(new StoreHueBridge(AppDatabase.getAppDatabase(context)).execute(hueBridge).get());
+            String user = response.getJSONObject(0).getJSONObject("success").getString("username");
+            hueBridge.setUser(user);
+            getHueBridgeDeviceName(context, hueBridge.getUrl());
             return true;
         } catch (JSONException e)
         {
             return false;
-        } catch (InterruptedException | ExecutionException e)
+        }
+    }
+
+    /**
+     * Extracts the device name from response and sets it on the {@link HueBridge} object.
+     *
+     * @param context of calling activity.
+     * @param response from hue bridge containing device information.
+     */
+    public void setDeviceName(Context context, JSONObject response)
+    {
+        try
+        {
+            hueBridge.setDeviceName(response.getString("name"));
+            checkIfShouldBeDefaultAndStore(context);
+        } catch (JSONException e)
         {
             e.printStackTrace();
         }
-        return false;
+    }
+
+    /**
+     * Switches default hue bridge and persists it.
+     *
+     * @param context of calling activity.
+     * @param selectedItem new default device.
+     */
+    public void changeDefaultDevice(Context context, HueBridge selectedItem)
+    {
+        new ChangeDefaultDevice(AppDatabase.getAppDatabase(context)).execute(selectedItem);
+    }
+
+    private void checkIfShouldBeDefaultAndStore(Context context)
+    {
+        try
+        {
+            hueBridge.setDefaultDevice(
+                new GetDefaultDevice(AppDatabase.getAppDatabase(context)).execute().get() == null);
+            hueBridge.setId(new StoreHueBridge(AppDatabase.getAppDatabase(context)).execute(hueBridge).get());
+        } catch (ExecutionException | InterruptedException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private JSONObject parseHttpBroadcastResponse(String target)
@@ -128,17 +189,17 @@ public class PhilipsHueConfigViewModel extends ViewModel
     }
 
     /**
-     * Gets hue bridge from database by url.
+     * Checks if the bridge is already registered, otherwise registers new device.
      *
      * @author wintermute
      */
-    private static class CheckIfAlreadyRegistered extends AsyncTask<String, Void, HueBridge>
+    private static class RegisterIfNonExisting extends AsyncTask<String, Void, HueBridge>
     {
 
         private AppDatabase db;
         private RestGun restGun;
 
-        public CheckIfAlreadyRegistered(AppDatabase db, RestGun instance)
+        public RegisterIfNonExisting(AppDatabase db, RestGun instance)
         {
             this.db = db;
             this.restGun = instance;
@@ -148,7 +209,8 @@ public class PhilipsHueConfigViewModel extends ViewModel
         protected HueBridge doInBackground(String... url)
         {
             HueBridge result = db.hueBridgeDao().getByUrl(url[0]);
-            if (result == null) {
+            if (result == null)
+            {
                 restGun.registerHue(url[0], "{\"devicetype\":\"" + R.string.app_name + "#" + Build.MODEL + "\"}");
                 return new HueBridge(url[0]);
             }
@@ -157,9 +219,51 @@ public class PhilipsHueConfigViewModel extends ViewModel
     }
 
     /**
+     * Gets the default hue bridge
+     */
+    private static class GetDefaultDevice extends AsyncTask<Void, Void, HueBridge>
+    {
+        private AppDatabase db;
+
+        public GetDefaultDevice(AppDatabase db)
+        {
+            this.db = db;
+        }
+
+        @Override
+        protected HueBridge doInBackground(Void... voids)
+        {
+            return db.hueBridgeDao().getDefaultDevice();
+        }
+    }
+
+    /**
+     * Changes default hue bridge.
+     */
+    private static class ChangeDefaultDevice extends AsyncTask<HueBridge, Void, Void>
+    {
+
+        private AppDatabase db;
+
+        public ChangeDefaultDevice(AppDatabase db)
+        {
+            this.db = db;
+        }
+
+        @Override
+        protected Void doInBackground(HueBridge... hueBridges)
+        {
+            HueBridge defaultDevice = db.hueBridgeDao().getDefaultDevice();
+            defaultDevice.setDefaultDevice(false);
+            db.hueBridgeDao().update(defaultDevice);
+            hueBridges[0].setDefaultDevice(true);
+            db.hueBridgeDao().update(hueBridges[0]);
+            return null;
+        }
+    }
+
+    /**
      * Stores hue bridge in database.
-     *
-     * @author wintermute
      */
     private static class StoreHueBridge extends AsyncTask<HueBridge, Void, Long>
     {
@@ -180,8 +284,6 @@ public class PhilipsHueConfigViewModel extends ViewModel
 
     /**
      * Discovers hue bridge over broadcast.
-     *
-     * @author wintermute
      */
     private static class DiscoverTask extends AsyncTask<Void, Void, String>
     {
