@@ -2,12 +2,14 @@ package com.wintermute.adventuresmaster.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneWithAudio;
 import com.wintermute.adventuresmaster.view.tools.gm.BoardPanel;
 
@@ -83,6 +85,24 @@ public class BoardViewModel extends ViewModel
     public LiveData<List<AudioFileWithOpts>> getAudioInScene(Context ctx, long sceneId)
     {
         return AppDatabase.getAppDatabase(ctx).audioInSceneDao().getAudioForScenes(sceneId);
+    }
+
+    /**
+     * @param context of calling activity.
+     * @param sceneId of target scene.
+     * @return configured light settings.
+     */
+    public LiveData<Light> getLight(Context context, long sceneId)
+    {
+        return AppDatabase.getAppDatabase(context).lightDao().getLightInScene(sceneId);
+    }
+
+    public void prepareSceneService(Context context, Intent intent)
+    {
+        if (intent.getExtras().size() == 2)
+        {
+            context.startForegroundService(intent);
+        }
     }
 
     private static class InsertTask extends AsyncTask<Board, Void, Long>

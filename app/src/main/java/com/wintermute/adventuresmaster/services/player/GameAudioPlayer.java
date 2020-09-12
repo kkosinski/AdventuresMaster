@@ -141,13 +141,7 @@ public class GameAudioPlayer
      */
     public void stopAll()
     {
-        players.values().forEach(p ->
-        {
-            if (p != null)
-            {
-                p.stop();
-            }
-        });
+        players.values().stream().filter(MediaPlayer::isPlaying).forEach(MediaPlayer::stop);
     }
 
     /**
@@ -160,6 +154,10 @@ public class GameAudioPlayer
     {
         String tag = audio.getAudioInScene().getTag();
         MediaPlayer target = players.get(tag) != null ? players.get(tag) : new MediaPlayer();
+
+        if (target == null) {
+            return;
+        }
 
         if (target.isPlaying())
         {

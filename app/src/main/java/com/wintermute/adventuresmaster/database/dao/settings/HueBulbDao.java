@@ -20,5 +20,8 @@ public interface HueBulbDao
     void insert(HueBulb hueBulb);
 
     @Query("SELECT * FROM hueBulb WHERE hueBridge = :bridgeId")
-    LiveData<List<HueBulb>> getPairedBulbs(long bridgeId);
+    LiveData<List<HueBulb>> getPairedBulbsDynamically(long bridgeId);
+
+    @Query("SELECT * FROM hueBulb WHERE hueBridge = :bridgeId")
+    List<HueBulb> getPairedBulbs(long bridgeId);
 }

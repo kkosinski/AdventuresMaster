@@ -71,11 +71,21 @@ public class BoardContentTable extends AppCompatActivity implements DynamicAdapt
     {
         GameAudioPlayer gameAudioPlayer = GameAudioPlayer.getInstance();
         gameAudioPlayer.stopAll();
-        Intent intent = new Intent(this, SceneManager.class);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setClass(this, SceneManager.class);
+
+        //TODO: get scene with audio and light settings instead of audio files only
         model.getAudioInScene(this, itemId).observe(this, audioFileWithOpts ->
         {
             intent.putParcelableArrayListExtra("audioList", new ArrayList<>(audioFileWithOpts));
-            startForegroundService(intent);
+            model.prepareSceneService(this, intent);
+        });
+
+        //TODO: prevent calling light like this. More information in todo above.
+        model.getLight(this, itemId).observe(this, light ->
+        {
+            intent.putExtra("light", light);
+            model.prepareSceneService(this, intent);
         });
     }
 }

@@ -1,6 +1,8 @@
 package com.wintermute.adventuresmaster.view;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -40,6 +42,7 @@ public class AdventuresMaster extends AppCompatActivity
 
     private void init()
     {
+        grantUserPermission();
         layoutFactory = LayoutFactory.getInstance();
         layout = layoutFactory.getDefaultLayout(getWindow().getDecorView());
         model = new ViewModelProvider(this).get(MenuViewModel.class);
@@ -100,6 +103,22 @@ public class AdventuresMaster extends AppCompatActivity
     {
         final Observer<MenuItem> parentFetcher = p -> currentItem = p;
         model.getItemParent(this, currentItem).observe(AdventuresMaster.this, parentFetcher);
+    }
+
+    /**
+     * Grants permissions to the application to access the storage.
+     */
+    private void grantUserPermission()
+    {
+        String[] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS};
+        for (String permission : permissions)
+        {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
+            {
+                shouldShowRequestPermissionRationale(permission);
+                requestPermissions(new String[] {permission}, 0);
+            }
+        }
     }
 
     @Override

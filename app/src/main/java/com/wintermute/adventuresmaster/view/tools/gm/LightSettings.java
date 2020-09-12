@@ -10,7 +10,7 @@ import com.flask.colorpicker.ColorPickerView;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.services.light.ColorHelper;
-import com.wintermute.adventuresmaster.services.light.RestGun;
+import com.wintermute.adventuresmaster.services.network.RestGun;
 
 /**
  * Activity to set up light settings for scene.

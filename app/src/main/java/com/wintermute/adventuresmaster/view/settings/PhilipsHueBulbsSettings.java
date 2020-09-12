@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;
-import com.wintermute.adventuresmaster.services.light.RestGun;
+import com.wintermute.adventuresmaster.services.network.RestGun;
 import com.wintermute.adventuresmaster.view.custom.adapter.BulbViewAdapter;
 import com.wintermute.adventuresmaster.viewmodel.HueBulbViewModel;
 import org.json.JSONArray;
@@ -44,7 +44,7 @@ public class PhilipsHueBulbsSettings extends AppCompatActivity
 
     private void init()
     {
-        currentBridge = ((HueBridge) getIntent().getParcelableExtra("bridge"));
+        currentBridge = getIntent().getParcelableExtra("bridge");
 
         RecyclerView bulbsListView = findViewById(R.id.philips_hue_bulbs_list);
         LinearLayoutManager layout = new LinearLayoutManager(this);
@@ -71,7 +71,10 @@ public class PhilipsHueBulbsSettings extends AppCompatActivity
     private void getAvailableBulbs()
     {
         HueBridge bridge = getIntent().getParcelableExtra("bridge");
-        model.requestAvailableBulbs(this, bridge);
+        if (bridge != null)
+        {
+            model.requestAvailableBulbs(this, bridge);
+        }
     }
 
     @Override
@@ -84,17 +87,20 @@ public class PhilipsHueBulbsSettings extends AppCompatActivity
     public void onResponse(JSONObject response)
     {
         bulbs.addAll(model.getBulbs(response));
-        model.getPairedBulbs(this, currentBridge.getId()).observe(this, hueBulbs -> {
-            hueBulbs.forEach(p -> {
-                for (HueBulb bulb : bulbs) {
-                    if (p.getId() == bulb.getId()){
+        model.getPairedBulbs(this, currentBridge.getId()).observe(this, hueBulbs ->
+        {
+            hueBulbs.forEach(p ->
+            {
+                for (HueBulb bulb : bulbs)
+                {
+                    if (p.getId() == bulb.getId())
+                    {
                         bulb.setSelected(true);
                     }
                 }
             });
             adapter.notifyDataSetChanged();
         });
-
     }
 
     @Override

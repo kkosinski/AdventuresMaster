@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;
-import com.wintermute.adventuresmaster.services.light.RestGun;
+import com.wintermute.adventuresmaster.services.network.RestGun;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,7 +84,7 @@ public class HueBulbViewModel extends ViewModel
      */
     public LiveData<List<HueBulb>> getPairedBulbs(Context context, long bridgeId)
     {
-        return AppDatabase.getAppDatabase(context).hueBulbDao().getPairedBulbs(bridgeId);
+        return AppDatabase.getAppDatabase(context).hueBulbDao().getPairedBulbsDynamically(bridgeId);
     }
 
     /**

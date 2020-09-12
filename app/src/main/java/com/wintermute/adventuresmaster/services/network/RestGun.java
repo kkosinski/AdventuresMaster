@@ -1,13 +1,20 @@
-package com.wintermute.adventuresmaster.services.light;
+package com.wintermute.adventuresmaster.services.network;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
+import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.helper.rest.JsonObjectReqArrayRsp;
+import com.wintermute.adventuresmaster.services.light.ColorHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Prepares the request queue.
@@ -27,8 +34,9 @@ public class RestGun
 
     private OnSuccess onSuccess;
     private Context context;
-    private String url;
+    private String privilegedUrl;
     private RequestHandler reqHandler;
+    private List<HueBulb> bulbs;
 
     /**
      * Creates instance.
@@ -39,17 +47,37 @@ public class RestGun
     {
         this.context = context;
         reqHandler = RequestHandler.getInstance(context);
-        url = ""; //TODO: get url from database
+        PhilisHueConnector hueConnector = PhilisHueConnector.getInstance();
+        HueBridge hueBridge = hueConnector.getHueBridge(context);
+        if (hueBridge != null)
+        {
+            privilegedUrl = hueBridge.getUrl() + "/" + hueBridge.getUser();
+            bulbs = hueConnector.getPairedBulbs(context, hueBridge.getId());
+        }
+    }
+
+    /**
+     * Change philips hue color and brightness configured for called scene.
+     *
+     * @param light configuration for scene.
+     */
+    public void adjustLightForScene(Light light){
+        changeColor(ColorHelper.extractHueColorCoordinates(light.getColor()));
+        changeBrightness(light.getBrightness());
     }
 
     /**
      * Adds a request to the que to change brightness of hue lights.
      *
-     * @param color to set on bulbs.
+     * @param color coordinates to set on philips hue bulbs.
      */
     public void changeColor(double[] color)
     {
-        sendRequest(Request.Method.PUT, url, getChangeColorReqBody(color));
+        bulbs.forEach(b ->
+        {
+            String targetUrl = privilegedUrl + "/lights" + "/" + b.getId() + "/state";
+            sendRequest(Request.Method.PUT, targetUrl, getChangeColorReqBody(color));
+        });
     }
 
     /**
@@ -59,7 +87,7 @@ public class RestGun
      */
     public void changeBrightness(int brightness)
     {
-        sendRequest(Request.Method.PUT, url, getChangeBrightnessReqBody(brightness));
+        sendRequest(Request.Method.PUT, privilegedUrl, getChangeBrightnessReqBody(brightness));
     }
 
     public void requestBulbs(String url)

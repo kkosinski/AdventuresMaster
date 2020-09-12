@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
-import com.wintermute.adventuresmaster.services.light.RestGun;
+import com.wintermute.adventuresmaster.services.network.RestGun;
 import com.wintermute.adventuresmaster.view.custom.ConnectHueBridgeDialog;
 import com.wintermute.adventuresmaster.view.custom.adapter.HueBridgeViewAdapter;
 import com.wintermute.adventuresmaster.viewmodel.HueBridgeViewModel;
