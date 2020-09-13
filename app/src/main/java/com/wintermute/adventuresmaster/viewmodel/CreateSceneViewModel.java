@@ -198,7 +198,7 @@ public class CreateSceneViewModel extends ViewModel
                 long createdAudioFileId = appDatabase.audioFileDao().insert((AudioFile) objects[0]);
                 if (createdAudioFileId == -1L)
                 {
-                    return appDatabase.audioFileDao().getIdByPath(((AudioFile) objects[0]).getUri());
+                    return appDatabase.audioFileDao().getIdByUri(((AudioFile) objects[0]).getUri());
                 }
                 return createdAudioFileId;
             } else if (objects[0] instanceof AudioInScene)

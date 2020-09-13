@@ -18,5 +18,5 @@ public interface AudioFileDao
     long insert(AudioFile audioFile);
 
     @Query("SELECT id FROM audioFile WHERE uri = :uri")
-    long getIdByPath(String uri);
+    long getIdByUri(String uri);
 }
