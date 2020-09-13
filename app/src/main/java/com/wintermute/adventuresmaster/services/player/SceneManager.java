@@ -15,6 +15,8 @@ import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneDesc;
 import com.wintermute.adventuresmaster.services.network.RestGun;
 import com.wintermute.adventuresmaster.services.receiver.SceneReceiver;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ import java.util.Optional;
  *
  * @author wintermute
  */
-public class SceneManager extends Service
+public class SceneManager extends Service implements RestGun.OnSuccess
 {
     public static final int NOTIFICATION_CHANNEL_ID = 1;
     public static final int NOTIFICATION_REQUEST_ID = 2;
@@ -133,5 +135,17 @@ public class SceneManager extends Service
     public IBinder onBind(Intent intent)
     {
         return null;
+    }
+
+    @Override
+    public void onResponse(JSONArray response)
+    {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response)
+    {
+
     }
 }

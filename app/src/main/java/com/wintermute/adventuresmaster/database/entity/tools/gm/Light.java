@@ -27,16 +27,20 @@ public class Light implements Parcelable
     @ColumnInfo(name = "color")
     private int color;
 
+    @ColumnInfo(name = "fadeIn")
+    private boolean fadeIn;
+
     @ColumnInfo(name = "brightness")
     private int brightness;
 
     @ColumnInfo(name = "inScene")
     private long inScene;
 
-    public Light(int color, int brightness)
+    public Light(int color, int brightness, boolean fadeIn)
     {
         this.color = color;
         this.brightness = brightness;
+        this.fadeIn = fadeIn;
     }
 
     protected Light(Parcel in)

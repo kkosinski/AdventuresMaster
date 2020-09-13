@@ -36,4 +36,5 @@
     <string name="philips_hue_config_set_default">set default device</string>
     <string name="philips_hue_config_connect_bulbs">connect bulbs</string>
     <string name="philips_hue_bulbs_pair">pair bulbs with bridge</string>
+    <string name="light_settings_fade_effect">fade in</string>
 </resources>

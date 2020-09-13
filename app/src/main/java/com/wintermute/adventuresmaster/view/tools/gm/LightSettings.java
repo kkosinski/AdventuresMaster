@@ -3,6 +3,7 @@ package com.wintermute.adventuresmaster.view.tools.gm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,13 +12,15 @@ import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.services.light.ColorHelper;
 import com.wintermute.adventuresmaster.services.network.RestGun;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Activity to set up light settings for scene.
  *
  * @author wintermute
  */
-public class LightSettings extends AppCompatActivity
+public class LightSettings extends AppCompatActivity implements RestGun.OnSuccess
 {
     private boolean showChanges;
     private ColorPickerView colorPicker;
@@ -37,6 +40,7 @@ public class LightSettings extends AppCompatActivity
         RestGun restGun = new RestGun(this);
         showChanges = false;
 
+        CheckBox fadeIn = findViewById(R.id.light_settings_fade_effect);
         Button switchChangesState = findViewById(R.id.light_settings_show_changes);
         switchChangesState.setOnClickListener(v ->
         {
@@ -56,7 +60,8 @@ public class LightSettings extends AppCompatActivity
         {
             if (showChanges)
             {
-                restGun.changeColor(ColorHelper.extractHueColorCoordinates(colorPicker.getSelectedColor()));
+                restGun.changeColor(ColorHelper.extractHueColorCoordinates(colorPicker.getSelectedColor()),
+                    fadeIn.isChecked());
             }
         });
 
@@ -68,7 +73,7 @@ public class LightSettings extends AppCompatActivity
             {
                 if (showChanges)
                 {
-                    restGun.changeBrightness(progress);
+                    restGun.changeBrightness(progress, fadeIn.isChecked());
                 }
             }
 
@@ -91,7 +96,7 @@ public class LightSettings extends AppCompatActivity
             if (colorPicker.getSelectedColor() != -1)
             {
                 setResult(RESULT_OK, new Intent().putExtra("preparedLight",
-                    new Light(colorPicker.getSelectedColor(), brightnessBar.getProgress())));
+                    new Light(colorPicker.getSelectedColor(), brightnessBar.getProgress(), fadeIn.isChecked())));
                 finish();
             } else
             {
@@ -106,5 +111,17 @@ public class LightSettings extends AppCompatActivity
         super.onBackPressed();
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    @Override
+    public void onResponse(JSONArray response)
+    {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response)
+    {
+
     }
 }

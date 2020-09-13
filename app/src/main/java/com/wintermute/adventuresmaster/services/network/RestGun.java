@@ -62,8 +62,8 @@ public class RestGun
      */
     public void adjustLightForScene(Light light)
     {
-        changeColor(ColorHelper.extractHueColorCoordinates(light.getColor()));
-        changeBrightness(light.getBrightness());
+        changeColor(ColorHelper.extractHueColorCoordinates(light.getColor()), light.isFadeIn());
+        changeBrightness(light.getBrightness(), light.isFadeIn());
     }
 
     /**
@@ -71,12 +71,12 @@ public class RestGun
      *
      * @param color coordinates to set on philips hue bulbs.
      */
-    public void changeColor(double[] color)
+    public void changeColor(double[] color, boolean fadeIn)
     {
         bulbs.forEach(b ->
         {
             String targetUrl = privilegedUrl + "/lights" + "/" + b.getId() + "/state";
-            sendRequest(Request.Method.PUT, targetUrl, getChangeColorReqBody(color));
+            sendRequest(Request.Method.PUT, targetUrl, getChangeColorReqBody(color, fadeIn));
         });
     }
 
@@ -85,9 +85,13 @@ public class RestGun
      *
      * @param brightness to set on bulbs.
      */
-    public void changeBrightness(int brightness)
+    public void changeBrightness(int brightness, boolean fadeIn)
     {
-        sendRequest(Request.Method.PUT, privilegedUrl, getChangeBrightnessReqBody(brightness));
+        bulbs.forEach(b ->
+        {
+            String targetUrl = privilegedUrl + "/lights" + "/" + b.getId() + "/state";
+            sendCustomReq(Request.Method.PUT, targetUrl, getChangeBrightnessReqBody(brightness, fadeIn));
+        });
     }
 
     public void requestBulbs(String url)
@@ -114,14 +118,23 @@ public class RestGun
         sendCustomReq(Request.Method.POST, url, createRequestBody(body));
     }
 
-    private JSONObject getChangeColorReqBody(double[] color)
+    private JSONObject getChangeColorReqBody(double[] color, boolean fadeIn)
     {
+        if (fadeIn)
+        {
+            return createRequestBody(
+                "{ \"on\":true, \"xy\": [ " + color[0] + ", " + color[1] + " ], \"transitiontime" + "\": 4 }");
+        }
         return createRequestBody(
             "{ \"on\":true, \"xy\": [ " + color[0] + ", " + color[1] + " ], \"transitiontime\":" + " 1 }");
     }
 
-    private JSONObject getChangeBrightnessReqBody(int brightness)
+    private JSONObject getChangeBrightnessReqBody(int brightness, boolean fadeIn)
     {
+        if (fadeIn)
+        {
+            return createRequestBody("{ \"on\":true, \"bri\": " + brightness + ", \"transitiontime\": 4 }");
+        }
         return createRequestBody("{ \"on\":true, \"bri\": " + brightness + ", \"transitiontime\": 1 }");
     }
 
