@@ -4,6 +4,7 @@ import static androidx.room.ForeignKey.CASCADE;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -11,13 +12,15 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
  * Represents audio ordered to scene with user settings.
  *
  * @author wintermute
  */
 @Data
-@Entity(tableName = "audioInBoard", indices = {@Index("audioFile"), @Index("inScene")}, foreignKeys = {
+@Entity(tableName = "audioInScene", indices = {@Index("audioFile"), @Index("inScene")}, foreignKeys = {
     @ForeignKey(entity = Scene.class, parentColumns = "id", childColumns = "inScene", onDelete = CASCADE),
     @ForeignKey(entity = AudioFile.class, parentColumns = "id", childColumns = "audioFile", onDelete = CASCADE)})
 public class AudioInScene implements Parcelable
@@ -40,10 +43,11 @@ public class AudioInScene implements Parcelable
     @ColumnInfo(name = "playAfterEffect")
     private boolean playAfterEffect;
 
+    @NonNull
     @ColumnInfo(name = "tag")
     private String tag;
 
-    public AudioInScene(int volume, boolean repeat, boolean playAfterEffect, String tag)
+    public AudioInScene(int volume, boolean repeat, boolean playAfterEffect, @NonNull String tag)
     {
         this.volume = volume;
         this.repeat = repeat;
@@ -59,7 +63,7 @@ public class AudioInScene implements Parcelable
         volume = in.readInt();
         repeat = in.readByte() != 0;
         playAfterEffect = in.readByte() != 0;
-        tag = in.readString();
+        tag = Objects.requireNonNull(in.readString());
     }
 
     public static final Creator<AudioInScene> CREATOR = new Creator<AudioInScene>()

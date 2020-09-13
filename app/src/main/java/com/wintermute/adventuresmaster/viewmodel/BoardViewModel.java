@@ -13,7 +13,6 @@ import com.wintermute.adventuresmaster.services.player.SceneManager;
 import com.wintermute.adventuresmaster.view.tools.gm.BoardContentView;
 import com.wintermute.adventuresmaster.view.tools.gm.BoardPanel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

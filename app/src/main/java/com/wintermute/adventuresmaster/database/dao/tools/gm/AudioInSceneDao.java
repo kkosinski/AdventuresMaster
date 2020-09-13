@@ -22,6 +22,6 @@ public interface AudioInSceneDao
     long insert(AudioInScene audioInScene);
 
     @Transaction
-    @Query("SELECT * FROM audioInBoard WHERE inScene = :sceneId")
+    @Query("SELECT * FROM audioInScene WHERE inScene = :sceneId")
     LiveData<List<AudioFileWithOpts>> getAudioForScenes(long sceneId);
 }
