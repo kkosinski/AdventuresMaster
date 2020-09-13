@@ -10,7 +10,8 @@ import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import java.util.List;
 
 /**
- * Manages hue bridge access.
+ * Manages hue bridge access. Bug in RoomDatabase forces the naming of parameters passed into queries to be like arg0,
+ * etc. Otherwise tests does not work.
  *
  * @author wintermute
  */
@@ -20,8 +21,12 @@ public interface HueBridgeDao
     @Insert
     long insert(HueBridge target);
 
-    @Query("SELECT * FROM hueBridge WHERE url = :url")
-    HueBridge getByUrl(String url);
+    /**
+     * @param arg0 url to reach the philips hue bridge.
+     * @return philips hue bridge selected by unique url.
+     */
+    @Query("SELECT * FROM hueBridge WHERE url = :arg0")
+    HueBridge getByUrl(String arg0);
 
     @Query("SELECT * FROM hueBridge WHERE defaultDevice = 1")
     HueBridge getDefaultDevice();

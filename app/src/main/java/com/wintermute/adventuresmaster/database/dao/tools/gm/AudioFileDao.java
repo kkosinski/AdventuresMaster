@@ -7,7 +7,8 @@ import androidx.room.Query;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 
 /**
- * Access audio files in database.
+ * Access audio files in database. Bug in RoomDatabase forces the naming of parameters passed into queries to be * like
+ * arg0, etc. Otherwise tests does not work.
  *
  * @author wintermute
  */
@@ -17,6 +18,10 @@ public interface AudioFileDao
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(AudioFile audioFile);
 
-    @Query("SELECT id FROM audioFile WHERE uri = :uri")
-    long getIdByUri(String uri);
+    /**
+     * @param arg0 uri for file.
+     * @return audio file by unique uri.
+     */
+    @Query("SELECT id FROM audioFile WHERE uri = :arg0")
+    long getIdByUri(String arg0);
 }

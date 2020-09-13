@@ -8,7 +8,8 @@ import androidx.room.Query;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 
 /**
- * Manages data access for light.
+ * Manages data access for light. Bug in RoomDatabase forces the naming of parameters passed into queries to be * like
+ * arg0, etc. Otherwise tests does not work.
  *
  * @author wintermute
  */
@@ -18,6 +19,10 @@ public interface LightDao
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(Light light);
 
-    @Query("SELECT * FROM light WHERE inScene = :sceneId")
-    LiveData<Light> getLightInScene(long sceneId);
+    /**
+     * @param arg0 id of target scene.
+     * @return light configured for scene
+     */
+    @Query("SELECT * FROM light WHERE inScene = :arg0")
+    LiveData<Light> getLightForScene(long arg0);
 }

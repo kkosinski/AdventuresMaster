@@ -8,13 +8,18 @@ import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
 import java.util.List;
 
 /**
- * Represents the activity extras as database access object.
+ * Represents the activity extras as database access object. Bug in RoomDatabase forces the naming of parameters
+ * passed into queries to be like arg0, etc. Otherwise tests does not work.
  *
  * @author wintermute
  */
 @Dao
 public interface ActivityExtrasDao
 {
-    @Query("SELECT * FROM activityExtras WHERE activityId = :activityId")
-    LiveData<List<ActivityExtras>> getExtrasForActivity(long activityId);
+    /**
+     * @param arg0 requested activity id.
+     * @return activity extras for target activity.
+     */
+    @Query("SELECT * FROM activityExtras WHERE activityId = :arg0")
+    LiveData<List<ActivityExtras>> getExtrasForActivity(long arg0);
 }

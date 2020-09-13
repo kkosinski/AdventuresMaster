@@ -9,7 +9,8 @@ import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;
 import java.util.List;
 
 /**
- * Manages access for hue bulbs.
+ * Manages access for hue bulbs. Bug in RoomDatabase forces the naming of parameters passed into queries to be like
+ * arg0, etc. Otherwise tests does not work.
  *
  * @author wintermute
  */
@@ -19,9 +20,17 @@ public interface HueBulbDao
     @Insert
     void insert(HueBulb hueBulb);
 
-    @Query("SELECT * FROM hueBulb WHERE hueBridge = :bridgeId")
-    LiveData<List<HueBulb>> getPairedBulbsDynamically(long bridgeId);
+    /**
+     * @param arg0 bridge id to request philips hue bulbs.
+     * @return list of paired bulbs for requested bridge id as live data.
+     */
+    @Query("SELECT * FROM hueBulb WHERE hueBridge = :arg0")
+    LiveData<List<HueBulb>> getPairedBulbsDynamically(long arg0);
 
-    @Query("SELECT * FROM hueBulb WHERE hueBridge = :bridgeId")
-    List<HueBulb> getPairedBulbs(long bridgeId);
+    /**
+     * @param arg0 bridge id to request philips hue bulbs.
+     * @return list of paired bulbs for requested bridge id.
+     */
+    @Query("SELECT * FROM hueBulb WHERE hueBridge = :arg0")
+    List<HueBulb> getPairedBulbs(long arg0);
 }
