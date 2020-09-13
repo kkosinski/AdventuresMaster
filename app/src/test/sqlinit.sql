@@ -86,7 +86,7 @@ CREATE TABLE hueBridge(
 	defaultDevice INTEGER NOT NULL,
 	deviceName TEXT);
 
-CREATE TABLE hueBulbs(
+CREATE TABLE hueBulb(
 	id INTEGER PRIMARY KEY NOT NULL,
 	hueBridge INTEGER NOT NULL,
 	FOREIGN KEY (hueBridge) REFERENCES hueBridge (id) ON DELETE CASCADE);

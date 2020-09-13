@@ -18,7 +18,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This activity provides the functionality to manage philips hue bulbs paired with {@link HueBridge}
@@ -60,7 +59,7 @@ public class PhilipsHueBulbsSettings extends AppCompatActivity
         Button storeBulbs = findViewById(R.id.philips_hue_bulbs_pair_bulbs);
         storeBulbs.setOnClickListener(v ->
         {
-            model.storeBulbs(this, bulbs.stream().filter(HueBulb::isSelected).collect(Collectors.toList()));
+            model.updatePairedBulbs(this);
             finish();
         });
 
@@ -86,7 +85,7 @@ public class PhilipsHueBulbsSettings extends AppCompatActivity
     @Override
     public void onResponse(JSONObject response)
     {
-        bulbs.addAll(model.getBulbs(response));
+        bulbs.addAll(model.getBulbs(response, currentBridge.getId()));
         model.getPairedBulbs(this, currentBridge.getId()).observe(this, hueBulbs ->
         {
             hueBulbs.forEach(p ->
@@ -107,6 +106,6 @@ public class PhilipsHueBulbsSettings extends AppCompatActivity
     public void onBulbClick(boolean state, int position)
     {
         bulbs.get(position).setSelected(state);
-        bulbs.get(position).setHueBridge(currentBridge.getId());
+        model.classifyBulb(bulbs.get(position));
     }
 }

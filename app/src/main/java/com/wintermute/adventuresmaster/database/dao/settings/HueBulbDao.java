@@ -2,6 +2,7 @@ package com.wintermute.adventuresmaster.database.dao.settings;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;
@@ -19,6 +20,9 @@ public interface HueBulbDao
 {
     @Insert
     void insert(HueBulb hueBulb);
+
+    @Delete
+    void delete(HueBulb hueBulb);
 
     /**
      * @param arg0 bridge id to request philips hue bulbs.

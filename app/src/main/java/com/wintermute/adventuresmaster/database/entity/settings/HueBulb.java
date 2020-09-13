@@ -9,6 +9,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents hue bulbs, which can be connected to the bridge.
@@ -16,6 +17,7 @@ import lombok.Data;
  * @author wintermute
  */
 @Data
+@NoArgsConstructor
 @Entity(tableName = "hueBulb", indices = @Index(value = "hueBridge"),
         foreignKeys = @ForeignKey(entity = HueBridge.class, parentColumns = "id", childColumns = "hueBridge",
                                   onDelete = CASCADE))
@@ -35,4 +37,11 @@ public class HueBulb
 
     @Ignore
     private boolean selected;
+
+    public HueBulb(long id, long hueBridge, String name, String type) {
+        this.id = id;
+        this.hueBridge = hueBridge;
+        this.name = name;
+        this.type = type;
+    }
 }

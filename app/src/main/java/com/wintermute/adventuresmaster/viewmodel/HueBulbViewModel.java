@@ -8,11 +8,11 @@ import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;
 import com.wintermute.adventuresmaster.services.network.RestGun;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class HueBulbViewModel extends ViewModel
 {
+    private List<HueBulb> changeSet;
+
     /**
      * Sends request to discover bulbs available to paired philips hue bridge.
      *
@@ -40,24 +42,18 @@ public class HueBulbViewModel extends ViewModel
      * @param response of requested available philips hue bulbs.
      * @return list of {@link HueBulb} available {@link HueBridge}
      */
-    public List<HueBulb> getBulbs(JSONObject response)
+    public List<HueBulb> getBulbs(JSONObject response, long bridgeId)
     {
         List<HueBulb> result = new ArrayList<>();
-
-        JSONArray names = response.names();
-
-        for (int i = 0; i < names.length(); i++)
+        Iterator<String> keys = response.keys();
+        while (keys.hasNext())
         {
+            String bulb = keys.next();
             try
             {
-                HueBulb bulb = new HueBulb();
-                String currentItemName = (String) names.get(i);
-                bulb.setId(Long.parseLong(currentItemName));
-                JSONObject bulbInfo = (JSONObject) response.get(currentItemName);
-                bulb.setName(bulbInfo.getString("name"));
-                bulb.setType(bulbInfo.getString("type"));
-                bulb.setSelected(false);
-                result.add(bulb);
+                JSONObject bulbDesc = (JSONObject) response.get(bulb);
+                result.add(
+                    new HueBulb(Long.parseLong(bulb), bridgeId, bulbDesc.getString("name"), bulbDesc.getString("type")));
             } catch (JSONException e)
             {
                 e.printStackTrace();
@@ -70,11 +66,10 @@ public class HueBulbViewModel extends ViewModel
      * Persists {@link HueBulb} in database.
      *
      * @param context of calling activity.
-     * @param bulbsToPair requested list of bulbs to persist.
      */
-    public void storeBulbs(Context context, List<HueBulb> bulbsToPair)
+    public void updatePairedBulbs(Context context)
     {
-        new InsertTask(AppDatabase.getAppDatabase(context)).execute(bulbsToPair);
+        new UpdateBulbsTask(AppDatabase.getAppDatabase(context)).execute(changeSet);
     }
 
     /**
@@ -88,22 +83,43 @@ public class HueBulbViewModel extends ViewModel
     }
 
     /**
+     * Decides whether the bulb should be stored in database or removed.
+     *
+     * @param hueBulb selected bulb.
+     */
+    public void classifyBulb(HueBulb hueBulb)
+    {
+        changeSet = changeSet == null ? new ArrayList<>() : changeSet;
+        changeSet.add(hueBulb);
+    }
+
+    /**
      * Manages insert tasks of {@link HueBulb} into database.
      */
-    private static class InsertTask extends AsyncTask<List<HueBulb>, Void, Void>
+    private static class UpdateBulbsTask extends AsyncTask<List<HueBulb>, Void, Void>
     {
 
         private AppDatabase db;
 
-        public InsertTask(AppDatabase db)
+        public UpdateBulbsTask(AppDatabase db)
         {
             this.db = db;
         }
 
+        @SafeVarargs
         @Override
-        protected Void doInBackground(List<HueBulb>... bulbs)
+        protected final Void doInBackground(List<HueBulb>... bulbs)
         {
-            bulbs[0].stream().forEach(b -> db.hueBulbDao().insert(b));
+            bulbs[0].forEach(b ->
+            {
+                if (b.isSelected())
+                {
+                    db.hueBulbDao().insert(b);
+                } else
+                {
+                    db.hueBulbDao().delete(b);
+                }
+            });
             return null;
         }
     }
