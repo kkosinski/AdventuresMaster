@@ -8,22 +8,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import com.wintermute.adventuresmaster.R;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneDesc;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicAdapter;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListHelper;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListItem;
-import com.wintermute.adventuresmaster.services.player.GameAudioPlayer;
-import com.wintermute.adventuresmaster.services.player.SceneManager;
 import com.wintermute.adventuresmaster.viewmodel.BoardViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Contains lists with {@link com.wintermute.adventuresmaster.database.entity.tools.gm.Scene} or Soundboard contained in
+ * game master´s tools.
  *
+ * @author wintermute
  */
-public class BoardContentTable extends AppCompatActivity implements DynamicAdapter.ItemClickListener
+public class BoardContentView extends AppCompatActivity implements DynamicAdapter.ItemClickListener
 {
     private BoardViewModel model;
+    private List<SceneDesc> storedScenes;
     private long sceneId;
 
     @Override
@@ -47,18 +49,10 @@ public class BoardContentTable extends AppCompatActivity implements DynamicAdapt
         RecyclerView recyclerView =
             DynamicListHelper.getInstance().initRecyclerView(this, findViewById(R.id.board_content_table_content_list));
 
-        model.getScenesForBoard(this, sceneId).observe(this, scenes ->
+        model.getScenesInBoard(this, sceneId).observe(this, scenes ->
         {
-            List<DynamicListItem> listContent = new ArrayList<>();
-            scenes.forEach(s ->
-            {
-                List<String> additionalInfo = new ArrayList<>();
-                s
-                    .getAudioInScene()
-                    .forEach(a -> additionalInfo.add(
-                        a.getAudioInScene().getTag().toUpperCase() + ": " + a.getAudioFiles().get(0).getTitle()));
-                listContent.add(new DynamicListItem(s.getScene().getTitle(), additionalInfo, s.getScene().getId()));
-            });
+            storedScenes = scenes;
+            List<DynamicListItem> listContent = model.loadStoredScenes(scenes);
 
             DynamicAdapter dynamicAdapter = DynamicListHelper.getInstance().initAdapter(this, listContent, this);
             recyclerView.setAdapter(dynamicAdapter);
@@ -69,23 +63,6 @@ public class BoardContentTable extends AppCompatActivity implements DynamicAdapt
     @Override
     public void onDynamicListItemClick(View view, int position, long itemId)
     {
-        GameAudioPlayer gameAudioPlayer = GameAudioPlayer.getInstance();
-        gameAudioPlayer.stopAll();
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.setClass(this, SceneManager.class);
-
-        //TODO: get scene with audio and light settings instead of audio files only
-        model.getAudioInScene(this, itemId).observe(this, audioFileWithOpts ->
-        {
-            intent.putParcelableArrayListExtra("audioList", new ArrayList<>(audioFileWithOpts));
-            model.prepareSceneService(this, intent);
-        });
-
-        //TODO: prevent calling light like this. More information in todo above.
-        model.getLight(this, itemId).observe(this, light ->
-        {
-            intent.putExtra("light", light);
-            model.prepareSceneService(this, intent);
-        });
+        model.startNewScene(this, storedScenes.get(position));
     }
 }

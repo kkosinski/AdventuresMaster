@@ -9,11 +9,11 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.wintermute.adventuresmaster.R;
+import com.wintermute.adventuresmaster.view.tools.gm.BoardContentView;
 import com.wintermute.adventuresmaster.view.tools.gm.BoardPanel;
 
 /**
- * Custom alert dialog to create folders and {@link com.wintermute.adventuresmaster.view.tools.gm.BoardContentTable} in
- * {@link BoardPanel}.
+ * Custom alert dialog to create folders and {@link BoardContentView} in {@link BoardPanel}.
  *
  * @author wintermute
  */
@@ -29,8 +29,7 @@ public class BoardDialog extends DialogFragment
     }
 
     /**
-     * This interface listens on confirmation of dialog for creating folders or {@link
-     * com.wintermute.adventuresmaster.view.tools.gm.BoardContentTable}
+     * This interface listens on confirmation of dialog for creating folders or {@link BoardContentView}
      */
     public interface OnCreateBoardConfirm
     {
@@ -50,8 +49,7 @@ public class BoardDialog extends DialogFragment
      * @param context of calling activity.
      * @param promptForBoardName flag to decide if the sub dialog should ask for board name or selection what to
      *     create.
-     * @param createContentTable flag to notify if board will be created or an {@link
-     *     com.wintermute.adventuresmaster.view.tools.gm.BoardContentTable}
+     * @param createContentTable flag to notify if board will be created or an {@link BoardContentView}
      * @param view layout of this dialog.
      */
     public BoardDialog(Context context, boolean promptForBoardName, boolean createContentTable, View view)

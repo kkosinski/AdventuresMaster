@@ -146,7 +146,7 @@ public class BoardPanel extends AppCompatActivity
         {
             if ("scenes".equals(boardType))
             {
-                startActivity(new Intent(this, BoardContentTable.class).putExtra("inBoard", itemId));
+                startActivity(new Intent(this, BoardContentView.class).putExtra("inBoard", itemId));
             }
         } else
         {

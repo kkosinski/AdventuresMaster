@@ -8,7 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
-import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneWithAudio;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneDesc;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public interface SceneDao
 
     @Transaction
     @Query("SELECT * FROM scene WHERE inBoard=:boardId")
-    LiveData<List<SceneWithAudio>> getScenesInBoard(long boardId);
+    LiveData<List<SceneDesc>> getScenesInBoard(long boardId);
 
     @Update
     void update(Scene target);

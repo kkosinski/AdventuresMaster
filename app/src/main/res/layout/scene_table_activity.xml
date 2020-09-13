@@ -3,7 +3,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.tools.gm.BoardContentTable">
+        tools:context=".view.tools.gm.BoardContentView">
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/board_content_table_content_list"

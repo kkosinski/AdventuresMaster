@@ -23,7 +23,7 @@
                 android:name=".services.player.SceneManager"
                 android:exported="false" />
 
-        <activity android:name=".view.tools.gm.BoardContentTable" />
+        <activity android:name=".view.tools.gm.BoardContentView" />
         <activity android:name=".view.tools.gm.SceneCreator" />
         <activity android:name=".view.tools.gm.BoardPanel" />
         <activity android:name=".dynamiclist.DynamicListActivity" />

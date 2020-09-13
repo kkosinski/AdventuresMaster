@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ import lombok.Data;
  * @author wintermute
  */
 @Data
-@Entity(tableName = "hueBulb",
+@Entity(tableName = "hueBulb", indices = @Index(value = "hueBridge"),
         foreignKeys = @ForeignKey(entity = HueBridge.class, parentColumns = "id", childColumns = "hueBridge",
                                   onDelete = CASCADE))
 public class HueBulb

@@ -1,7 +1,6 @@
 package com.wintermute.adventuresmaster.services.network;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -61,7 +60,8 @@ public class RestGun
      *
      * @param light configuration for scene.
      */
-    public void adjustLightForScene(Light light){
+    public void adjustLightForScene(Light light)
+    {
         changeColor(ColorHelper.extractHueColorCoordinates(light.getColor()));
         changeBrightness(light.getBrightness());
     }
