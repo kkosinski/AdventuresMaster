@@ -57,20 +57,10 @@ public class GameAudioPlayer
         {
             Thread t = new Thread(() ->
             {
-                MediaPlayer value =
-                    MediaPlayer.create(context, Uri.parse(target.getValue().getAudioFiles().get(0).getUri()));
-                String tag = target.getKey();
-                players.put(tag, value);
-
-                AudioInScene audioInScene = target.getValue().getAudioInScene();
-                adjustVolume(tag, audioInScene.getVolume());
-                setLoopForPlayer(tag, audioInScene.isRepeat());
-
                 if (audioForTasks.containsKey("effect"))
                 {
-                    if (audioInScene.isPlayAfterEffect())
+                    if (target.getValue().getAudioInScene().isPlayAfterEffect())
                     {
-
                         try
                         {
                             Thread.sleep(wait[0]);
@@ -80,7 +70,7 @@ public class GameAudioPlayer
                         }
                     }
                 }
-                players.get(tag).start();
+                players.get(target.getKey()).start();
             });
             threads.add(t);
         }
@@ -142,6 +132,7 @@ public class GameAudioPlayer
     public void stopAll()
     {
         players.values().stream().filter(Objects::nonNull).filter(MediaPlayer::isPlaying).forEach(MediaPlayer::stop);
+        //TODO: interrupt pending threads
     }
 
     /**

@@ -86,8 +86,7 @@ public class BoardViewModel extends ViewModel
      */
     public void startNewScene(Context context, SceneDesc target)
     {
-        Intent sceneService = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        sceneService.setClass(context, SceneManager.class);
+        Intent sceneService = new Intent(context, SceneManager.class);
         sceneService.putExtra("scene", target);
         context.startForegroundService(sceneService);
     }

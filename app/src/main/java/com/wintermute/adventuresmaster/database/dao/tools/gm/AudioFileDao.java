@@ -20,7 +20,7 @@ public interface AudioFileDao
 
     /**
      * @param arg0 uri for file.
-     * @return audio file by unique uri.
+     * @return audio file id by unique uri.
      */
     @Query("SELECT id FROM audioFile WHERE uri = :arg0")
     long getIdByUri(String arg0);

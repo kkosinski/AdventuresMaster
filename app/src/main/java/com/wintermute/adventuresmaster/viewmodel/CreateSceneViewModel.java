@@ -3,6 +3,7 @@ package com.wintermute.adventuresmaster.viewmodel;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import androidx.lifecycle.ViewModel;
 import com.wintermute.adventuresmaster.database.app.AppDatabase;
@@ -52,12 +53,17 @@ public class CreateSceneViewModel extends ViewModel
             scene.setId(new InsertTask(appDatabase).execute(scene).get());
             for (AudioFileWithOpts target : preparedAudio.values())
             {
-                Long audioFileId = new InsertTask(appDatabase).execute(target.getAudioFiles().get(0)).get();
+                AudioFile audioFile = target.getAudioFiles().get(0);
+                audioFile.setId(new InsertTask(appDatabase).execute(audioFile).get());
+
                 AudioInScene audioInScene = target.getAudioInScene();
-                audioInScene.setAudioFile(audioFileId);
+                audioInScene.setAudioFile(audioFile.getId());
                 audioInScene.setInScene(scene.getId());
 
                 new InsertTask(appDatabase).execute(audioInScene);
+
+                //Grant permission to access this uri until revoked.
+                context.getContentResolver().takePersistableUriPermission(Uri.parse(audioFile.getUri()), Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
             if (light != null)
             {
