@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.media.audiofx.Visualizer;
 import android.os.IBinder;
@@ -13,6 +14,7 @@ import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.SceneDesc;
+import com.wintermute.adventuresmaster.services.network.PhilisHueConnector;
 import com.wintermute.adventuresmaster.services.network.RestGun;
 import com.wintermute.adventuresmaster.services.receiver.SceneReceiver;
 import org.json.JSONArray;
@@ -33,8 +35,8 @@ public class SceneManager extends Service implements RestGun.OnSuccess
     public static final int NOTIFICATION_CHANNEL_ID = 1;
     public static final int NOTIFICATION_REQUEST_ID = 2;
     private GameAudioPlayer player;
-    private RestGun restGun;
     private Visualizer audioOutput;
+    private RestGun restGun;
 
     @Override
     public void onCreate()
@@ -43,11 +45,10 @@ public class SceneManager extends Service implements RestGun.OnSuccess
         Notification notification = createNotification();
         startForeground(NOTIFICATION_CHANNEL_ID, notification);
         player = player != null ? player : GameAudioPlayer.getInstance();
-        restGun = restGun != null ? restGun : new RestGun(this);
         super.onCreate();
     }
 
-    private void changeLightOnNoise(Light light)
+    private void changeLightOnNoise(Light light, Context context)
     {
         int rate = Visualizer.getMaxCaptureRate();
         audioOutput = new Visualizer(0);
@@ -59,7 +60,8 @@ public class SceneManager extends Service implements RestGun.OnSuccess
                 float intensity = ((float) waveform[0] + 128f) / 256;
                 if (intensity != 0)
                 {
-                    restGun.adjustLightForScene(light);
+                    restGun = restGun == null ? new RestGun(context) : restGun;
+                    new RestGun(context).adjustLightForScene(light);
                     audioOutput.release();
                 }
             }
@@ -83,10 +85,12 @@ public class SceneManager extends Service implements RestGun.OnSuccess
             Optional.of(Objects.requireNonNull(scene).getAudioInScene()).orElse(new ArrayList<>());
         player.playScene(this, audio);
 
-        Light light = scene.getLight();
-        if (light != null)
-        {
-            changeLightOnNoise(light);
+        if (PhilisHueConnector.getInstance().lightBridgeIsPresent(this)) {
+            Light light = scene.getLight();
+            if (light != null)
+            {
+                changeLightOnNoise(light, this);
+            }
         }
 
         return super.onStartCommand(intent, flags, startId);

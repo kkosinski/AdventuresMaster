@@ -37,4 +37,5 @@
     <string name="philips_hue_config_connect_bulbs">connect bulbs</string>
     <string name="philips_hue_bulbs_pair">pair bulbs with bridge</string>
     <string name="light_settings_fade_effect">fade in</string>
+    <string name="scene_creator_hue_not_connected">No philips hue connected</string>
 </resources>

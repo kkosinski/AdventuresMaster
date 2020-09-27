@@ -35,6 +35,16 @@ public class PhilisHueConnector
     }
 
     /**
+     * @param context of calling activity
+     * @return true if default device is present, otherwise false.
+     *
+     * TODO: check if the bridge device is also reachable.
+     */
+    public boolean lightBridgeIsPresent(Context context){
+        return getHueBridge(context) != null;
+    }
+
+    /**
      * @return philips hue bridge to connect.
      */
     public HueBridge getHueBridge(Context context)
@@ -49,6 +59,11 @@ public class PhilisHueConnector
         return null;
     }
 
+    /**
+     * @param context of calling activity.
+     * @param bridgeId which is currently connected.
+     * @return list of bulbs that should be controlled by the app.
+     */
     public List<HueBulb> getPairedBulbs(Context context, long bridgeId)
     {
         try
@@ -62,7 +77,7 @@ public class PhilisHueConnector
     }
 
     /**
-     * Returns
+     * Returns a list of philips hue bulbs connected to device communicating with the app.
      */
     private static class HueBulbsProvider extends AsyncTask<Long, Void, List<HueBulb>>
     {
@@ -81,7 +96,7 @@ public class PhilisHueConnector
     }
 
     /**
-     * Returns
+     * Returns default philips hue bridge.
      */
     private static class HueBridgeProvider extends AsyncTask<Void, Void, HueBridge>
     {

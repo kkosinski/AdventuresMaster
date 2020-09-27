@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
+import com.wintermute.adventuresmaster.services.network.PhilisHueConnector;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.viewmodel.CreateSceneViewModel;
 
@@ -64,9 +65,7 @@ public class SceneCreator extends AppCompatActivity
             finish();
         });
 
-        Button setLight = findViewById(R.id.scene_activity_set_light);
-        setLight.setOnClickListener(
-            v -> startActivityForResult(new Intent(this, LightSettings.class), LIGHT_PICKER_REQUEST_CODE));
+        createAndConfigureLightSettingsButton();
 
         effect = findViewById(R.id.scene_activity_effect);
         effect.disablePlayAfterEffectOption();
@@ -81,6 +80,18 @@ public class SceneCreator extends AppCompatActivity
             a.setOnChangedLoopingStatus(this);
             a.setOnChangeSchedulerStatus(this);
         });
+    }
+
+    private void createAndConfigureLightSettingsButton(){
+        Button setLight = findViewById(R.id.scene_activity_set_light);
+        setLight.setOnClickListener(
+            v -> startActivityForResult(new Intent(this, LightSettings.class), LIGHT_PICKER_REQUEST_CODE));
+
+        if (!PhilisHueConnector.getInstance().lightBridgeIsPresent(this)){
+            setLight.setText(R.string.scene_creator_hue_not_connected);
+            setLight.setEnabled(false);
+        }
+
     }
 
     private void scenePreview()
