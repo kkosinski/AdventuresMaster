@@ -75,7 +75,7 @@ public class RestGun
     {
         bulbs.forEach(b ->
         {
-            String targetUrl = privilegedUrl + "/lights" + "/" + b.getId() + "/state";
+            String targetUrl = getBulbUrl(b);
             sendRequest(Request.Method.PUT, targetUrl, getChangeColorReqBody(color, fadeIn));
         });
     }
@@ -89,11 +89,15 @@ public class RestGun
     {
         bulbs.forEach(b ->
         {
-            String targetUrl = privilegedUrl + "/lights" + "/" + b.getId() + "/state";
+            String targetUrl = getBulbUrl(b);
             sendCustomReq(Request.Method.PUT, targetUrl, getChangeBrightnessReqBody(brightness, fadeIn));
         });
     }
 
+    /**
+     * Requests all available hue bulbs.
+     * @param url of philips hue bridge to request available bulbs.
+     */
     public void requestBulbs(String url)
     {
         sendRequest(Request.Method.GET, url, null);
@@ -116,6 +120,12 @@ public class RestGun
     public void registerHue(String url, String body)
     {
         sendCustomReq(Request.Method.POST, url, createRequestBody(body));
+    }
+
+
+    private String getBulbUrl(HueBulb bulb)
+    {
+        return privilegedUrl + "/lights" + "/" + bulb.getBulbId() + "/state";
     }
 
     private JSONObject getChangeColorReqBody(double[] color, boolean fadeIn)

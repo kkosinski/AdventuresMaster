@@ -88,11 +88,11 @@ public class PhilipsHueBulbsSettings extends AppCompatActivity
         bulbs.addAll(model.getBulbs(response, currentBridge.getId()));
         model.getPairedBulbs(this, currentBridge.getId()).observe(this, hueBulbs ->
         {
-            hueBulbs.forEach(p ->
+            hueBulbs.forEach(pairedBulb ->
             {
                 for (HueBulb bulb : bulbs)
                 {
-                    if (p.getId() == bulb.getId())
+                    if (pairedBulb.getBulbId() == bulb.getBulbId())
                     {
                         bulb.setSelected(true);
                     }

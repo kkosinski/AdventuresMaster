@@ -23,8 +23,11 @@ import lombok.NoArgsConstructor;
                                   onDelete = CASCADE))
 public class HueBulb
 {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;
+
+    @ColumnInfo(name = "bulbId")
+    private long bulbId;
 
     @ColumnInfo(name = "hueBridge")
     private long hueBridge;
@@ -39,7 +42,7 @@ public class HueBulb
     private boolean selected;
 
     public HueBulb(long id, long hueBridge, String name, String type) {
-        this.id = id;
+        this.bulbId = id;
         this.hueBridge = hueBridge;
         this.name = name;
         this.type = type;

@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import com.wintermute.adventuresmaster.database.TestDatabase;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 import org.junit.Assert;
 import org.junit.Test;

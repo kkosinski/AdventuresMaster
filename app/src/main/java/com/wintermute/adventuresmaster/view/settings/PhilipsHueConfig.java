@@ -130,6 +130,8 @@ public class PhilipsHueConfig extends AppCompatActivity
     {
         if (model.registerDevice(response, this))
         {
+            //TODO: ask user for hue name. Important due to one bridge registered in multiple networks has always the
+            // same display name
             Toast.makeText(this, "Successfully registered", Toast.LENGTH_SHORT).show();
         } else
         {
