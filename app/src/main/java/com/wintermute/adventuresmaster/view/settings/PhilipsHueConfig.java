@@ -16,7 +16,6 @@ import com.wintermute.adventuresmaster.view.custom.ConnectHueBridgeDialog;
 import com.wintermute.adventuresmaster.view.custom.adapter.HueBridgeViewAdapter;
 import com.wintermute.adventuresmaster.viewmodel.HueBridgeViewModel;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -53,8 +52,8 @@ public class PhilipsHueConfig extends AppCompatActivity
         discoverBridge.setOnClickListener(v -> showResult(model.discoverBridge()));
 
         setAsDefaultDevice = findViewById(R.id.philips_hue_config_set_default);
-        //        setAsDefaultDevice.setOnClickListener(
-        //            v -> model.changeDefaultDevice(this, (HueBridge) registeredDevicesView.getSelectedItem()));
+        setAsDefaultDevice.setOnClickListener(
+            v -> model.changeDefaultDevice(this, (HueBridge) registeredDevicesView.getSelectedItem()));
 
         connectBulbs = findViewById(R.id.philips_hue_config_connect_bulbs);
         connectBulbs.setOnClickListener(v -> startActivity(
@@ -107,10 +106,9 @@ public class PhilipsHueConfig extends AppCompatActivity
         new ConnectHueBridgeDialog(this, discoveringResult).onCreateDialog(null).show();
     }
 
-    //TODO: deleteme
     private void updateDefaultHueBridge(int position)
     {
-        if (bridges.get(position) != null)
+        if (bridges.get(position).isDefaultDevice())
         {
             setAsDefaultDevice.setVisibility(View.GONE);
             return;
@@ -121,40 +119,30 @@ public class PhilipsHueConfig extends AppCompatActivity
     @Override
     public void onConnectClicked()
     {
-        if (model.deviceAlreadyRegistered(this))
+        if (!model.registerHueBridge(this))
         {
-            Toast.makeText(this, "Device already paired.", Toast.LENGTH_SHORT).show();
-        } else
-        {
-            model.requestDeviceRegistration(this);
+            Toast.makeText(this, "Already registered", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onResponse(JSONArray response)
     {
-        try
+        if (model.registerDevice(response, this))
         {
-            HueBridge storedBridge =
-                model.registerDevice(response.getJSONObject(0).getJSONObject("success").getString("username"), this);
-
-            if (storedBridge.getId() != -1L)
-            {
-                Toast
-                    .makeText(this, "Successfully paired with device: " + storedBridge.getDeviceId(),
-                        Toast.LENGTH_SHORT)
-                    .show();
-            }
-        } catch (JSONException | NullPointerException e)
+            //TODO: ask user for hue name. Important due to one bridge registered in multiple networks has always the
+            // same display name
+            Toast.makeText(this, "Successfully registered", Toast.LENGTH_SHORT).show();
+        } else
         {
-            e.printStackTrace();
-            Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to register", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onResponse(JSONObject response)
     {
+        model.setDeviceName(this, response);
     }
 
     @Override

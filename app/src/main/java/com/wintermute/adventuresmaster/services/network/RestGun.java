@@ -1,11 +1,9 @@
 package com.wintermute.adventuresmaster.services.network;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
@@ -24,7 +22,6 @@ import java.util.List;
  */
 public class RestGun
 {
-
     public interface OnSuccess
     {
         void onResponse(JSONArray response);
@@ -50,27 +47,11 @@ public class RestGun
         this.context = context;
         reqHandler = RequestHandler.getInstance(context);
         PhilisHueConnector hueConnector = PhilisHueConnector.getInstance();
-        HueBridge hueBridge = null;
+        HueBridge hueBridge = hueConnector.getHueBridge(context);
         if (hueBridge != null)
         {
-//            privilegedUrl = hueBridge.getUrl() + "/" + hueBridge.getUser();
+            privilegedUrl = hueBridge.getUrl() + "/" + hueBridge.getUser();
             bulbs = hueConnector.getPairedBulbs(context, hueBridge.getId());
-        }
-    }
-
-    /**
-     * Creates authorized user to make calls on philips hue bridge.
-     *
-     * @param url of philips hue bridge.
-     */
-    public void createPhilipsHueUser(String url)
-    {
-        try
-        {
-            sendCustomReq(Request.Method.POST, url, new JSONObject("{\"devicetype\":\"" + R.string.app_name + "#" + Build.MODEL + "\"}"));
-        } catch (JSONException e)
-        {
-            e.printStackTrace();
         }
     }
 
@@ -119,8 +100,28 @@ public class RestGun
      */
     public void requestBulbs(String url)
     {
-        sendRequest(Request.Method.GET, url, createRequestBody("{}"));
+        sendRequest(Request.Method.GET, url, null);
     }
+
+    /**
+     * @param url of target device.
+     */
+    public void getHueBridgeName(String url)
+    {
+        sendRequest(Request.Method.GET, url + "/config", null);
+    }
+
+    /**
+     * Register device by hue bridge.
+     *
+     * @param url of hue bridge.
+     * @param body containing string expected by hue bridge.
+     */
+    public void registerHue(String url, String body)
+    {
+        sendCustomReq(Request.Method.POST, url, createRequestBody(body));
+    }
+
 
     private String getBulbUrl(HueBulb bulb)
     {

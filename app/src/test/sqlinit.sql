@@ -82,8 +82,9 @@ CREATE TABLE light(
 
 CREATE TABLE hueBridge(
 	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-	deviceId TEXT NOT NULL,
-	user TEXT UNIQUE,
+	user TEXT,
+	url TEXT UNIQUE,
+	defaultDevice INTEGER NOT NULL,
 	deviceName TEXT);
 
 CREATE TABLE hueBulb(

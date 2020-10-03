@@ -2,14 +2,11 @@ package com.wintermute.adventuresmaster.database.entity.settings;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Represents hue bridge with api url and credentials.
@@ -17,8 +14,7 @@ import lombok.NoArgsConstructor;
  * @author wintermute
  */
 @Data
-@NoArgsConstructor
-@Entity(tableName = "hueBridge", indices = {@Index(value = "deviceId", unique = true)})
+@Entity(tableName = "hueBridge", indices = {@Index(value = "url", unique = true)})
 public class HueBridge implements Parcelable
 {
     @PrimaryKey(autoGenerate = true)
@@ -27,33 +23,31 @@ public class HueBridge implements Parcelable
     @ColumnInfo(name = "user")
     private String user;
 
-    @NonNull
-    @ColumnInfo(name = "deviceId")
-    private String deviceId;
+    @ColumnInfo(name = "url")
+    private String url;
+
+    @ColumnInfo(name = "defaultDevice")
+    private boolean defaultDevice;
 
     @ColumnInfo(name = "deviceName")
     private String deviceName;
 
-    @Ignore
-    private String url;
-
     /**
-     * Creates an instance.
+     * Creates instance with url.
      *
-     * @param url of philips hue bridge.
-     * @param deviceId unique hardware id.
+     * @param url to api of bridge.
      */
-    public HueBridge(String url, String deviceId, String deviceName)
+    public HueBridge(String url)
     {
         this.url = url;
-        this.deviceName = deviceName;
-        this.deviceId = deviceId;
     }
 
     protected HueBridge(Parcel in)
     {
         id = in.readLong();
         user = in.readString();
+        url = in.readString();
+        defaultDevice = in.readByte() != 0;
         deviceName = in.readString();
     }
 
@@ -83,6 +77,8 @@ public class HueBridge implements Parcelable
     {
         dest.writeLong(id);
         dest.writeString(user);
+        dest.writeString(url);
+        dest.writeByte((byte) (defaultDevice ? 1 : 0));
         dest.writeString(deviceName);
     }
 }

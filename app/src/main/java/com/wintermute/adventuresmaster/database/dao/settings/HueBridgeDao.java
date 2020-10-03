@@ -22,26 +22,18 @@ public interface HueBridgeDao
     long insert(HueBridge target);
 
     /**
-     * @param arg0 user authorized to make api calls.
-     * @return philips hue bridge selected by unique user per device.
+     * @param arg0 url to reach the philips hue bridge.
+     * @return philips hue bridge selected by unique url.
      */
-    @Query("SELECT * FROM hueBridge WHERE deviceId = :arg0")
-    HueBridge getByDeviceId(String arg0);
+    @Query("SELECT * FROM hueBridge WHERE url = :arg0")
+    HueBridge getByUrl(String arg0);
 
-    /**
-     * @deprecated this api call does not work anymore.
-     * //TODO: delete me. Critical.
-     */
-    @Query("SELECT * FROM hueBridge")
+    @Query("SELECT * FROM hueBridge WHERE defaultDevice = 1")
     HueBridge getDefaultDevice();
 
     @Update
     void update(HueBridge target);
 
-    /**
-     * @deprecated this api call does not work anymore. Critical.
-     * //TODO: delete me. Critical.
-     */
-    @Query("SELECT * FROM hueBridge")
+    @Query("SELECT * FROM hueBridge ORDER BY defaultDevice DESC")
     LiveData<List<HueBridge>> getAll();
 }
