@@ -1,17 +1,15 @@
 package com.wintermute.adventuresmaster.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import androidx.lifecycle.ViewModel;
-import com.wintermute.adventuresmaster.database.app.AppDatabase;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFile;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioFileWithOpts;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.AudioInScene;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Light;
 import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
+import com.wintermute.adventuresmaster.database.repository.SceneRepository;
 import com.wintermute.adventuresmaster.services.player.GameAudioPlayer;
 import com.wintermute.adventuresmaster.services.player.SceneManager;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Handles logic and notifies the {@link SceneCreator} about changes.
@@ -41,41 +38,36 @@ public class CreateSceneViewModel extends ViewModel
      * Creates audio files if these don´t already exists, stores audio settings, scene and light settings.
      *
      * @param context of calling activity.
-     * @param inBoard is the boardId to attach the scene to it.
+     * @param scene newly configured scene.
      */
-    public void storeScene(Context context, String sceneName, long inBoard)
+    public void storeScene(Context context, Scene scene)
     {
-        AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
+        SceneRepository sceneRepository = new SceneRepository(context);
 
-        Scene scene = new Scene(sceneName, inBoard);
-        try
+        scene.setId(sceneRepository.storeScene(scene));
+        preparedAudio.values().forEach(configuredTrack -> {
+            AudioFile audioFile = configuredTrack.getAudioFiles().get(0);
+            audioFile.setId(sceneRepository.storeAudioFile(audioFile));
+
+            AudioInScene audioInScene = configuredTrack.getAudioInScene();
+            audioInScene.setAudioFile(audioFile.getId());
+            audioInScene.setInScene(scene.getId());
+            sceneRepository.storeSceneAudio(audioInScene);
+
+            //Grant permission to access this uri on this device until revoked.
+            context
+                .getContentResolver()
+                .takePersistableUriPermission(Uri.parse(audioFile.getUri()), Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        });
+        if (light != null)
         {
-            scene.setId(new InsertTask(appDatabase).execute(scene).get());
-            for (AudioFileWithOpts target : preparedAudio.values())
-            {
-                AudioFile audioFile = target.getAudioFiles().get(0);
-                audioFile.setId(new InsertTask(appDatabase).execute(audioFile).get());
-
-                AudioInScene audioInScene = target.getAudioInScene();
-                audioInScene.setAudioFile(audioFile.getId());
-                audioInScene.setInScene(scene.getId());
-
-                new InsertTask(appDatabase).execute(audioInScene);
-
-                //Grant permission to access this uri until revoked.
-                context.getContentResolver().takePersistableUriPermission(Uri.parse(audioFile.getUri()), Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-            if (light != null)
-            {
-                light.setInScene(scene.getId());
-                new InsertTask(appDatabase).execute(light);
-            }
-        } catch (ExecutionException | InterruptedException e)
-        {
-            e.printStackTrace();
+            light.setInScene(scene.getId());
+            sceneRepository.storeLightInScene(light);
         }
     }
 
+    //TODO: delegate all methods operating on the audio player to the GameAudioPlayer
     /**
      * Terminate all existing players.
      */
@@ -174,50 +166,5 @@ public class CreateSceneViewModel extends ViewModel
         Intent scenePreview = new Intent(context, SceneManager.class);
         scenePreview.putParcelableArrayListExtra("audioList", new ArrayList<>(preparedAudio.values()));
         context.startForegroundService(scenePreview);
-    }
-
-    /**
-     * Async task to operate on databases for {@link SceneCreator}. Performs insert operation. Except in case when row
-     * exists yet and should not be created twice, in this case this task performs select operation.
-     */
-    private static class InsertTask extends AsyncTask<Object, Void, Long>
-    {
-
-        @SuppressLint("StaticFieldLeak")
-        private AppDatabase appDatabase;
-
-        /**
-         * Creates an instance of async task.
-         *
-         * @param appDatabase instance of database.
-         */
-        InsertTask(AppDatabase appDatabase)
-        {
-            this.appDatabase = appDatabase;
-        }
-
-        @Override
-        protected Long doInBackground(Object... objects)
-        {
-            if (objects[0] instanceof AudioFile)
-            {
-                long createdAudioFileId = appDatabase.audioFileDao().insert((AudioFile) objects[0]);
-                if (createdAudioFileId == -1L)
-                {
-                    return appDatabase.audioFileDao().getIdByUri(((AudioFile) objects[0]).getUri());
-                }
-                return createdAudioFileId;
-            } else if (objects[0] instanceof AudioInScene)
-            {
-                return appDatabase.audioInSceneDao().insert((AudioInScene) objects[0]);
-            } else if (objects[0] instanceof Scene)
-            {
-                return appDatabase.sceneDao().insert((Scene) objects[0]);
-            } else if (objects[0] instanceof Light)
-            {
-                return appDatabase.lightDao().insert((Light) objects[0]);
-            }
-            return null;
-        }
     }
 }

@@ -8,7 +8,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import com.wintermute.adventuresmaster.database.entity.menu.Board;
 import lombok.Data;
 
 /**

@@ -33,5 +33,5 @@ public interface SceneDao
     LiveData<List<SceneDesc>> getScenesInBoard(long arg0);
 
     @Update
-    void update(Scene target);
+    int update(Scene target);
 }

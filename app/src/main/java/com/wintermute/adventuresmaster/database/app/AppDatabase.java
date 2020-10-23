@@ -16,7 +16,7 @@ import com.wintermute.adventuresmaster.database.dao.tools.gm.LightDao;
 import com.wintermute.adventuresmaster.database.dao.tools.gm.SceneDao;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityDesc;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
-import com.wintermute.adventuresmaster.database.entity.menu.Board;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Board;
 import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBridge;
 import com.wintermute.adventuresmaster.database.entity.settings.HueBulb;

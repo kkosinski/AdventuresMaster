@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Scene;
 import com.wintermute.adventuresmaster.services.network.PhilisHueConnector;
 import com.wintermute.adventuresmaster.view.custom.SceneAudioEntry;
 import com.wintermute.adventuresmaster.viewmodel.CreateSceneViewModel;
@@ -101,7 +102,7 @@ public class SceneCreator extends AppCompatActivity
 
     private void storeScene(String sceneName)
     {
-        model.storeScene(this, sceneName, getIntent().getLongExtra("inBoard", 0L));
+        model.storeScene(this, new Scene(sceneName, getIntent().getLongExtra("inBoard", 0L)));
     }
 
     private String sanitizeFileName(String path)

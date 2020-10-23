@@ -1,29 +1,38 @@
-package com.wintermute.adventuresmaster.viewmodel;
+package com.wintermute.adventuresmaster.database.repository;
 
+import android.content.Context;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import com.wintermute.adventuresmaster.database.app.AppDatabase;
+import com.wintermute.adventuresmaster.database.dao.menu.ActivityDescDao;
+import com.wintermute.adventuresmaster.database.dao.menu.ActivityExtrasDao;
+import com.wintermute.adventuresmaster.database.dao.menu.MenuItemDao;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityDesc;
 import com.wintermute.adventuresmaster.database.entity.menu.ActivityExtras;
 import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
-import com.wintermute.adventuresmaster.database.repository.MenuRepository;
 
 import java.util.List;
 
 /**
- * Observes changes in menu and sends notifications about changes to the activity showing menu.
+ * Data cache for items important for menu.
  *
  * @author wintermute
  */
-public class MenuViewModel extends ViewModel
+public class MenuRepository
 {
-    private MenuRepository repository;
+    private ActivityDescDao activityDescDao;
+    private ActivityExtrasDao activityExtrasDao;
+    private MenuItemDao menuItemDao;
 
     /**
-     * @param repository data cache.
+     * Creates an instance.
+     *
+     * @param context of calling activity.
      */
-    public void initRepository(MenuRepository repository)
-    {
-        this.repository = repository;
+    public MenuRepository(Context context) {
+        AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
+        activityDescDao = appDatabase.activityDescDao();
+        activityExtrasDao = appDatabase.activityExtrasDao();
+        menuItemDao = appDatabase.menuItemDao();
     }
 
     /**
@@ -31,7 +40,7 @@ public class MenuViewModel extends ViewModel
      */
     public LiveData<List<MenuItem>> getTopLevelItems()
     {
-        return repository.getTopLevelItems();
+        return menuItemDao.getItemsByParentId(-1L);
     }
 
     /**
@@ -40,7 +49,7 @@ public class MenuViewModel extends ViewModel
      */
     public LiveData<List<MenuItem>> getSelectedItemContent(MenuItem target)
     {
-        return repository.getSelectedItemContent(target);
+        return menuItemDao.getItemsByParentId(target.getId());
     }
 
     /**
@@ -49,7 +58,7 @@ public class MenuViewModel extends ViewModel
      */
     public LiveData<List<MenuItem>> getItemParentContent(MenuItem target)
     {
-        return repository.getItemParentContent(target);
+        return menuItemDao.getItemsByParentId(target.getParentId());
     }
 
     /**
@@ -58,7 +67,7 @@ public class MenuViewModel extends ViewModel
      */
     public LiveData<MenuItem> getItemParent(MenuItem target)
     {
-        return repository.getItemParent(target);
+        return menuItemDao.getParent(target.getParentId());
     }
 
     /**
@@ -67,7 +76,7 @@ public class MenuViewModel extends ViewModel
      */
     public LiveData<ActivityDesc> getActivity(MenuItem target)
     {
-        return repository.getActivity(target);
+        return activityDescDao.getActivityDesc(target.getId());
     }
 
     /**
@@ -76,6 +85,6 @@ public class MenuViewModel extends ViewModel
      */
     public LiveData<List<ActivityExtras>> getActivityExtras(ActivityDesc target)
     {
-        return repository.getActivityExtras(target);
+        return activityExtrasDao.getExtrasForActivity(target.getActivityId());
     }
 }

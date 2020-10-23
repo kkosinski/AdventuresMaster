@@ -49,7 +49,7 @@ public class BoardContentView extends AppCompatActivity implements DynamicAdapte
         RecyclerView recyclerView =
             DynamicListHelper.getInstance().initRecyclerView(this, findViewById(R.id.board_content_table_content_list));
 
-        model.getScenesInBoard(this, sceneId).observe(this, scenes ->
+        model.getScenesInBoard(sceneId).observe(this, scenes ->
         {
             storedScenes = scenes;
             List<DynamicListItem> listContent = model.loadStoredScenes(scenes);

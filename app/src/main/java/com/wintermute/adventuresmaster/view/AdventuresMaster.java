@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.wintermute.adventuresmaster.R;
 import com.wintermute.adventuresmaster.database.entity.menu.MenuItem;
+import com.wintermute.adventuresmaster.database.repository.MenuRepository;
 import com.wintermute.adventuresmaster.helper.LayoutFactory;
 import com.wintermute.adventuresmaster.viewmodel.MenuViewModel;
 
@@ -46,11 +47,11 @@ public class AdventuresMaster extends AppCompatActivity
         layoutFactory = LayoutFactory.getInstance();
         layout = layoutFactory.getDefaultLayout(getWindow().getDecorView());
         model = new ViewModelProvider(this).get(MenuViewModel.class);
-
+        model.initRepository(new MenuRepository(this));
         menuItemsObserver = displayedMenuItems -> displayedMenuItems.forEach(
             i -> layoutFactory.addViewToDefaultLayout(layout, initMenuItem(i)));
 
-        model.getTopLevelItems(this).observe(AdventuresMaster.this, menuItemsObserver);
+        model.getTopLevelItems().observe(AdventuresMaster.this, menuItemsObserver);
     }
 
     private Button initMenuItem(MenuItem target)
@@ -63,7 +64,7 @@ public class AdventuresMaster extends AppCompatActivity
         {
             if (target.isActivity())
             {
-                model.getActivity(this, target).observe(this, activityDesc ->
+                model.getActivity(target).observe(this, activityDesc ->
                 {
                     try
                     {
@@ -74,7 +75,7 @@ public class AdventuresMaster extends AppCompatActivity
                         Intent intent = new Intent(this, c);
                         if (activityDesc.isHasExtras())
                         {
-                            model.getActivityExtras(this, activityDesc).observe(AdventuresMaster.this, activityExtras ->
+                            model.getActivityExtras(activityDesc).observe(AdventuresMaster.this, activityExtras ->
                             {
                                 activityExtras.forEach(e -> intent.putExtra(e.getKey(), e.getValue()));
                                 startActivity(intent);
@@ -93,7 +94,7 @@ public class AdventuresMaster extends AppCompatActivity
             {
                 currentItem = target;
                 layout.removeAllViews();
-                model.getSelectedItemContent(this, target).observe(AdventuresMaster.this, menuItemsObserver);
+                model.getSelectedItemContent(target).observe(AdventuresMaster.this, menuItemsObserver);
             }
         });
         return result;
@@ -102,7 +103,7 @@ public class AdventuresMaster extends AppCompatActivity
     private void updateCurrentItem()
     {
         final Observer<MenuItem> parentFetcher = p -> currentItem = p;
-        model.getItemParent(this, currentItem).observe(AdventuresMaster.this, parentFetcher);
+        model.getItemParent(currentItem).observe(AdventuresMaster.this, parentFetcher);
     }
 
     /**
@@ -127,7 +128,7 @@ public class AdventuresMaster extends AppCompatActivity
         if (currentItem != null && currentItem.getId() != -1L)
         {
             layout.removeAllViews();
-            model.getItemParentContent(this, currentItem).observe(this, menuItemsObserver);
+            model.getItemParentContent(currentItem).observe(this, menuItemsObserver);
             if (currentItem.getParentId() != -1L)
             {
                 updateCurrentItem();

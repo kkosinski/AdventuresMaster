@@ -10,7 +10,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import com.wintermute.adventuresmaster.R;
-import com.wintermute.adventuresmaster.database.entity.menu.Board;
+import com.wintermute.adventuresmaster.database.entity.tools.gm.Board;
+import com.wintermute.adventuresmaster.database.repository.BoardRepository;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicAdapter;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListHelper;
 import com.wintermute.adventuresmaster.dynamiclist.DynamicListItem;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Endpoint for the user to execute CRUD on {@link com.wintermute.adventuresmaster.database.entity.menu.Board}, {@link
+ * Endpoint for the user to execute CRUD on {@link Board}, {@link
  * com.wintermute.adventuresmaster.database.entity.tools.gm.Scene} and SoundBoard.
  *
  * @author wintermute
@@ -50,7 +51,7 @@ public class BoardPanel extends AppCompatActivity
 
         init();
 
-        model.getTopLevelBoards(this, boardType).observe(BoardPanel.this, boards ->
+        model.getTopLevelBoards(boardType).observe(BoardPanel.this, boards ->
         {
             if (adapter == null)
             {
@@ -68,6 +69,7 @@ public class BoardPanel extends AppCompatActivity
     private void init()
     {
         model = new ViewModelProvider(this).get(BoardViewModel.class);
+        model.initRepository(new BoardRepository(this));
         recyclerViewHelper = DynamicListHelper.getInstance();
         boardType = getIntent().getStringExtra("type");
         contentList = recyclerViewHelper.initRecyclerView(this, findViewById(R.id.board_activity_content_view));
@@ -120,17 +122,17 @@ public class BoardPanel extends AppCompatActivity
                 handleBoardClicked(itemId);
             } catch (NullPointerException e)
             {
-                model.getTopLevelBoards(this, boardType).observe(this, this::updateViewContent);
+                model.getTopLevelBoards(boardType).observe(this, this::updateViewContent);
             }
         };
-        model.getBoardById(this, itemId).observe(this, itemObserver);
+        model.getBoardById(itemId).observe(this, itemObserver);
     }
 
     @Override
     public void onCreateBoardConfirmed(String name, boolean isContentTable)
     {
         long parentId = currentBoard == null ? -1L : currentBoard.getId();
-        model.createNewBoard(this, name, boardType, isContentTable, parentId);
+        model.storeNewBoard(new Board(name, boardType, isContentTable, parentId));
     }
 
     @Override
@@ -151,7 +153,7 @@ public class BoardPanel extends AppCompatActivity
         } else
         {
             Observer<List<Board>> itemListObserver = this::updateViewContent;
-            model.getBoardsByParentId(this, itemId, boardType).observe(this, itemListObserver);
+            model.getBoardsByParentId(itemId, boardType).observe(this, itemListObserver);
         }
     }
 
